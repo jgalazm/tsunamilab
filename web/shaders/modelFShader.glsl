@@ -97,6 +97,11 @@ void main()
 
 	u2_ij.a = u_ij.a;
 
+	if (abs(u2_ij.r)>10.0*5.0){
+		u2_ij.r = 0.0;
+		u2_ij.g = 0.0;
+		u2_ij.b = 0.0;
+	}
 	// //boundaries
 	// if (vUv.x <=delta.x){
 	// 	gl_FragColor = vec4(0.0,0.0,0.0,1.0);

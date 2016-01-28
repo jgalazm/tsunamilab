@@ -7,7 +7,7 @@ var planeScreen;
 
 
 var info
-var time=0;
+var time=0, dt;
 
 var mTextureBuffer1, mTextureBuffer2, batiTextureBuffer;
 var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
@@ -21,6 +21,8 @@ var mMap, initCondition = 1;
 
 var speed = 1;
 var nstep = 0;
+
+var colors;
 //------------------------------------------------------
 //it requires variables: vshader, mFshader and sFshader
 //with url's of vertex/fragment shaders to work.
@@ -145,7 +147,7 @@ function init(){
 	scene.add( planeScreen );	
 
 	//default colormap
-	setColorMap('blues','jet');
+	setColorMap('blues','seismic');
  
 
 	// Load the simulation
@@ -172,8 +174,8 @@ function init(){
 function runSimulation(initial_condition){
 
 	//create simulation buffers
-	var nx = parseInt(432);
-	var ny = parseInt(594);
+	var nx = parseInt(width);
+	var ny = parseInt(height);
 
 	resizeSimulation(nx,ny);
 
@@ -209,7 +211,7 @@ function runSimulation(initial_condition){
     }
     var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/nx;
     var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/ny;
-    var dt = 0.45*Math.min(dx,dy)/Math.sqrt(-9.81*mUniforms.zmin.value);
+    dt = 0.45*Math.min(dx,dy)/Math.sqrt(-9.81*mUniforms.zmin.value);
     mUniforms.rx.value = dt/dx;
     mUniforms.ry.value = dt/dy;
 	
@@ -267,7 +269,13 @@ function renderSimulation(){
 	planeScreen.material = modelMaterial;
 	for (var i=0; i<Math.floor(speed); i++){
 		nstep = nstep+1;
-		// console.log(nstep);
+		time = nstep*dt/60;
+		time = Math.floor(time*100)/100;
+		var timetext = "Time: "
+		timetext = timetext.concat(time.toString());
+		timetext = timetext.concat(" min.");
+		var timeDomEl = document.getElementById("time");
+		timeDomEl.textContent = timetext;
 		if (!toggleBuffer){
 			mUniforms.tSource.value = mTextureBuffer1;		
 			renderer.render(scene, camera, mTextureBuffer2, true);
@@ -295,19 +303,37 @@ function renderSimulation(){
 }
 
 function setColorMap(cmap_bati,cmap_water){
-	var colors = {
+	colors = {
 		'heat': [new THREE.Vector4(1, 1, 1, -1/10.0), //white
 				new THREE.Vector4(0, 1, 1, -6.6/10.0),  //cyan
 				new THREE.Vector4(0, 0, 1, -3.3/10.0),  //blue
 				new THREE.Vector4(0, 0, 0, 0.0),   //red
 				new THREE.Vector4(1, 0, 0, 3.3/10.0),   //yellow
 				new THREE.Vector4(1, 1, 0, 6.6/10.0),	  //red
-				new THREE.Vector4(1, 1, 1, 9.9/10.0)], 
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 6.6/10.0), //red
+				new THREE.Vector4(1, 1, 1, 9.9/10.0)], //white
 		'jet': [new THREE.Vector4(0, 0, 1, 0.0*2), //azul
 				new THREE.Vector4(0, 1, 1, 0.33*2),  //cyan
 				new THREE.Vector4(0, 1, 0, 0.5*2),  //verde
 				new THREE.Vector4(1, 1, 0, 0.66*2),   //amarillo
 				new THREE.Vector4(1, 0, 0, 1.0*2),   //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
+				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
 				new THREE.Vector4(1, 0, 0, 1.0*2),	  //rojo
 				new THREE.Vector4(1, 0, 0, 1.0*2)],
 		'blues': [new THREE.Vector4(0, 0, 0.3, 0.0), //azul
@@ -316,8 +342,54 @@ function setColorMap(cmap_bati,cmap_water){
 				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
 				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
 				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
-				new THREE.Vector4(0.8, 0.8, 0.8, 1.0)]};
-	
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0)],
+	      // Add colors
+	     'wave': [ new THREE.Vector4(4, 29, 59,  0.006*2),
+				new THREE.Vector4(8, 59, 118,  0.120*2),
+				new THREE.Vector4(24, 77, 157,  0.130*2),
+				new THREE.Vector4(59, 106, 204,  0.250*2),
+				new THREE.Vector4(39, 32, 228,  0.260*2),
+				new THREE.Vector4(113, 184, 249,  0.380*2),
+				new THREE.Vector4(0, 106, 17,  0.390*2),
+				new THREE.Vector4(0, 208, 0,  0.500*2),
+				new THREE.Vector4(137, 130, 0,  0.510*2),
+				new THREE.Vector4(254, 229, 20,  0.620*2),
+				new THREE.Vector4(131, 80, 0,  0.630*2),
+				new THREE.Vector4(225, 128, 16,  0.750*2),
+				new THREE.Vector4(159, 19, 0,  0.760*2),
+				new THREE.Vector4(249, 26, 0,  0.870*2),
+				new THREE.Vector4(255, 255, 255,  0.880*2),
+				new THREE.Vector4(255, 64, 196,  1.000*2)],
+		'seismic': [ new THREE.Vector4(0, 0, 0.4, -1.0),
+				new THREE.Vector4(1.0, 1.0, 1.0, 0.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0),
+				new THREE.Vector4(1.0, 0, 0.0, 1.0)]};
+	for (var i=0;i<16;i++){
+		colors['wave'][i].x = colors['wave'][i].x/255;
+		colors['wave'][i].y = colors['wave'][i].y/255;
+		colors['wave'][i].z = colors['wave'][i].z/255;
+	}
 	mUniforms.colors.value = colors[cmap_water];
 	mUniforms.bcolors.value = colors[cmap_bati]
 }

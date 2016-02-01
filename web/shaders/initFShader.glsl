@@ -218,7 +218,13 @@ void main()
 	float bati = texture2D(tBati, vUv).r;
 	float bati_real = zmin + bati*(zmax-zmin);
 
-	value = value*step(bati_real,0.0);
+	// if (e>=500000.0 && e<=900000.0 && n>=5700000.0 && n<=6300000.0){
+		value = value*step(bati_real,0.0);	
+	// }
+	// else{
+		// value = 0.0;
+	// }
+	
     
     // float asdf = I5(1.0,1.0,1.0,1.0,1.0,1.0,1.0);
 

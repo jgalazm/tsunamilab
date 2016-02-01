@@ -14,6 +14,173 @@ uniform float ymax;
 uniform float zmin;
 uniform float zmax;
 
+float openBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
+	float h_ij, float h_ijm){
+	
+	float eta=0.0;
+	float k = 3.0; //debug thing
+	//to test if im catching the right texels;
+// 	//boundaries
+	
+	//j=0
+	if (vUv.y <=k*delta.y){ 
+		if (vUv.x > k*delta.x && vUv.x <=1.0-k*delta.x){
+			if (h_ij>gx){
+				float cc = sqrt(g*h_ij);
+				float uh = 0.5*(u_ij.g+u_imj.g);
+				float uu = sqrt(uh*uh+ u_ij.b*u_ij.b);
+				float zz = uu/cc;
+				if (u_ij.b>0.0){
+					zz = -zz;
+				}
+				eta = zz;
+			}
+			else {
+				eta = 0.0;	
+			}
+		}
+	}
+
+	//j=ny
+	else if (vUv.y>1.0-k*delta.y) {
+		if (vUv.x > k*delta.x && vUv.x <=1.0-k*delta.x){
+			if (h_ij>gx){
+				float cc = sqrt(g*h_ij);
+				float uh = 0.5*(u_ij.g+u_imj.g);
+				float uu = sqrt(uh*uh + u_ijm.b*u_ijm.b);
+				float zz = uu/cc;
+				if (u_ijm.b<0.0){
+					zz = -zz;
+				}
+				eta = zz;
+			}
+			else {
+				eta = 0.0;
+
+			}
+		}
+	}
+
+	// i = 0
+	if (vUv.x <=k*delta.x){ 
+		//j in range(1,ny-1)
+		if (vUv.y > k*delta.y && vUv.y <=1.0-k*delta.y){
+			if (h_ij>gx){
+				float cc = sqrt(g*h_ij);
+				float uh;
+				if (h_ijm>gx){
+					uh =  0.5*(u_ij.b+u_ijm.b);
+				}
+				else{
+					uh = u_ij.b;
+				}
+				float uu = sqrt(uh*uh+u_ij.g*u_ij.g);
+				float zz = uu/cc;
+				if (u_ij.g>0.0){
+					zz = -zz;
+				}
+				eta = zz;
+			}
+			else {
+				eta = 0.0;
+			}
+		}
+	}
+	else if (vUv.x >1.0-k*delta.x){ // i = nx
+		if (vUv.y >= k*delta.y && vUv.y <=1.0-k*delta.y){
+			if (h_ij>gx){
+				float cc = sqrt(g*h_ij);
+				float uh = 0.5*(u_ij.b+u_ijm.b);
+				float uu = sqrt(uh*uh+u_imj.g*u_imj.g);
+				float zz = uu/cc;
+				if (u_imj.g<0.0){
+					zz = -zz;
+				}
+				eta = zz;
+			}
+			else {
+				eta = 0.0;
+			}
+		}	  
+	}
+
+
+	// i = 0, j = 0
+	if (vUv.x <= k*delta.x && vUv.y <= k*delta.y){
+		if (h_ij>gx){
+			float cc = sqrt(g*h_ij);
+			float qx = u_ij.g;
+			float qy = u_ij.b;
+			float uu = sqrt(qx*qx+qy*qy);
+			float zz = uu/cc;
+			if (qx>0.0|| qy>0.0){
+				zz = -zz;
+			}
+			eta = zz;
+
+		}
+		else {
+			eta = 0.0;
+		}		
+	}
+   
+	// // i = 0, j = ny
+	if (vUv.x<= k*delta.x && vUv.y > 1.0-k*delta.y){
+		if (h_ij>gx){
+			float cc = sqrt(g*h_ij);
+			float qx = u_ij.g;
+			float qy = u_ijm.b;
+			float uu = sqrt(qx*qx+qy*qy);
+			float zz = uu/cc;
+			if (qx>0.0 || qy<0.0){
+				zz = -zz;
+			}
+			eta = zz;
+
+		}
+		else {
+			eta = 0.0;
+		}
+	}
+
+	// // i = nx, j = 0
+	if (vUv.x > 1.0 - k*delta.x && vUv.y <= k*delta.y){
+		if (h_ij>gx){
+			float cc = sqrt(g*h_ij);
+			float qx = u_imj.g;
+			float qy = u_ij.b;
+			float uu = sqrt(qx*qx+qy*qy);
+			float zz = uu/cc;
+			if (qx<0.0 || qy>0.0){
+				zz = -zz;
+			}
+			eta = zz;
+		}
+		else {
+			eta = 0.0;
+		}
+	}
+	
+	// i = nx, j = ny
+	if (vUv.x >  1.0 - k*delta.x && vUv.y > 1.0-k*delta.y){
+		if (h_ij>gx){
+			float cc = sqrt(g*h_ij);
+			float qx = u_imj.g;
+			float qy = u_ijm.b;
+			float uu = sqrt(qx*qx+qy*qy);
+			float zz = uu/cc;
+			if (qx<0.0 || qy<0.0){
+				zz = -zz;
+			}
+			eta = zz;
+		}
+		else {
+			eta = 0.0;
+		}
+	}				
+	return eta;
+	
+}
 void main()
 {
 	// u = (eta, p, q, h)
@@ -37,20 +204,15 @@ void main()
 	vec4 u_imjp = texture2D(tSource, vUv+vec2(-1.0*delta.x,delta.y));
 	
 
-	// vec4 u_ij = texture2D(tSource,vUv);
-	// vec4 u_imj = texture2D(tSource, vUv+vec2(0.0,-1.0*delta.x));
-	// vec4 u_ipj = texture2D(tSource, vUv+vec2(0.0,delta.x));
-	// vec4 u_ijm = texture2D(tSource, vUv+vec2(-1.0*delta.y),0.0);
-	// vec4 u_ijp = texture2D(tSource, vUv+vec2(delta.y),0.0);
-
-	// vec4 u_ipjm = texture2D(tSource, vUv+vec2(-1.0*delta.y,delta.x));
-	// vec4 u_imjp = texture2D(tSource, vUv+vec2(delta.y,-1.0*delta.x));
 	//next step vals
 	vec4 u2_ij, u2_ipj, u2_ijp;
 
 	float h_ij = -(u_ij.a*(zmax-zmin)+zmin);
 	float h_ipj = -(u_ipj.a*(zmax-zmin)+zmin);
 	float h_ijp = -(u_ijp.a*(zmax-zmin)+zmin);
+	float h_ijm = -(u_ijm.a*(zmax-zmin)+zmin);
+	//handle boundaries
+
 
 	//mass equation
 	if (h_ij >gx){
@@ -59,7 +221,6 @@ void main()
 	else{
 		u2_ij.r = 0.0;
 	}
-
 	if (h_ipj >gx){
 
 		u2_ipj.r = u_ipj.r -rx*(u_ipj.g-u_ij.g)-ry*(u_ipj.b - u_ipjm.b);
@@ -67,81 +228,58 @@ void main()
 	else{
 		u2_ipj.r = 0.0;
 	}
-
 	if (h_ijp >gx){
 		
 		u2_ijp.r = u_ijp.r -rx*(u_ijp.g - u_imjp.g) -ry*(u_ijp.b - u_ij.b);
 	}
 	else{
 		u2_ijp.r = 0.0;
+	}	
+	
+
+	if (vUv.x<=1.0*delta.x || vUv.x>1.0-1.0*delta.x || 
+		vUv.y <=1.0*delta.y || vUv.y>1.0-1.0*delta.y){
+		u2_ij.r = openBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
 	}
 
+
 	// x -momentum
-	if ((h_ij>gx) && (h_ipj>gx)){
-		float hM = 0.5*(h_ij+h_ipj) + 0.5*(u2_ij.r+u2_ipj.r);
-		u2_ij.g = u_ij.g - g*rx*hM*(u2_ipj.r-u2_ij.r);
+	if (vUv.x<1.0-delta.x && vUv.y<1.0-delta.y){
+		if ((h_ij>gx) && (h_ipj>gx)){
+			float hM = 0.5*(h_ij+h_ipj) + 0.5*(u2_ij.r+u2_ipj.r);
+			u2_ij.g = u_ij.g - g*rx*hM*(u2_ipj.r-u2_ij.r);
+		}
+		else{
+			u2_ij.g = 0.0;
+		}			
 	}
 	else{
 		u2_ij.g = 0.0;
-	}			
+	}
 
 	// y - momentum
-	if ( (h_ij>gx) && (h_ijp>gx)){
-		float hN = 0.5*(h_ij + h_ijp) + 0.5*(u2_ij.r+u2_ijp.r);
-		u2_ij.b = u_ij.b - g*ry*hN*(u2_ijp.r-u2_ij.r);
+	if (vUv.x<1.0-delta.x && vUv.y<1.0-delta.y){
+		if ( (h_ij>gx) && (h_ijp>gx)){
+			float hN = 0.5*(h_ij + h_ijp) + 0.5*(u2_ij.r+u2_ijp.r);
+			u2_ij.b = u_ij.b - g*ry*hN*(u2_ijp.r-u2_ij.r);
+		}
+		else{
+			u2_ij.b = 0.0;
+		}		
 	}
 	else{
-		u2_ij.b = 0.0;
+		u2_ij.g = 0.0;
 	}
 
 
 	u2_ij.a = u_ij.a;
 
-	if (abs(u2_ij.r)>10.0*5.0){
+	//sometimes .. it just blows up
+	if (abs(u2_ij.r)>50.0){
 		u2_ij.r = 0.0;
 		u2_ij.g = 0.0;
 		u2_ij.b = 0.0;
 	}
-	// //boundaries
-	// if (vUv.x <=delta.x){
-	// 	gl_FragColor = vec4(0.0,0.0,0.0,1.0);
-	// 	return;
-	// }
-	// else if (vUv.x >=1.0-delta.x){
-	// 	gl_FragColor = vec4(0.0,0.0,0.0,1.0);
-	// 	return;
-	// }
-
-	// if (vUv.y <=delta.y){
-	// 	gl_FragColor = vec4(0.0,0.0,0.0,1.0);
-	// 	return;
-	// }
-	// else if (vUv.y>=1.0-delta.y) {
-	// 	gl_FragColor = vec4(0.0,0.0,0.0,1.0);
-	// 	return;
-	// }
-	// if (vUv.x <=delta.x){
-	// 	gl_FragColor= vec4(u_ipj,0.0,0.0,1.0);
-	// 	return;
-	// }
-	// else if (vUv.x >=1.0-delta.x){
-	// 	gl_FragColor= vec4(u_imj,0.0,0.0,1.0);
-	// 	return;
-	// }
-
-	// if (vUv.y <=delta.y){
-	// 	gl_FragColor= vec4(u_ijp,0.0,0.0,1.0);
-	// 	return;
-	// }
-	// else if (vUv.y>=1.0-delta.y) {
-	// 	gl_FragColor= vec4(u_ijm,0.0,0.0,1.0);
-	// 	return;
-	// }	
-
-	// //interior: u^{n+1}
-	// float u_np = u_ij;
-	// u_np += dt/(delta.x*delta.x)*(u_imj+u_ipj-2.0*u_ij);
-	// u_np += dt/(delta.x*delta.x)*(u_ijm+u_ijp-2.0*u_ij);
 
 	gl_FragColor = vec4(u2_ij);
 	// gl_FragColor = vec4(u_ipj.a,0.0,0.0,u_ij.a);

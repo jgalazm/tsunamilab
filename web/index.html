@@ -3,11 +3,12 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title> Diffuse (jgalazm) </title>		
+		<title> Tsunami (jgalazm) </title>		
 		<script src="js/three.min.js"></script>
 		<script src="js/jquery-1.11.3.min.js"></script>				
 		<script src="js/dat.gui.min.js"></script>				
 		<script src="js/model.js"></script>
+		<script src="js/colormap.js"></script>
 		<script>
 			var vshader = 'shaders/vshader.glsl';
 			var bFshader = 'shaders/batiFShader.glsl';
@@ -17,18 +18,49 @@
 			$(function(){
 				init();
 			});
-		</script>			
+		</script>		
+		<style>
+			body {
+				color: #cccccc;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #050505;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#time {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+			#cv{
+
+			}
+
+			a {
+				color: #0080ff;
+			}
+
+		</style>			
 	</head>		
 
 	<body>
-			
-
+		
 		<div id="simulation" style='display:inline-block;'>
-			<canvas id="container" style="width:1024px;height:512px;border:1px solid #d0d0d0;"></canvas>
+			<canvas id="container" style="width:1024px;height:512px;border:1px solid #d0d0d0;"> Chrome plz</canvas>
 		</div>
+		<br>
+		<canvas width="50" height="512" id="cbwater"></canvas>	
+		<canvas width="50" height="512" id="cbbati"></canvas>	
 		<h4 id="time"> Time: </h4>
+
 		<div id="controls" style='display:inline-block;'>
-		</div>	
+		</div>
+
+
 	</body>
 
 

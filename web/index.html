@@ -9,6 +9,7 @@
 		<script src="js/dat.gui.min.js"></script>				
 		<script src="js/model.js"></script>
 		<script src="js/colormap.js"></script>
+		<script src="js/ui.js"></script>
 		<script>
 			var vshader = 'shaders/vshader.glsl';
 			var bFshader = 'shaders/batiFShader.glsl';
@@ -43,6 +44,10 @@
 			a {
 				color: #0080ff;
 			}
+			#controls{
+				position: absolute;
+				top: 0px;
+			}
 
 		</style>			
 	</head>		
@@ -50,14 +55,14 @@
 	<body>
 		
 		<div id="simulation" style='display:inline-block;'>
-			<canvas id="container" style="width:1024px;height:512px;border:1px solid #d0d0d0;"> Chrome plz</canvas>
+			<canvas id="container" style="width:1024px;height:512px;border:1px solid #d0d0d0;"> Chrome please</canvas>
 		</div>
 		<br>
 		<canvas width="50" height="512" id="cbwater"></canvas>	
 		<canvas width="50" height="512" id="cbbati"></canvas>	
 		<h4 id="time"> Time: </h4>
 
-		<div id="controls" style='display:inline-block;'>
+		<div id="controls">
 		</div>
 
 

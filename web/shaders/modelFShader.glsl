@@ -14,6 +14,7 @@ uniform float ymax;
 uniform float zmin;
 uniform float zmax;
 
+
 float openBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 	float h_ij, float h_ijm){
 	
@@ -188,13 +189,11 @@ void main()
 	// p: x-momentum
 	// q: y-momentum
 	// h: water depth, >0 if wet, <0 if dry.
-	
 
-	// simulation(x,h,eta,p,q,rx,ry,dx,dy,cfl,nt,gx)
-	//neighbors values
-
-	//previous step values
+	//old vals
 	vec4 u_ij = texture2D(tSource,vUv);
+
+	//neighbors old vals
 	vec4 u_imj = texture2D(tSource, vUv+vec2(-1.0*delta.x,0.0));
 	vec4 u_ipj = texture2D(tSource, vUv+vec2(delta.x,0.0));
 	vec4 u_ijm = texture2D(tSource, vUv+vec2(0.0,-1.0*delta.y));
@@ -204,15 +203,14 @@ void main()
 	vec4 u_imjp = texture2D(tSource, vUv+vec2(-1.0*delta.x,delta.y));
 	
 
-	//next step vals
+	//new vals
 	vec4 u2_ij, u2_ipj, u2_ijp;
 
+	//bati depth vals
 	float h_ij = -(u_ij.a*(zmax-zmin)+zmin);
 	float h_ipj = -(u_ipj.a*(zmax-zmin)+zmin);
 	float h_ijp = -(u_ijp.a*(zmax-zmin)+zmin);
 	float h_ijm = -(u_ijm.a*(zmax-zmin)+zmin);
-	//handle boundaries
-
 
 	//mass equation
 	if (h_ij >gx){
@@ -237,6 +235,7 @@ void main()
 	}	
 	
 
+	//handle boundaries (Open)
 	if (vUv.x<=1.0*delta.x || vUv.x>1.0-1.0*delta.x || 
 		vUv.y <=1.0*delta.y || vUv.y>1.0-1.0*delta.y){
 		u2_ij.r = openBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
@@ -282,5 +281,4 @@ void main()
 	}
 
 	gl_FragColor = vec4(u2_ij);
-	// gl_FragColor = vec4(u_ipj.a,0.0,0.0,u_ij.a);
 }

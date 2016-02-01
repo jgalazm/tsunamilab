@@ -1,0 +1,50 @@
+{
+  "preset": "BurgosCatCien",
+  "remembered": {
+    "Default": {
+      "0": {
+        "speed": 1,
+        "colormap": "wave",
+        "cn": 6020015.529892579,
+        "ce": 666850.3764601912,
+        "L": 450000,
+        "W": 150000,
+        "depth": 30100,
+        "slip": 6.06,
+        "strike": 18,
+        "dip": 18,
+        "rake": 112,
+        "U3": 0
+      }
+    },
+    "BurgosCatCien": {
+      "0": {
+        "speed": 1,
+        "colormap": "wave",
+        "cn": 6020015.529892579,
+        "ce": 666850.3764601912,
+        "L": 450000,
+        "W": 150000,
+        "depth": 30100,
+        "slip": 6.06,
+        "strike": 18,
+        "dip": 18,
+        "rake": 112,
+        "U3": 0
+      }
+    }
+  },
+  "closed": false,
+  "folders": {
+    "General Controls": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "Fault model": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    }
+  }
+}

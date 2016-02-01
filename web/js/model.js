@@ -19,7 +19,7 @@ var geotest, mat, planeTest, batidata;
 
 var mMap, initCondition = 1;
 
-var speed = 1;
+var speed = 1, paused = 0;
 var nstep = 0;
 
 var colors;
@@ -98,7 +98,10 @@ function init(){
 		rake :  {type:  'f', value: 112.0},
 		U3 : {type: 'f', value:  0.0},
 		cn : {type: 'f', value:  6020015.529892579},   //centroid N coordinate
-		ce : {type: 'f', value: 666850.3764601912}    //centroid E coordinate
+		ce : {type: 'f', value: 666850.3764601912},    //centroid E coordinate
+
+		//misc
+		pause: {type: 'i', value: 0}
 	};
 
 
@@ -141,7 +144,6 @@ function init(){
 	planeScreen = new THREE.Mesh( geometry, screenMaterial );
 	scene.add( planeScreen );	
  
-
 	// Load the simulation
 	var loader = new THREE.ImageLoader();
 	loader.load(
@@ -149,7 +151,7 @@ function init(){
 		"img/bati1.jpg",
 		// Function when resource is loaded
 		function ( image ) {			
-			runSimulation(image);
+			startSimulation(image);
 		},
 		// Function called when download progresses
 		function ( xhr ) {
@@ -163,7 +165,7 @@ function init(){
 
 }
 
-function runSimulation(initial_condition){
+function startSimulation(bati_image){
 
 	//create simulation buffers
 	var nx = parseInt(432/2);
@@ -172,12 +174,11 @@ function runSimulation(initial_condition){
 	resizeSimulation(nx,ny);
 
 	//add GUI controls
-
-	   //soon
+ 	initControls();
 
 	//load bathymetry and bathymetry data
 
-	batiTextureBuffer = new THREE.Texture(initial_condition);
+	batiTextureBuffer = new THREE.Texture(bati_image);
     batiTextureBuffer.wrapS = THREE.ClampToEdgeWrapping; // are these necessary?
     batiTextureBuffer.wrapT = THREE.ClampToEdgeWrapping;
     batiTextureBuffer.repeat.x = batiTextureBuffer.repeat.y = 2;
@@ -213,9 +214,7 @@ function runSimulation(initial_condition){
 	
 	//set initial condition
     // render initial condition and bathymetry to both buffers
-	planeScreen.material = initialMaterial;
-	renderer.render(scene, camera, mTextureBuffer1, true);
-	renderer.render(scene, camera, mTextureBuffer2, true);
+    doFaultModel();
 
 	//render to screen
 	mUniforms.tSource.value = mTextureBuffer1;
@@ -226,6 +225,11 @@ function runSimulation(initial_condition){
 	renderSimulation();
 }
 
+function doFaultModel(){
+	planeScreen.material = initialMaterial;
+	renderer.render(scene, camera, mTextureBuffer1, true);
+	renderer.render(scene, camera, mTextureBuffer2, true);
+}
 function resizeSimulation(nx,ny){
 
 	mUniforms.delta.value = new THREE.Vector2(1/nx,1/ny);
@@ -260,40 +264,46 @@ function resizeSimulation(nx,ny){
 	}
 
 }
-function renderSimulation(){	
+function writeTimeStamp(){
+	nstep = nstep+1;
+	time = nstep*dt/60;
+	var timetext = "Time: "
+	timetext = timetext.concat(time.toFixed(2));
+	timetext = timetext.concat(" min.");
+	var timeDomEl = document.getElementById("time");
+	timeDomEl.textContent = timetext;
+}
+function renderSimulation(){		
 
-	planeScreen.material = modelMaterial;
-	for (var i=0; i<Math.floor(speed); i++){
-		nstep = nstep+1;
-		time = nstep*dt/60;
-		var timetext = "Time: "
-		timetext = timetext.concat(time.toFixed(2));
-		timetext = timetext.concat(" min.");
-		var timeDomEl = document.getElementById("time");
-		timeDomEl.textContent = timetext;
+	if (paused != 1){
+		planeScreen.material = modelMaterial;
+		for (var i=0; i<Math.floor(speed); i++){			
+			writeTimeStamp();
+			if (!toggleBuffer){
+				mUniforms.tSource.value = mTextureBuffer1;		
+				renderer.render(scene, camera, mTextureBuffer2, true);
+				
+			}
+			else{
+				mUniforms.tSource.value = mTextureBuffer2;
+				renderer.render(scene, camera, mTextureBuffer1, true);
+				
+			}
+
+			toggleBuffer = !toggleBuffer;
+		}
+
 		if (!toggleBuffer){
-			mUniforms.tSource.value = mTextureBuffer1;		
-			renderer.render(scene, camera, mTextureBuffer2, true);
-			
+			mUniforms.tSource.value = mTextureBuffer2;		
 		}
 		else{
-			mUniforms.tSource.value = mTextureBuffer2;
-			renderer.render(scene, camera, mTextureBuffer1, true);
-			
+			mUniforms.tSource.value = mTextureBuffer1;
 		}
 
-		toggleBuffer = !toggleBuffer;
+		planeScreen.material = screenMaterial;
+		renderer.render(scene,camera);		
 	}
-
-	if (!toggleBuffer){
-		mUniforms.tSource.value = mTextureBuffer2;		
-	}
-	else{
-		mUniforms.tSource.value = mTextureBuffer1;
-	}
-
-	planeScreen.material = screenMaterial;
-	renderer.render(scene,camera);			
+			
 	requestAnimationFrame(renderSimulation);
 }
 

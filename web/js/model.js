@@ -1,6 +1,8 @@
 var container;
 var camera, scene, renderer;	
 
+var batiname = "bati2"
+
 var width, height, ratio=1;
 var toggleBuffer = false;
 var planeScreen;
@@ -97,8 +99,10 @@ function init(){
 		dip : {type: 'f', value: 18.0},
 		rake :  {type:  'f', value: 112.0},
 		U3 : {type: 'f', value:  0.0},
-		cn : {type: 'f', value:  6020015.529892579},   //centroid N coordinate
-		ce : {type: 'f', value: 666850.3764601912},    //centroid E coordinate
+		cn : {type: 'f', value:  5931680.473432716},   //centroid N coordinate, 16zone
+		ce : {type: 'f', value: 1752804.334767196},    //centroid E coordinate, 16zone		
+		// cn : {type: 'f', value:  6020015.529892579},   //centroid N coordinate, 18zone
+		// ce : {type: 'f', value: 666850.3764601912},    //centroid E coordinate, 18zone
 
 		//misc
 		pause: {type: 'i', value: 0}
@@ -148,7 +152,7 @@ function init(){
 	var loader = new THREE.ImageLoader();
 	loader.load(
 		// resource URL
-		"img/bati1.jpg",
+		"img/"+batiname+".jpg",
 		// Function when resource is loaded
 		function ( image ) {			
 			startSimulation(image);
@@ -168,14 +172,41 @@ function init(){
 function startSimulation(bati_image){
 
 	//create simulation buffers
-	var nx = parseInt(432/2);
-	var ny = parseInt(594/2);
 
+    var data = $.ajax("img/"+batiname+".txt",{async:false}).responseText;
+    var dataarray = data.split('\n');
+    batidata = {
+    	ny:parseInt(dataarray[0].split(':')[1]),
+    	nx:parseInt(dataarray[1].split(':')[1]),
+    }; 
+
+   
+    mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
+    mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
+	mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
+    mUniforms.ymax.value = parseFloat(dataarray[5].split(':')[1]);
+    mUniforms.zmin.value = parseFloat(dataarray[6].split(':')[1]);
+    mUniforms.zmax.value = parseFloat(dataarray[7].split(':')[1]);
+
+    if (mUniforms.zmin.value>0.0){
+    	var e = new Error('zmin negative on bathymetry image file'); 
+    	throw e;
+    }
+            
+	var nx = parseInt(batidata.nx);
+	var ny = parseInt(batidata.ny);
+	
+    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/nx;
+    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/ny;
+    dt = 0.45*Math.min(dx,dy)/Math.sqrt(-9.81*mUniforms.zmin.value);
+    mUniforms.rx.value = dt/dx;
+    mUniforms.ry.value = dt/dy;
+        
 	resizeSimulation(nx,ny);
 
 	//add GUI controls
  	initControls();
-
+ 	
 	//load bathymetry and bathymetry data
 
 	batiTextureBuffer = new THREE.Texture(bati_image);
@@ -185,29 +216,7 @@ function startSimulation(bati_image){
     batiTextureBuffer.needsUpdate = true; //this IS necessary	
     mUniforms.tBati.value = batiTextureBuffer;
 
-    var data = $.ajax("img/bati1.txt",{async:false}).responseText;
-    var dataarray = data.split('\n');
-    batidata = {
-    	nx:parseInt(dataarray[0].split(':')[1]),
-    	ny:parseInt(dataarray[1].split(':')[1]),
-    };    
-    mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
-    mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
-	mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
-    mUniforms.ymax.value = parseFloat(dataarray[5].split(':')[1]);
-    mUniforms.zmin.value = parseFloat(dataarray[6].split(':')[1]);
-    mUniforms.zmax.value = parseFloat(dataarray[7].split(':')[1]);
-    
-    if (mUniforms.zmin.value>0.0){
-    	var e = new Error('zmin negative on bathymetry image file'); 
-    	throw e;
-    }
-    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/nx;
-    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/ny;
-    dt = 0.45*Math.min(dx,dy)/Math.sqrt(-9.81*mUniforms.zmin.value);
-    mUniforms.rx.value = dt/dx;
-    mUniforms.ry.value = dt/dy;
-	
+
 	//set default colors
 	setColorMapBar('batitopo','wave');
 

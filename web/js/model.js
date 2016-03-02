@@ -1,7 +1,7 @@
 var container;
-var camera, scene, renderer;	
+var calc_camera, scene, renderer;	
 
-var batiname = "bati2"
+var batiname = "bati1"
 
 var width, height, ratio=1;
 var toggleBuffer = false;
@@ -21,7 +21,7 @@ var geotest, mat, planeTest, batidata;
 
 var mMap, initCondition = 1;
 
-var speed = 1, paused = 0;
+var speed = 1, paused = 1;
 var nstep = 0;
 
 var colors;
@@ -29,7 +29,19 @@ var colors;
 //it requires variables: vshader, mFshader and sFshader
 //with url's of vertex/fragment shaders to work.
 //------------------------------------------------------
+
+var stats = new Stats();
+stats.setMode( 2 ); // 0: fps, 1: ms, 2: mb
+
+// align top-left
+
+
 function init(){
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top = '0px';
+	document.body.appendChild(stats.domElement);	
+
 	// height = window.innerHeight;
 	// width = window.innerWidth;
 	height = window.innerHeight-50;
@@ -66,8 +78,9 @@ function init(){
 	var camHeight = height;
 	var camWidth = width;
 
-	camera = new THREE.OrthographicCamera( -0.5, 0.5, 0.5, -0.5, - 500, 1000 );
+	calc-camera = new THREE.OrthographicCamera( -0.5, 0.5, 0.5, -0.5, - 500, 1000 );
 	scene = new THREE.Scene();
+
 
 	// uniforms
 	mUniforms = {
@@ -99,10 +112,10 @@ function init(){
 		dip : {type: 'f', value: 18.0},
 		rake :  {type:  'f', value: 112.0},
 		U3 : {type: 'f', value:  0.0},
-		cn : {type: 'f', value:  5931680.473432716},   //centroid N coordinate, 16zone
-		ce : {type: 'f', value: 1752804.334767196},    //centroid E coordinate, 16zone		
-		// cn : {type: 'f', value:  6020015.529892579},   //centroid N coordinate, 18zone
-		// ce : {type: 'f', value: 666850.3764601912},    //centroid E coordinate, 18zone
+		// cn : {type: 'f', value:  6020015.52},   //centroid N coordinate, 16zone
+		// ce : {type: 'f', value: 666850.37},    //centroid E coordinate, 16zone		
+		cn : {type: 'f', value:  6020015.5},   //centroid N coordinate, 18zone
+		ce : {type: 'f', value: 666850.4},    //centroid E coordinate, 18zone
 
 		//misc
 		pause: {type: 'i', value: 0}
@@ -140,7 +153,7 @@ function init(){
 	geotest = new THREE.PlaneGeometry(1.0,1.0);
  	// mat = new THREE.MeshBasicMaterial({color:0x0000aa, opacity:1.0, transparent:true});
 	planeTest = new THREE.Mesh(geotest, batiMaterial);	
-	planeTest.position.z = -0.5;
+	planeTest.position.z = -0.1;
 	scene.add(planeTest);
 	
 	// create plane geometry
@@ -193,8 +206,8 @@ function startSimulation(bati_image){
     	throw e;
     }
             
-	var nx = parseInt(batidata.nx);
-	var ny = parseInt(batidata.ny);
+	var nx = 359;//parseInt(batidata.nx);
+	var ny = 359;//parseInt(batidata.ny);
 	
     var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/nx;
     var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/ny;
@@ -239,6 +252,7 @@ function doFaultModel(){
 	renderer.render(scene, camera, mTextureBuffer1, true);
 	renderer.render(scene, camera, mTextureBuffer2, true);
 }
+
 function resizeSimulation(nx,ny){
 
 	mUniforms.delta.value = new THREE.Vector2(1/nx,1/ny);
@@ -284,6 +298,8 @@ function writeTimeStamp(){
 }
 function renderSimulation(){		
 
+	stats.begin();
+
 	if (paused != 1){
 		planeScreen.material = modelMaterial;
 		for (var i=0; i<Math.floor(speed); i++){			
@@ -313,6 +329,7 @@ function renderSimulation(){
 		renderer.render(scene,camera);		
 	}
 			
+	stats.end();
 	requestAnimationFrame(renderSimulation);
 }
 
@@ -327,15 +344,17 @@ function setColorMapBar(cmap_bati, cmap_water){
 
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
-	cbwater.width = width/3;
-    cbwater.height = 25;	
+	cbwater.width = width/2;
+    cbwater.height = 50;	
     
     var cbbati  = document.getElementById('cbbati');
-	cbbati.width = width/3;
-    cbbati.height = 25;	
+	cbbati.width = width/2;
+    cbbati.height = 50;	
     
     var ncolors = 16;
 
-	colorbar(watermap,cbwater,ncolors,0.0);
-	colorbar(batimap,cbbati,ncolors,c);
+    var waterlabels = getColormapLabels(cmap_water,1,0);
+    var batilabels = getColormapLabels(cmap_bati,0,c);
+	colorbar(watermap,cbwater,ncolors,0.0,waterlabels);
+	colorbar(batimap,cbbati,ncolors,c,batilabels);
 }

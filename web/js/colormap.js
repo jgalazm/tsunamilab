@@ -103,7 +103,23 @@ function getColormapArray(cmap,k,d){
 		colors['wave'][i].z = colors['wave'][i].z/255;
 	}
 
+
 	return colors[cmap];
+}
+
+function getColormapLabels(cmap,k,d){
+	label_colors = {
+		'batitopo': [[mUniforms.zmin.value,0.0],
+					[0.0, d], 
+					[ mUniforms.zmax.value, 1.0]],
+		'wave':  [[(0.006-d)*k,(0.006-d)*k],
+				 [(0.250-d)*k,(0.250-d)*k],
+				 [(0.500-d)*k,(0.500-d)*k],
+				 [(0.750-d)*k,(0.750-d)*k],
+				 [(1.000-d)*k,(1.000-d)*k]]
+	};
+
+	return label_colors[cmap];
 }
 
 function mix(cleft,cright,t){
@@ -148,7 +164,15 @@ function getpcolor(value, colors, ncolors){
     return pseudoColor;
 }
 
-function colorbar(cmap3js, canvas, ncolors, fstart){
+function colorbar(cmap3js, canvas, ncolors, fstart, labels){
+	/*cmap3js: list of THREE.Vector4 containing rgb colors 
+			and cuts in  the alpha channel
+	  canvas: where to plot the colorbar, now horizontal only
+	  ncolors: length of the cmap3js list
+	  fstart: fraction (in (0,1]) from where to start in the colorbar range
+	  labels: list of labels and cuts to put on the colorbar
+	
+	*/
 	if (typeof(fstart)=="undefined"){
 		istart = 0;
 	}
@@ -165,13 +189,30 @@ function colorbar(cmap3js, canvas, ncolors, fstart){
 	    var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';
 	    ctx.fillStyle = color;		    
 	    if (typeof(fstart)=="undefined"){
-	    	ctx.fillRect(i-istart,0 , canvas.width, canvas.height);	
+	    	ctx.fillRect((i-istart)*0.9+0.05*canvas.width,0 , 
+	    		canvas.width*0.95, canvas.height/2);	
 	    }
 	    else{
-	    	ctx.fillRect(i-istart,0 , canvas.width, canvas.height);
+	    	ctx.fillRect((i-istart)*0.9+0.05*canvas.width,0 , 
+	    		canvas.width*0.95, canvas.height/2);
 	    }
 	    
 	}
+
+	for (var i=0; i<labels.length;i++){
+		if (labels[i][1]>=fstart){
+			ctx.font = "10pt Arial";//better exact px based on % of canvas.height?
+			ctx.fillStyle ="#aaaaaa";
+			ctx.textAlign = "left";
+
+			ctx.fillText(labels[i][0].toFixed(2),
+					(labels[i][1]-fstart)*canvas.width*0.9+0.05,
+					canvas.height*0.7);
+		}
+		
+	}
+
+
 
 	canvas.onclick = function(e) {
 	    var x = e.offsetX,

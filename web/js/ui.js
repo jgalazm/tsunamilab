@@ -65,13 +65,13 @@ function initControls() {
 
 
     //---fault model controls-----
-    fNorthingControl = folderFault.add(controls, "cn", 5700000, 8000000).name('Northing (m)');
+    fNorthingControl = folderFault.add(controls, "cn", 2478797, 9980938).name('Northing (m)');
     fNorthingControl.onChange(function(value){
         mUniforms.cn.value = Math.floor(value);
         controls.restart();
     }); 
 
-    fEastingControl = folderFault.add(controls, "ce", -600000, 800000).name('Easting (m)');
+    fEastingControl = folderFault.add(controls, "ce", -1861048.0, 2169448   ).name('Easting (m)');
     fEastingControl.onChange(function(value){
         mUniforms.ce.value = Math.floor(value);
         controls.restart();

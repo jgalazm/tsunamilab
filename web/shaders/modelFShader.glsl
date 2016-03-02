@@ -19,7 +19,7 @@ float openBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 	float h_ij, float h_ijm){
 	
 	float eta=0.0;
-	float k = 3.0; //debug thing
+	float k = 1.0; //debug thing
 	//to test if im catching the right texels;
 // 	//boundaries
 	
@@ -267,7 +267,7 @@ void main()
 		}		
 	}
 	else{
-		u2_ij.g = 0.0;
+		u2_ij.b = 0.0;
 	}
 
 

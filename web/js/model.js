@@ -1,22 +1,34 @@
+//------------------------------------------------------
+//it requires variables: vshader, mFshader and sFshader
+//with url's of vertex/fragment shaders to work.
+//------------------------------------------------------
+
 var container;
-var calc_camera, scene, renderer;	
-
-var batiname = "bati1"
-
+var screenWidth, screenHeight, ratio;
+var scene,calc_camera, view_camera, renderer;	
 var width, height, ratio=1;
+
+//simulation object
+var planeScreen, planeWidth=1.0, planeHeight=1.0;
+var simNx = 359, simNy = 359;
+
+
+//simulation texture-materials related stuff
 var toggleBuffer = false;
-var planeScreen;
-
-
-var info
-var time=0, dt;
-
 var mTextureBuffer1, mTextureBuffer2, batiTextureBuffer;
 var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
 var imagen;
 
 //bathhymetry stuff
-var geotest, mat, planeTest, batidata;
+var batiname = "bati1"
+var batiGeom, batiPlane, batidata;
+
+var info
+var time=0, dt;
+
+
+
+
 
 
 var mMap, initCondition = 1;
@@ -25,10 +37,7 @@ var speed = 1, paused = 1;
 var nstep = 0;
 
 var colors;
-//------------------------------------------------------
-//it requires variables: vshader, mFshader and sFshader
-//with url's of vertex/fragment shaders to work.
-//------------------------------------------------------
+
 
 var stats = new Stats();
 stats.setMode( 2 ); // 0: fps, 1: ms, 2: mb
@@ -42,8 +51,6 @@ function init(){
 	stats.domElement.style.top = '0px';
 	document.body.appendChild(stats.domElement);	
 
-	// height = window.innerHeight;
-	// width = window.innerWidth;
 	height = window.innerHeight-50;
 	ratio = 432/594;
 	width = height*ratio;	
@@ -78,7 +85,9 @@ function init(){
 	var camHeight = height;
 	var camWidth = width;
 
-	calc-camera = new THREE.OrthographicCamera( -0.5, 0.5, 0.5, -0.5, - 500, 1000 );
+	calc_camera = new THREE.OrthographicCamera( -0.5, 0.5, 0.5, -0.5, - 500, 1000 );
+	view_camera = new THREE.OrthographicCamera( -1.5, 1.5, 0.5, -0.5, - 500, 1000 );
+	
 	scene = new THREE.Scene();
 
 
@@ -149,14 +158,13 @@ function init(){
 		transparent:true
 	});
 
-	//create a splane
-	geotest = new THREE.PlaneGeometry(1.0,1.0);
- 	// mat = new THREE.MeshBasicMaterial({color:0x0000aa, opacity:1.0, transparent:true});
-	planeTest = new THREE.Mesh(geotest, batiMaterial);	
-	planeTest.position.z = -0.1;
-	scene.add(planeTest);
+	//create a plane for bathymetry
+	batiGeom = new THREE.PlaneGeometry(1.0,1.0);
+	batiPlane = new THREE.Mesh(batiGeom, batiMaterial);	
+	batiPlane.position.z = -0.1;
+	scene.add(batiPlane);
 	
-	// create plane geometry
+	// create a plane for simulation
 	var geometry = new THREE.PlaneGeometry(1.0 , 1.0);
 	planeScreen = new THREE.Mesh( geometry, screenMaterial );
 	scene.add( planeScreen );	
@@ -241,7 +249,7 @@ function startSimulation(bati_image){
 	//render to screen
 	mUniforms.tSource.value = mTextureBuffer1;
 	planeScreen.material = screenMaterial;
-	renderer.render(scene,camera);
+	renderer.render(scene,view_camera);
 
 	// ----proceed with the simulation---
 	renderSimulation();
@@ -249,8 +257,8 @@ function startSimulation(bati_image){
 
 function doFaultModel(){
 	planeScreen.material = initialMaterial;
-	renderer.render(scene, camera, mTextureBuffer1, true);
-	renderer.render(scene, camera, mTextureBuffer2, true);
+	renderer.render(scene, calc_camera, mTextureBuffer1, true);
+	renderer.render(scene, calc_camera, mTextureBuffer2, true);
 }
 
 function resizeSimulation(nx,ny){
@@ -306,12 +314,12 @@ function renderSimulation(){
 			writeTimeStamp();
 			if (!toggleBuffer){
 				mUniforms.tSource.value = mTextureBuffer1;		
-				renderer.render(scene, camera, mTextureBuffer2, true);
+				renderer.render(scene, calc_camera, mTextureBuffer2, true);
 				
 			}
 			else{
 				mUniforms.tSource.value = mTextureBuffer2;
-				renderer.render(scene, camera, mTextureBuffer1, true);
+				renderer.render(scene, calc_camera, mTextureBuffer1, true);
 				
 			}
 
@@ -326,7 +334,7 @@ function renderSimulation(){
 		}
 
 		planeScreen.material = screenMaterial;
-		renderer.render(scene,camera);		
+		renderer.render(scene, view_camera);		
 	}
 			
 	stats.end();

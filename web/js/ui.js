@@ -8,7 +8,8 @@ function tsunamiControls(){
 		doFaultModel();
         planeScreen.material = screenMaterial;
         nstep = 0;
-        renderer.render(scene,camera); 
+        renderer.render(scene,view_camera); 
+        orb_controls.reset();
         writeTimeStamp(); 
 	}
 	this.snapshot = snapshot;
@@ -120,58 +121,6 @@ function initControls() {
         mUniforms.U3.value = Math.floor(value);
         controls.restart();
     });     
-
-        // L : {type: 'f', value: 450000.0},
-        // W : {type: 'f', value: 150000.0},       
-        // depth : {type: 'f', value: 30100.0},
-        // slip : {type: 'f', value:  6.06},
-        // strike : {type: 'f', value: 18.0},
-        // dip : {type: 'f', value: 18.0},
-        // rake :  {type:  'f', value: 112.0},
-        // U3 : {type: 'f', value:  0.0},
-        // cn : {type: 'f', value:  6020015.529892579},   //centroid N coordinate
-        // ce : {type: 'f', value: 666850.3764601912}, 
-    // Scene (colormap)
-
-    // sceneControl = folderSimulation.add(controls, "scene",
-    // 	 ["blueInk", "heat"]).name("Scene");
-    // sceneControl.onChange(setColorMap);
-
-    // //boundary condition
-
-    // bcControl = folderSimulation.add(controls, "bc", ["fixed value", "closed"]).name("Boundaries");
-    // bcControl.onChange(function(value){
-    // 	if (value=="fixed value"){
-    // 		mUniforms.boundaryCondition.value = 0;
-    // 	}
-    // 	else if (value=="closed"){
-    // 		mUniforms.boundaryCondition.value = 1;
-    // 	}
-    // })
-
-    //mesh resolution
-
-	// resolutionControl = folderSimulation.add(controls, "resolution", 16, 512).name('Resolution');
- //    resolutionControl.onChange(function(value){
- //    	resizeSimulation(value,value*ratio);
- //    	//resizeSimulation(value,value,1);
- //    });
-
-
-    //brush
-
-    // brushWidthControl = folderExtSource.add(controls, "brushWidth", 8, 150).name('Brush Width');
-    // brushWidthControl.onChange(function(value){
-    // 	mUniforms.brushWidth.value = value;
-    // });
-
-    //heat/concentration source intensity
-
-    // heatIntensityControl = folderExtSource.add(controls, "intensity", 1, 200000).name('Intensity');
-    // heatIntensityControl.onChange(function(value){
-    // 	mUniforms.heatIntensity.value = value;
-    // });
-
 
     // folders are open initially
     

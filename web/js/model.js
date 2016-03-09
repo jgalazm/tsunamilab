@@ -1,32 +1,37 @@
-"use strict";
-/*------------------------------------------------------
-it requires variables: vshader, mFshader and sFshader
-with url's of vertex/fragment shaders to work.
-------------------------------------------------------*/
+//------------------------------------------------------
+//it requires variables: vshader, mFshader and sFshader
+//with url's of vertex/fragment shaders to work.
+//------------------------------------------------------
 
-//scene
 var container;
 var screenWidth, screenHeight, ratio;
-var scene, renderer, calc_camera, view_camera;
+var scene,calc_camera, view_camera, renderer;	
+var width, height, ratio=1;
 
 //simulation object
 var planeScreen, planeWidth=1, planeHeight=1;
-var dt,dx,dy, simNx, simNy, nstep=0;
+var simNx = 359, simNy = 359;
 
-//simulation texture/materials
+
+//simulation texture-materials related stuff
+var toggleBuffer = false;
 var mTextureBuffer1, mTextureBuffer2, batiTextureBuffer;
 var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
-var toggleBuffer = false;
-var mUniforms;
+var imagen;
 
-//bathymetry 
+//bathhymetry stuff
 var batiname = "bati1"
 var batiGeom, batiPlane, batidata;
 
+var info
+var time=0, dt;
 
-//interactivity
-var speed = 1, paused = 1, colors;
-var orb_controls;
+var mMap, initCondition = 1;
+
+var speed = 1, paused = 1;
+var nstep = 0;
+
+var colors;
 
 
 var stats = new Stats();
@@ -38,50 +43,24 @@ stats.setMode( 2 ); // 0: fps, 1: ms, 2: mb
 function init(){
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.left = '0px';
-	stats.domElement.style.top = '90%';
+	stats.domElement.style.top = '0px';
 	document.body.appendChild(stats.domElement);	
 
 	screenHeight = window.innerHeight-50;
-	ratio = 432/594;
-	screenWidth = screenHeight*ratio;	
+	// ratio = 432/594;
+	screenWidth = window.innerWidth;
 
-	var simulationDiv = document.getElementById('simulation');
+	simulationDiv = document.getElementById('simulation');
 	container = document.getElementById( 'container' );
 	container.width = screenWidth;
 	container.height = screenHeight;
 
-	//scene
-	scene = new THREE.Scene();
-
-	//renderer
-	renderer = new THREE.WebGLRenderer({canvas:container, preserveDrawingBuffer: true});
-	renderer.setClearColor( 0x000000 );
-	renderer.setSize(screenWidth, screenHeight);
-
-	// cameras
-	calc_camera = new THREE.OrthographicCamera( planeWidth/-2,
-												planeWidth/2,
-												planeHeight/2,
-												planeHeight/-2,
-												- 500, 1000 );
-	view_camera = new THREE.OrthographicCamera( planeWidth/-2,
-												planeWidth/2,
-												planeHeight/2,
-												planeHeight/-2,
-												- 500, 1000 );
-	view_camera.position.z = 1.0;
-
-
-	//orbit controls
-	orb_controls = new THREE.OrbitControls( view_camera, renderer.domElement );
-	controls.enableDamping = true;
-	controls.dampingFactor = 0.25;
-
-	// materials
-	createMaterials();
-
-	// 3js objects
-	createObjects();
+	info = document.createElement( 'div' );
+	info.style.position = 'absolute';
+	info.style.top = '10px';
+	info.style.width = '100%';
+	info.style.textAlign = 'center';
+	simulationDiv.appendChild( info );	
 
 	//event handlers
 	container.oncontextmenu = function(){return false};
@@ -92,7 +71,7 @@ function init(){
 		snapshot();
 	});
 
-	// Load bathymetry and continue with simulation
+	// Load the simulation
 	var loader = new THREE.ImageLoader();
 	loader.load(
 		// resource URL
@@ -113,7 +92,63 @@ function init(){
 
 }
 
+function startSimulation(bati_image){
+	//renderer
+	renderer = new THREE.WebGLRenderer({canvas:container, preserveDrawingBuffer: true});
+	renderer.setClearColor( 0xa0a0a0 );
+	renderer.setSize(screenWidth, screenHeight);
+
+	// camera
+
+
+	// scene
+	
+	scene = new THREE.Scene();
+
+	// create material
+
+	createMaterials();
+
+	//load input data
+    
+    loadData(bati_image);
+    
+	calc_camera = new THREE.OrthographicCamera( planeWidth/-2,
+					 planeWidth/2,
+					 planeHeight/2, 
+					 planeHeight/-2, - 500, 1000 );
+	var r = screenWidth/screenHeight;
+	view_camera = new THREE.OrthographicCamera( -0.5*r, 0.5*r, 0.5, -0.5, - 500, 1000 );
+
+	//create geometries
+
+	createGeom();
+
+    //create Buffers    
+	resizeSimulation(simNx,simNy);
+
+	//add GUI controls
+ 	initControls();
+ 	
+	//set default colors
+	setColorMapBar('batitopo','wave');
+
+	
+	//set initial condition
+    // render initial condition and bathymetry to both buffers
+    doFaultModel();
+
+	//render to screen
+	mUniforms.tSource.value = mTextureBuffer1;
+	planeScreen.material = screenMaterial;
+	renderer.render(scene,view_camera);
+
+	// ----proceed with the simulation---
+	renderSimulation();
+}
+
 function createMaterials(){
+	// uniforms
 	mUniforms = {
 		texel: {type: "v2", value: undefined},
 		delta: {type:  "v2", value: undefined},
@@ -121,7 +156,6 @@ function createMaterials(){
 		tBati: {type: "t", value: undefined},
 		colors: {type: "v4v", value: undefined},
 		bcolors: {type: "v4v", value: undefined},
-
 		//sim params		
 		gx : {type: 'f', value: 0.01},
 		rx : {type: 'f', value: undefined},
@@ -152,9 +186,6 @@ function createMaterials(){
 		pause: {type: 'i', value: 0}
 	};
 
-
-	// create materials
-
 	batiMaterial = new THREE.ShaderMaterial({
 		uniforms: mUniforms,
 		vertexShader: $.ajax(vshader, {async:false}).responseText,
@@ -177,34 +208,20 @@ function createMaterials(){
 		uniforms: mUniforms,
 		vertexShader: $.ajax(vshader,{async:false}).responseText,
 		fragmentShader: $.ajax(sFshader,{async:false}).responseText,
-		transparent:true,
-		side: THREE.DoubleSide
-	});	
+		transparent:true
+	});
+
 }
 
-function createObjects(){
-	//create a plane for Bathymetry
-	batiGeom = new THREE.PlaneGeometry(planeWidth, planeHeight);
-	batiPlane = new THREE.Mesh(batiGeom, batiMaterial);	
-	batiPlane.position.z = -0.1;
-	scene.add(batiPlane);
-	
-	// create plane for geometry
-	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
-	planeScreen = new THREE.Mesh( geometry, screenMaterial );
-	scene.add( planeScreen );	
-}
-
-function startSimulation(bati_image){	
-
-    var data = $.ajax("img/"+batiname+".txt",{async:false}).responseText;
+function loadData(bati_image){
+	var data = $.ajax("img/"+batiname+".txt",{async:false}).responseText;
     var dataarray = data.split('\n');
     batidata = {
     	ny:parseInt(dataarray[0].split(':')[1]),
     	nx:parseInt(dataarray[1].split(':')[1]),
     }; 
 
-    mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy);
+   
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
     mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
 	mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
@@ -217,45 +234,38 @@ function startSimulation(bati_image){
     	throw e;
     }
             
-	simNx = batidata.nx;
-	simNy = batidata.ny;
+	var simNx  = batidata.nx;//parseInt(batidata.nx);
+	var simNy =  batidata.ny;//parseInt(batidata.ny);
 	
-    dx = (mUniforms.xmax.value-mUniforms.xmin.value)/simNx;
-    dy = (mUniforms.ymax.value-mUniforms.ymin.value)/simNy;
-    dt = 0.45*Math.min(dx,dy)/Math.sqrt(9.81*(-mUniforms.zmin.value));
-    mUniforms.rx.value = dt/dx;
-    mUniforms.ry.value = dt/dy;
-        
-	resizeSimulation(simNx,simNy);
+	planeHeight = 1.0;
+	planeWidth = planeHeight*simNx/simNy;
+	mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy)
 
-	//add GUI controls
- 	initControls();
- 	
-	//load bathymetry and bathymetry data
+    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/simNx;
+    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/simNy;
+    dt = 0.45*Math.min(dx,dy)/Math.sqrt(-9.81*mUniforms.zmin.value);
+    mUniforms.rx.value = dt/dx;
+    mUniforms.ry.value = dt/dy;	
 
 	batiTextureBuffer = new THREE.Texture(bati_image);
     batiTextureBuffer.wrapS = THREE.ClampToEdgeWrapping; // are these necessary?
     batiTextureBuffer.wrapT = THREE.ClampToEdgeWrapping;
     batiTextureBuffer.repeat.x = batiTextureBuffer.repeat.y = 2;
     batiTextureBuffer.needsUpdate = true; //this IS necessary	
-    mUniforms.tBati.value = batiTextureBuffer;
+    mUniforms.tBati.value = batiTextureBuffer;    
+}
 
-
-	//set default colors
-	setColorMapBar('batitopo','wave');
-
+function createGeom(){
+	//create a plane for bathymetry
+	batiGeom = new THREE.PlaneGeometry(planeWidth,planeHeight);
+	batiPlane = new THREE.Mesh(batiGeom, batiMaterial);	
+	batiPlane.position.z = -0.1;
+	scene.add(batiPlane);
 	
-	//set initial condition
-    // render initial condition and bathymetry to both buffers
-    doFaultModel();
-
-	//render to screen
-	mUniforms.tSource.value = mTextureBuffer1;
-	planeScreen.material = screenMaterial;
-	renderer.render(scene,view_camera);
-
-	// ----proceed with the simulation---
-	renderSimulation();
+	// create a plane for simulation
+	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
+	planeScreen = new THREE.Mesh( geometry, screenMaterial );
+	scene.add( planeScreen );		
 }
 
 function doFaultModel(){
@@ -266,8 +276,6 @@ function doFaultModel(){
 
 function resizeSimulation(nx,ny){
 
-	//create simulation buffers
-	//resize does not work so well
 	mUniforms.delta.value = new THREE.Vector2(1/nx,1/ny);
 	
 	// create buffers
@@ -302,7 +310,7 @@ function resizeSimulation(nx,ny){
 }
 function writeTimeStamp(){
 	nstep = nstep+1;
-	var time = nstep*dt/60;
+	time = nstep*dt/60;
 	var timetext = "Time: "
 	timetext = timetext.concat(time.toFixed(2));
 	timetext = timetext.concat(" min.");
@@ -338,11 +346,10 @@ function renderSimulation(){
 			mUniforms.tSource.value = mTextureBuffer1;
 		}
 
-	
+		planeScreen.material = screenMaterial;
+		renderer.render(scene, view_camera);		
 	}
-	planeScreen.material = screenMaterial;
-	orb_controls.update(); 
-	renderer.render(scene,view_camera);				
+			
 	stats.end();
 	requestAnimationFrame(renderSimulation);
 }

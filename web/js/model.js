@@ -95,39 +95,34 @@ function init(){
 function startSimulation(bati_image){
 	//renderer
 	renderer = new THREE.WebGLRenderer({canvas:container, preserveDrawingBuffer: true});
-	renderer.setClearColor( 0xa0a0a0 );
+	renderer.setClearColor( 0x000000);
 	renderer.setSize(screenWidth, screenHeight);
 
-	// camera
-
-
-	// scene
-	
+	// scene	
 	scene = new THREE.Scene();
 
-	// create material
+	// create materials - uniforms
 
 	createMaterials();
 
-	//load input data
-    
+	//load input data and planeWidth, planeHeight for calc_camera and objects
+
     loadData(bati_image);
+
+    //create cameras
     
-	calc_camera = new THREE.OrthographicCamera( planeWidth/-2,
-					 planeWidth/2,
-					 planeHeight/2, 
-					 planeHeight/-2, - 500, 1000 );
-	var r = screenWidth/screenHeight;
-	view_camera = new THREE.OrthographicCamera( -0.5*r, 0.5*r, 0.5, -0.5, - 500, 1000 );
+	createCameras();
 
 	//create geometries
 
 	createGeom();
 
-    //create Buffers    
+    //create Buffers  
+
 	resizeSimulation(simNx,simNy);
 
 	//add GUI controls
+
  	initControls();
  	
 	//set default colors
@@ -255,6 +250,14 @@ function loadData(bati_image){
     mUniforms.tBati.value = batiTextureBuffer;    
 }
 
+function createCameras(){
+	calc_camera = new THREE.OrthographicCamera( planeWidth/-2,
+					 planeWidth/2,
+					 planeHeight/2, 
+					 planeHeight/-2, - 500, 1000 );
+	var r = screenWidth/screenHeight;
+	view_camera = new THREE.OrthographicCamera( -0.5*r, 0.5*r, 0.5, -0.5, - 500, 1000 );	
+}
 function createGeom(){
 	//create a plane for bathymetry
 	batiGeom = new THREE.PlaneGeometry(planeWidth,planeHeight);
@@ -365,11 +368,11 @@ function setColorMapBar(cmap_bati, cmap_water){
 
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
-	cbwater.width = screenWidth/2;
+	cbwater.width = Math.min(screenWidth/4,300);
     cbwater.height = 50;	
     
     var cbbati  = document.getElementById('cbbati');
-	cbbati.width = screenWidth/2;
+	cbbati.width = Math.min(screenWidth/4,300);
     cbbati.height = 50;	
     
     var ncolors = 16;

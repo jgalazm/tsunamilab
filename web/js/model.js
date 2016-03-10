@@ -46,7 +46,7 @@ function init(){
 	stats.domElement.style.top = '0px';
 	document.body.appendChild(stats.domElement);	
 
-	screenHeight = window.innerHeight-50;
+	screenHeight = window.innerHeight;
 	// ratio = 432/594;
 	screenWidth = window.innerWidth;
 
@@ -257,6 +257,8 @@ function createCameras(){
 					 planeHeight/-2, - 500, 1000 );
 	var r = screenWidth/screenHeight;
 	view_camera = new THREE.OrthographicCamera( -0.5*r, 0.5*r, 0.5, -0.5, - 500, 1000 );	
+	orb_controls = new THREE.OrbitControls( view_camera, renderer.domElement );
+	orb_controls.enableRotate = false;
 }
 function createGeom(){
 	//create a plane for bathymetry
@@ -311,15 +313,7 @@ function resizeSimulation(nx,ny){
 	}
 
 }
-function writeTimeStamp(){
-	nstep = nstep+1;
-	time = nstep*dt/60;
-	var timetext = "Time: "
-	timetext = timetext.concat(time.toFixed(2));
-	timetext = timetext.concat(" min.");
-	var timeDomEl = document.getElementById("time");
-	timeDomEl.textContent = timetext;
-}
+
 function renderSimulation(){		
 
 	stats.begin();
@@ -349,12 +343,25 @@ function renderSimulation(){
 			mUniforms.tSource.value = mTextureBuffer1;
 		}
 
-		planeScreen.material = screenMaterial;
-		renderer.render(scene, view_camera);		
+	
 	}
 			
 	stats.end();
+	orb_controls.update();
+	planeScreen.material = screenMaterial;
+	renderer.render(scene, view_camera);		
+
 	requestAnimationFrame(renderSimulation);
+}
+
+function writeTimeStamp(){
+	nstep = nstep+1;
+	time = nstep*dt/60;
+	var timetext = "Time: "
+	timetext = timetext.concat(time.toFixed(2));
+	timetext = timetext.concat(" min.");
+	var timeDomEl = document.getElementById("time");
+	timeDomEl.textContent = timetext;
 }
 
 function setColorMapBar(cmap_bati, cmap_water){

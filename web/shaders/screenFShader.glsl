@@ -36,5 +36,5 @@ void main()
     vec3 pseudoColor = getpcolor(value);
 
     // gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b, value*0.7+0.3); 
-    gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b,pow(value,0.2)*0.9+0.1); 
+    gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b, pow(value,0.2)*0.9+0.1);
 }

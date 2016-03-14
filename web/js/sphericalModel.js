@@ -17,25 +17,27 @@ var simNx = 359, simNy = 359;
 var toggleBuffer = false;
 var mTextureBuffer1, mTextureBuffer2, batiTextureBuffer;
 var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
-var imagen;
+var initCondition = 1;
 
 //bathhymetry stuff
 var batiname = "batiLatLonPacific"
 var batiGeom, batiPlane, batidata;
 
+//physical world variables
+var R_earth = 6378000.0,
+    rad_deg = 0.01745329252,
+    rad_min = 0.000290888208665721,
+    cori_w = 7.2722e-5;
+
+
+//ui
 var info
 var time=0, dt;
-
-var mMap, initCondition = 1;
-
 var speed = 1, paused = 1;
 var nstep = 0;
-
 var colors;
-
-
 var stats = new Stats();
-stats.setMode( 2 ); // 0: fps, 1: ms, 2: mb
+stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
 
 // align top-left
 
@@ -151,10 +153,15 @@ function createMaterials(){
 		tBati: {type: "t", value: undefined},
 		colors: {type: "v4v", value: undefined},
 		bcolors: {type: "v4v", value: undefined},
-		//sim params		
+		
+		//sim params	
+		rad_min: {type: 'f', value: rad_min},	
+		rad_deg: {type: 'f', value: rad_deg},
 		gx : {type: 'f', value: 0.01},
-		rx : {type: 'f', value: undefined},
-		ry : {type: 'f', value: undefined},
+		dx : {type: 'f', value:undefined},
+		dy : {type: 'f', value:undefined},
+		RR : {type: 'f', value:undefined},
+		RS : {type: 'f', value:undefined},
 		g : {type: 'f', value: 9.81},
 		xmin: {type: "f", value: 0.0},
 		xmax: {type: "f", value: 1.0},
@@ -174,12 +181,10 @@ function createMaterials(){
 		U3 : {type: 'f', value:  0.0},
 		// cn : {type: 'f', value:  6020015.52},   //centroid N coordinate, 16zone
 		// ce : {type: 'f', value: 666850.37},    //centroid E coordinate, 16zone		
-		// cn : {type: 'f', value:  6020015.5},   //centroid N coordinate, 18zone
-		// ce : {type: 'f', value: 666850.4},    //centroid E coordinate, 18zone
-		cn: {type: 'f', value: -35.5},
-		ce: {type: 'f', value: -73.0},
+		cn : {type: 'f', value:  -35.5},   //centroid N coordinate, 18zone
+		ce : {type: 'f', value:  -73.0},    //centroid E coordinate, 18zone
 
-		//misc	
+		//misc
 		pause: {type: 'i', value: 0}
 	};
 
@@ -219,10 +224,13 @@ function loadData(bati_image){
     }; 
 
    
+   	
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
     mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
 	mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
+	var ymin = parseFloat(dataarray[4].split(':')[1]);
     mUniforms.ymax.value = parseFloat(dataarray[5].split(':')[1]);
+    var ymax = parseFloat(dataarray[5].split(':')[1]);
     mUniforms.zmin.value = parseFloat(dataarray[6].split(':')[1]);
     mUniforms.zmax.value = parseFloat(dataarray[7].split(':')[1]);
 
@@ -238,11 +246,20 @@ function loadData(bati_image){
 	planeWidth = planeHeight*simNx/simNy;
 	mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy)
 
-    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/simNx;
-    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/simNy;
-    dt = 0.45*Math.min(dx,dy)/Math.sqrt(-9.81*mUniforms.zmin.value);
-    mUniforms.rx.value = dt/dx;
-    mUniforms.ry.value = dt/dy;	
+    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/simNx*60.0;
+    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/simNy*60.0;
+    mUniforms.dx.value = dx;
+    mUniforms.dy.value = dx;
+    ymin = mUniforms.ymin.value
+    var lat_max = Math.max(Math.abs(ymin),Math.abs(ymax));
+    var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
+    var dy_real = R_earth*dy*rad_min;
+    console.log(dx_real)
+
+    dt = 0.45*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
+    
+    mUniforms.RR.value = dt/R_earth;
+    mUniforms.RS.value = 9.81*mUniforms.RR.value;
 
 	batiTextureBuffer = new THREE.Texture(bati_image);
     batiTextureBuffer.wrapS = THREE.ClampToEdgeWrapping; // are these necessary?
@@ -259,8 +276,9 @@ function createCameras(){
 					 planeHeight/-2, - 500, 1000 );
 	var r = screenWidth/screenHeight;
 	view_camera = new THREE.OrthographicCamera( -0.5*r, 0.5*r, 0.5, -0.5, - 500, 1000 );	
+	view_camera.lookAt(0,0,0);
 	orb_controls = new THREE.OrbitControls( view_camera, renderer.domElement );
-	orb_controls.enableRotate = false;
+	orb_controls.enableRotate = true;
 }
 function createGeom(){
 	//create a plane for bathymetry
@@ -348,9 +366,10 @@ function renderSimulation(){
 	
 	}
 			
+	
+	planeScreen.material = screenMaterial;
 	stats.end();
 	orb_controls.update();
-	planeScreen.material = screenMaterial;
 	renderer.render(scene, view_camera);		
 
 	requestAnimationFrame(renderSimulation);

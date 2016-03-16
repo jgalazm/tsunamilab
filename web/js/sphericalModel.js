@@ -7,15 +7,16 @@ var container;
 var screenWidth, screenHeight, ratio;
 var scene,calc_camera, view_camera, renderer;	
 var width, height, ratio=1;
+var orb_controls;
 
 //simulation object
 var planeScreen, planeWidth=1, planeHeight=1;
-var simNx = 359, simNy = 359;
+var simNx, simNy ;
 
 
 //simulation texture-materials related stuff
 var toggleBuffer = false;
-var mTextureBuffer1, mTextureBuffer2, batiTextureBuffer;
+var mTextureBuffer1, mTextureBuffer2, batiTextureBuffer,batiTextureBufferColored;
 var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
 var initCondition = 1;
 
@@ -45,7 +46,7 @@ stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
 function init(){
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.left = '0px';
-	stats.domElement.style.top = '0px';
+	stats.domElement.style.top = '90%';
 	document.body.appendChild(stats.domElement);	
 
 	screenHeight = window.innerHeight;
@@ -188,6 +189,8 @@ function createMaterials(){
 		pause: {type: 'i', value: 0}
 	};
 
+	batiMaterial2 = new THREE.MeshPhongMaterial();
+
 	batiMaterial = new THREE.ShaderMaterial({
 		uniforms: mUniforms,
 		vertexShader: $.ajax(vshader, {async:false}).responseText,
@@ -239,9 +242,15 @@ function loadData(bati_image){
     	throw e;
     }
             
-	var simNx  = batidata.nx;//parseInt(batidata.nx);
-	var simNy =  batidata.ny;//parseInt(batidata.ny);
-	
+
+	simNx  = batidata.nx;//parseInt(batidata.nx);
+	simNy =  batidata.ny;//parseInt(batidata.ny);
+	if (simNx>500){
+		simNx = simNx/2;
+		simNy = simNy/2;
+	}
+	console.log('There are '+simNx.toString()+ ' cells in the X direction')
+	console.log('There are '+simNy.toString()+ ' cells in the X direction')
 	planeHeight = 1.0;
 	planeWidth = planeHeight*simNx/simNy;
 	mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy)
@@ -254,7 +263,6 @@ function loadData(bati_image){
     var lat_max = Math.max(Math.abs(ymin),Math.abs(ymax));
     var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
     var dy_real = R_earth*dy*rad_min;
-    console.log(dx_real)
 
     dt = 0.45*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
     
@@ -264,9 +272,11 @@ function loadData(bati_image){
 	batiTextureBuffer = new THREE.Texture(bati_image);
     batiTextureBuffer.wrapS = THREE.ClampToEdgeWrapping; // are these necessary?
     batiTextureBuffer.wrapT = THREE.ClampToEdgeWrapping;
-    batiTextureBuffer.repeat.x = batiTextureBuffer.repeat.y = 2;
+    // batiTextureBuffer.repeat.x = batiTextureBuffer.repeat.y = 2;
     batiTextureBuffer.needsUpdate = true; //this IS necessary	
-    mUniforms.tBati.value = batiTextureBuffer;    
+    mUniforms.tBati.value = batiTextureBuffer; 
+
+
 }
 
 function createCameras(){
@@ -276,21 +286,49 @@ function createCameras(){
 					 planeHeight/-2, - 500, 1000 );
 	var r = screenWidth/screenHeight;
 	view_camera = new THREE.OrthographicCamera( -0.5*r, 0.5*r, 0.5, -0.5, - 500, 1000 );	
+	view_camera.position.set(0,0,5);
 	view_camera.lookAt(0,0,0);
 	orb_controls = new THREE.OrbitControls( view_camera, renderer.domElement );
-	orb_controls.enableRotate = true;
+	// orb_controls.enableRotate = true;
 }
 function createGeom(){
 	//create a plane for bathymetry
 	batiGeom = new THREE.PlaneGeometry(planeWidth,planeHeight);
-	batiPlane = new THREE.Mesh(batiGeom, batiMaterial);	
-	batiPlane.position.z = -0.1;
-	scene.add(batiPlane);
+	// batiPlane = new THREE.Mesh(batiGeom, batiMaterial);	
+	// batiPlane.position.z = -0.1;
+	// scene.add(batiPlane);
+
+	batiGeom2 = new THREE.PlaneGeometry(planeWidth, planeHeight);
+
+	
+	//first use batiMaterial1 to render to buffer
+	batiPlane2 = new THREE.Mesh(batiGeom, batiMaterial);
+
+	//now use material2, to render to screen
+	
+	batiMaterial2.map =  THREE.ImageUtils.loadTexture('img/'+batiname+'Map.jpg');
+	batiMaterial2.bumpMap = THREE.ImageUtils.loadTexture('img/'+batiname+'BumpMap.jpg');;
+	batiMaterial2.bumpScale = 0.02;
+	batiMaterial2.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
+	batiMaterial2.specular  = new THREE.Color('grey')
+	batiPlane2.material = batiMaterial2;
+	batiPlane2.position.z = -0.05;	
+	scene.add(batiPlane2);
+
+	var light	= new THREE.AmbientLight( 0x888888)
+	scene.add( light );
+
+	var light	= new THREE.DirectionalLight( 0xcccccc, 1 )
+	light.position.set(5,3,5)
+	scene.add( light );
+
 	
 	// create a plane for simulation
 	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
 	planeScreen = new THREE.Mesh( geometry, screenMaterial );
 	scene.add( planeScreen );		
+
+	
 }
 
 function doFaultModel(){
@@ -305,6 +343,13 @@ function resizeSimulation(nx,ny){
 	
 	// create buffers
 	if (!mTextureBuffer1){
+
+
+	batiTextureBufferColored = new THREE.WebGLRenderTarget( nx, ny, 
+		 					{minFilter: THREE.LinearFilter,
+	                         magFilter: THREE.LinearFilter,
+	                         format: THREE.RGBAFormat,
+	                         type: THREE.FloatType});
 
 	mTextureBuffer1 = new THREE.WebGLRenderTarget( nx, ny, 
 		 					{minFilter: THREE.LinearFilter,

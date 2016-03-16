@@ -30,7 +30,6 @@ vec3 getpcolor(float value){
 
 void main()
 {
-
     vec4 texval = texture2D(tSource, vUv);
     float bati = texval.a;
 

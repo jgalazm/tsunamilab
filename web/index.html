@@ -8,7 +8,7 @@
 		<script src="js/jquery-1.11.3.min.js"></script>				
 		<script src="js/dat.gui.min.js"></script>				
 		<script src="js/stats.js"></script>
-		<script src="js/model.js"></script>
+		<script src="js/sphericalModel.js"></script>
 		<script src="js/colormap.js"></script>
 		<script src="js/ui.js"></script>
 		<script src="js/TrackballControls.js"></script>
@@ -16,9 +16,9 @@
 
 		<script>
 			var vshader = 'shaders/vshader.glsl';
-			var bFshader = 'shaders/batiFShader.glsl';
-			var iFshader = 'shaders/sphere_initFShader.glsl';
-			var mFshader = 'shaders/modelFShader.glsl';
+			var bFshader = 'shaders/batiFShader2.glsl';
+			var iFshader = 'shaders/sphericalInitFShader.glsl';
+			var mFshader = 'shaders/sphericalModelFShader.glsl';
 			var sFshader = 'shaders/screenFShader.glsl';		
 			$(function(){
 				init();

@@ -32,14 +32,14 @@ function initControls() {
         autoPlace: false
     }); 
 
-    gui.remember(controls);
+    // gui.remember(controls);
     //folders    
     var folderGeneral = gui.addFolder('General Controls');
     var folderFault = gui.addFolder('Fault model');
 
 
     //speed
-    speedControl = folderGeneral.add(controls, "speed", 1, 20).name('Speed');
+    speedControl = folderGeneral.add(controls, "speed", 1, 20).name('Speed').step(1);
     speedControl.onChange(function(value){
     	speed = Math.floor(value);
     });  
@@ -66,15 +66,15 @@ function initControls() {
 
 
     //---fault model controls-----
-    fNorthingControl = folderFault.add(controls, "cn", 2478797, 9980938).name('Northing (m)');
+    fNorthingControl = folderFault.add(controls, "cn", -90, 90).name('Northing (m)');
     fNorthingControl.onChange(function(value){
-        mUniforms.cn.value = Math.floor(value);
+        mUniforms.cn.value = value;
         controls.restart();
     }); 
 
-    fEastingControl = folderFault.add(controls, "ce", -1861048.0, 2169448   ).name('Easting (m)');
+    fEastingControl = folderFault.add(controls, "ce", -240,120   ).name('Easting (m)');
     fEastingControl.onChange(function(value){
-        mUniforms.ce.value = Math.floor(value);
+        mUniforms.ce.value = value;
         controls.restart();
     });     
     fLengthControl = folderFault.add(controls, "L", 1, 1000000).name('Length (m)');

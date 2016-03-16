@@ -434,24 +434,17 @@ function setColorMapBar(cmap_bati, cmap_water){
 	//requires colormap.js
 	
 	var c = -mUniforms.zmin.value/(mUniforms.zmax.value - mUniforms.zmin.value);
-	var batimap = getColormapArray(cmap_bati,0,c);
 	var watermap = getColormapArray(cmap_water,1,0);
 	mUniforms.colors.value = watermap;
-	mUniforms.bcolors.value = batimap;
 
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
-	cbwater.width = Math.min(screenWidth/4,300);
-    cbwater.height = 50;	
+	cbwater.width = screenWidth/4;//Math.min(screenWidth/2,300);
+    cbwater.height = 80;	
     
-    var cbbati  = document.getElementById('cbbati');
-	cbbati.width = Math.min(screenWidth/4,300);
-    cbbati.height = 50;	
     
     var ncolors = 16;
 
     var waterlabels = getColormapLabels(cmap_water,1,0);
-    var batilabels = getColormapLabels(cmap_bati,0,c);
 	colorbar(watermap,cbwater,ncolors,0.0,waterlabels);
-	colorbar(batimap,cbbati,ncolors,c,batilabels);
 }

@@ -203,24 +203,50 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 	else{
 		istart = parseInt(canvas.width * fstart);
 	}
+
+	//number of color segments
+
+	var n = 8;
+
 	var ctx = canvas.getContext('2d');
 	//cmap3js
-	for(var i = istart; i <= canvas.width; i++) {		
+	for(var i = istart; i < canvas.width; i++) {	
+		if (i>=195){
+			console.log('asdf');
+		}	
  		// curent fraction in the canvas
+
 		var t = i/canvas.width;
 
-		//normalize to cmap
-		t = cmap3js[0].w+(cmap3js[ncolors-1].w - cmap3js[0].w)*t; 
+		//color segment index for this t
 
-		//draw this color
+		var k = parseInt(t*n);
+		
+		//re-scale to color range
+
+		var vk0 = cmap3js[2*k].w;
+		var vkf = cmap3js[2*k+1].w;
+		var s = n*t-k;
+		var v = vk0*(1-s) + vkf*s;
+
+		//get pseudo color for this value
+
+		var pcolor = getpcolor(v,cmap3js,2*n);
+
+
+		//build color string
+
+		var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';	
+		console.log(t,s);
+		console.log(v,pcolor,getpcolor(vk0,cmap3js,2*n),getpcolor(vkf,cmap3js,2*n));
+		console.log('');
+
+		// set color
+		ctx.fillStyle = color;    
+
+ 		//draw a rectangle for this color
+
 	    ctx.beginPath();
-
-	    //get pseudocolor for this t value
-	    var pcolor = getpcolor(t,cmap3js,16);
-	    var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';	    
-	    ctx.fillStyle = color;		    
-
-
 	    if (typeof(fstart)=="undefined"){
 	    	ctx.fillRect((i-istart)*0.9+0.05*canvas.width,0 , 
 	    		canvas.width*0.95, canvas.height/2);	
@@ -228,23 +254,46 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 	    else{
 	    	ctx.fillRect((i-istart)*0.9+0.05*canvas.width,0 , 
 	    		canvas.width*0.95, canvas.height/2);
-	    }
-	    
+	    }	    
+
 	}
 
-	for (var i=0; i<labels.length;i++){
-		if (labels[i][1]>=fstart){
-			ctx.font = "10pt Arial";//better exact px based on % of canvas.height?
-			ctx.fillStyle ="#aaaaaa";
-			ctx.textAlign = "left";
 
-			ctx.fillText(labels[i][0].toFixed(2),
-					(labels[i][1]-fstart)*canvas.width*0.9+0.05,
-					canvas.height*0.7);
-		}
+	//write labels
+
+	ctx.font = "10pt Arial";//better exact px based on % of canvas.height?
+	ctx.fillStyle ="#aaaaaa";
+	ctx.textAlign = "right";
+	// for (var i=0; i<labels.length;i++){
+	for (var i=0; i<n;i++){
+		var labelText,labelPosX,labelPosY;
+		// if (i<n){
+		var labelText  = cmap3js[Math.min(2*i,2*n-1)].w.toFixed(2).toString();
+		var labelPosX = (i+1)/n*canvas.width*0.9;
+		var labelPosY = canvas.height*0.7;
+		// }
 		
+		// ctx.fillText(labels[i][0].toFixed(2),
+		// 		(labels[i][1]-fstart)*canvas.width*0.9+0.05,
+		// 		canvas.height*0.7);
+		ctx.fillText(labelText, labelPosX, labelPosY);	
+
+		//draw a tick line
+	    ctx.beginPath();
+	    ctx.strokeStyle = "white";
+	    labelPosX = labelPosX - canvas.width*0.95/n/2-1;
+	    ctx.moveTo(labelPosX,canvas.height/2);
+	    ctx.lineTo(labelPosX,canvas.height/2*1.1);
+	    ctx.stroke();
 	}
 
+	//last label
+
+
+	//draw colorbar border
+	ctx.rect(0.05*canvas.width,0,canvas.width*0.95,canvas.height/2);
+	ctx.strokeStyle="white";
+	ctx.stroke();
 
 
 	canvas.onclick = function(e) {

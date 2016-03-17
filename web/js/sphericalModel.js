@@ -129,7 +129,7 @@ function startSimulation(bati_image){
  	initControls();
  	
 	//set default colors
-	setColorMapBar('batitopo','wave');
+	setColorMapBar('batitopo','wave2');
 
 	
 	//set initial condition
@@ -245,9 +245,9 @@ function loadData(bati_image){
 
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
-	if (simNx>500){
-		simNx = simNx/2;
-		simNy = simNy/2;
+	if (simNx>1000){
+		simNx = simNx/6;
+		simNy = simNy/6;
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
 	console.log('There are '+simNy.toString()+ ' cells in the X direction')
@@ -309,8 +309,8 @@ function createGeom(){
 	batiMaterial2.map =  THREE.ImageUtils.loadTexture('img/'+batiname+'Map.jpg');
 	batiMaterial2.bumpMap = THREE.ImageUtils.loadTexture('img/'+batiname+'BumpMap.jpg');;
 	batiMaterial2.bumpScale = 0.02;
-	batiMaterial2.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
-	batiMaterial2.specular  = new THREE.Color('grey')
+	// batiMaterial2.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
+	// batiMaterial2.specular  = new THREE.Color('grey')
 	batiPlane2.material = batiMaterial2;
 	batiPlane2.position.z = -0.05;	
 	scene.add(batiPlane2);

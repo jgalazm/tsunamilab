@@ -13,7 +13,7 @@ function tsunamiControls(){
         writeTimeStamp(); 
 	}
 	this.snapshot = snapshot;
-    this.colormap = "wave";
+    this.colormap = "wave2";
 
     this.L = mUniforms.L.value;
     this.W = mUniforms.W.value;
@@ -59,7 +59,7 @@ function initControls() {
     //colormap control
 
     colormapControl = folderGeneral.add(controls, "colormap",
-        ["jet","seismic","wave"]).name("Colormap");
+        ["jet","seismic","wave","wave2"]).name("Colormap");
     colormapControl.onChange(function(value){
         setColorMapBar('batitopo',value);
     });

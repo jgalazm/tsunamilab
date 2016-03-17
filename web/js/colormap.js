@@ -81,6 +81,22 @@ function getColormapArray(cmap,k,d){
 				new THREE.Vector4(249, 26, 0,  (0.870-d)*k),
 				new THREE.Vector4(255, 255, 255,  (0.880-d)*k),
 				new THREE.Vector4(255, 64, 196,  (1.000-d)*k)],
+		'wave2': [ new THREE.Vector4(4, 29, 59,  (0.00-d)*k),
+				new THREE.Vector4(8, 59, 118,  (0.01-d)*k),
+				new THREE.Vector4(24, 77, 157,  (0.011-d)*k),
+				new THREE.Vector4(59, 106, 204,  (0.05-d)*k),
+				new THREE.Vector4(39, 32, 228,  (0.051-d)*k),
+				new THREE.Vector4(113, 184, 249,  (0.10-d)*k),
+				new THREE.Vector4(0, 106, 17,  (0.101-d)*k),
+				new THREE.Vector4(0, 208, 0,  (0.25-d)*k),
+				new THREE.Vector4(137, 130, 0,  (0.251-d)*k),
+				new THREE.Vector4(254, 229, 20,  (0.50-d)*k),
+				new THREE.Vector4(131, 80, 0,  (0.501-d)*k),
+				new THREE.Vector4(225, 128, 16,  (0.750-d)*k),
+				new THREE.Vector4(159, 19, 0,  (0.751-d)*k),
+				new THREE.Vector4(249, 26, 0,  (1.000-d)*k),
+				new THREE.Vector4(255, 255, 255,  (1.001-d)*k),
+				new THREE.Vector4(255, 64, 196,  (2.25-d)*k)],				
 		'seismic': [ new THREE.Vector4(0, 0, 0.4, (-1.0-d)*k),
 				new THREE.Vector4(1.0, 1.0, 1.0, (0.0-d)*k),
 				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
@@ -101,6 +117,9 @@ function getColormapArray(cmap,k,d){
 		colors['wave'][i].x = colors['wave'][i].x/255;
 		colors['wave'][i].y = colors['wave'][i].y/255;
 		colors['wave'][i].z = colors['wave'][i].z/255;
+		colors['wave2'][i].x = colors['wave2'][i].x/255;
+		colors['wave2'][i].y = colors['wave2'][i].y/255;
+		colors['wave2'][i].z = colors['wave2'][i].z/255;
 	}
 
 
@@ -116,7 +135,12 @@ function getColormapLabels(cmap,k,d){
 				 [(0.250-d)*k,(0.250-d)*k],
 				 [(0.500-d)*k,(0.500-d)*k],
 				 [(0.750-d)*k,(0.750-d)*k],
-				 [(1.000-d)*k,(1.000-d)*k]]
+				 [(1.000-d)*k,(1.000-d)*k]],
+		'wave2':  [[(0.00-d)*k,(0.00-d)*k],
+				 [(0.250-d)*k,(0.250-d)*k],
+				 [(0.500-d)*k,(0.500-d)*k],
+				 [(0.750-d)*k,(0.750-d)*k],
+				 [(1.000-d)*k,(1.000-d)*k]]				 
 	};
 
 	return label_colors[cmap];
@@ -181,13 +205,22 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 	}
 	var ctx = canvas.getContext('2d');
 	//cmap3js
-	for(var i = istart; i <= canvas.width; i++) {
-		var t = i/canvas.width; //normalize [0,1]
-		t = cmap3js[0].w+(cmap3js[ncolors-1].w - cmap3js[0].w)*t; //normalize to cmap
+	for(var i = istart; i <= canvas.width; i++) {		
+ 		// curent fraction in the canvas
+		var t = i/canvas.width;
+
+		//normalize to cmap
+		t = cmap3js[0].w+(cmap3js[ncolors-1].w - cmap3js[0].w)*t; 
+
+		//draw this color
 	    ctx.beginPath();
+
+	    //get pseudocolor for this t value
 	    var pcolor = getpcolor(t,cmap3js,16);
-	    var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';
+	    var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';	    
 	    ctx.fillStyle = color;		    
+
+
 	    if (typeof(fstart)=="undefined"){
 	    	ctx.fillRect((i-istart)*0.9+0.05*canvas.width,0 , 
 	    		canvas.width*0.95, canvas.height/2);	

@@ -207,7 +207,7 @@ void main()
 	vec2 pos = stereographic_projection(n,e,cn,ce);
 
 	float value = 0.0;
-	if (abs(pos.x)<L/2.0 && abs(pos.y)<L/2.0){
+	if (abs(pos.x)<L/2.0*4.0 && abs(pos.y)<L/2.0*4.0){
 		value  = okada(pos.g,pos.r,depth,strike,dip,L,W,rake,slip,U3);
 	}
 	float bati = texture2D(tBati, vUv).r;

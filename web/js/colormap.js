@@ -209,14 +209,16 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 	var n = 8;
 
 	var ctx = canvas.getContext('2d');
+
+	//colorbar canvas size
+	var L = canvas.width;
+	var W = canvas.height;
+
 	//cmap3js
-	for(var i = istart; i < canvas.width; i++) {	
-		if (i>=195){
-			console.log('asdf');
-		}	
+	for(var i = istart; i < L; i++) {	
  		// curent fraction in the canvas
 
-		var t = i/canvas.width;
+		var t = i/L;
 
 		//color segment index for this t
 
@@ -237,25 +239,19 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 		//build color string
 
 		var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';	
-		console.log(t,s);
-		console.log(v,pcolor,getpcolor(vk0,cmap3js,2*n),getpcolor(vkf,cmap3js,2*n));
-		console.log('');
+		// console.log(t,s);
+		// console.log(v,pcolor,getpcolor(vk0,cmap3js,2*n),getpcolor(vkf,cmap3js,2*n));
+		// console.log('');
 
 		// set color
 		ctx.fillStyle = color;    
 
  		//draw a rectangle for this color
-
 	    ctx.beginPath();
-	    if (typeof(fstart)=="undefined"){
-	    	ctx.fillRect((i-istart)*0.9+0.05*canvas.width,0 , 
-	    		canvas.width*0.95, canvas.height/2);	
-	    }
-	    else{
-	    	ctx.fillRect((i-istart)*0.9+0.05*canvas.width,0 , 
-	    		canvas.width*0.95, canvas.height/2);
-	    }	    
 
+	    //5% offset in both sides
+    	ctx.fillRect((i-istart)*0.9+0.05*L,0 , 
+					L*0.95, W/2);
 	}
 
 
@@ -269,8 +265,8 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 		var labelText,labelPosX,labelPosY;
 		// if (i<n){
 		var labelText  = cmap3js[Math.min(2*i,2*n-1)].w.toFixed(2).toString();
-		var labelPosX = (i+1)/n*canvas.width*0.9;
-		var labelPosY = canvas.height*0.7;
+		var labelPosX = (i+1)/n*L*0.9;
+		var labelPosY = W*0.7;
 		// }
 		
 		// ctx.fillText(labels[i][0].toFixed(2),
@@ -281,9 +277,9 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 		//draw a tick line
 	    ctx.beginPath();
 	    ctx.strokeStyle = "white";
-	    labelPosX = labelPosX - canvas.width*0.95/n/2-1;
-	    ctx.moveTo(labelPosX,canvas.height/2);
-	    ctx.lineTo(labelPosX,canvas.height/2*1.1);
+	    labelPosX = labelPosX - L*0.95/n/2-1;
+	    ctx.moveTo(labelPosX,W/2);
+	    ctx.lineTo(labelPosX,W/2*1.1);
 	    ctx.stroke();
 	}
 
@@ -291,7 +287,7 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 
 
 	//draw colorbar border
-	ctx.rect(0.05*canvas.width,0,canvas.width*0.95,canvas.height/2);
+	ctx.rect(0.05*L, 0, L*0.95, W/2);
 	ctx.strokeStyle="white";
 	ctx.stroke();
 

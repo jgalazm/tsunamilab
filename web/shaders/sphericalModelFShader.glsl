@@ -17,6 +17,43 @@ uniform float ymax;
 uniform float zmin;
 uniform float zmax;
 
+float periodicBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
+	float h_ij, float h_ijm){
+	float eta = 0.0;
+	if (vUv.x<=delta.x){
+		float un = texture2D(tSource,vec2(1.0-delta.x,vUv.y)).r;
+		eta = un;
+	}
+	else if(vUv.x>=1.0-delta.x){
+		float u0 = texture2D(tSource,vec2(delta.x,vUv.y)).r;
+		eta = u0;
+	}
+	
+
+	//j=0
+	float k = 1.0;
+	if (vUv.y <=k*delta.y){ 
+		if (vUv.x > k*delta.x && vUv.x <=1.0-k*delta.x){
+			if (h_ij>gx){
+				float cc = sqrt(g*h_ij);
+				float uh = 0.5*(u_ij.g+u_imj.g);
+				float uu = sqrt(uh*uh+ u_ij.b*u_ij.b);
+				float zz = uu/cc;
+				if (u_ij.b>0.0){
+					zz = -zz;
+				}
+				eta = zz;
+			}
+			else {
+				eta = 0.0;	
+			}
+		}
+	}
+
+	return eta;	
+
+
+}
 
 float openBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 	float h_ij, float h_ijm){
@@ -308,7 +345,8 @@ void main()
 	//handle boundaries (Open)
 	if (vUv.x<=1.0*delta.x || vUv.x>1.0-1.0*delta.x || 
 		vUv.y <=1.0*delta.y || vUv.y>1.0-1.0*delta.y){
-		u2_ij.r = openBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
+		// u2_ij.r = openBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
+		u2_ij.r = periodicBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
 	}
 
 

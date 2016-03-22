@@ -9,7 +9,7 @@ function tsunamiControls(){
         planeScreen.material = screenMaterial;
         nstep = 0;
         renderer.render(scene,view_camera); 
-        orb_controls.reset();
+        //orb_controls.reset();
         writeTimeStamp(); 
 	}
 	this.snapshot = snapshot;

@@ -3,6 +3,9 @@ uniform sampler2D tSource;
 uniform vec2 delta;
 uniform vec4 colors[16];
 
+uniform float zmin;
+uniform float zmax;
+
 vec3 getpcolor(float value){
     vec3 pseudoColor;
     // 
@@ -36,5 +39,17 @@ void main()
     vec3 pseudoColor = getpcolor(value);
 
     // gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b, value*0.7+0.3); 
-    gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b, pow(value,0.2));
+
+    float bati = texval.a;
+    float bati_real = zmin + (zmax-zmin)*bati;
+
+    float corrected_color =  pow(value,0.2);
+    if (bati_real>0.0){
+        corrected_color = 0.0;
+    }
+    else{
+        float t = 0.4;
+        corrected_color = t*corrected_color+1.0-t;
+    }
+    gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b,corrected_color);
 }

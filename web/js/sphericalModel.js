@@ -21,7 +21,7 @@ var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
 var initCondition = 1;
 
 //bathhymetry stuff
-var batiname = "batiLatLonPacific"
+var batiname = "batiWorld"
 var batiGeom, batiPlane, batidata;
 
 //physical world variables
@@ -246,8 +246,8 @@ function loadData(bati_image){
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
-		simNx = simNx/6;
-		simNy = simNy/6;
+		simNx = simNx/4;
+		simNy = simNy/4;
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
 	console.log('There are '+simNy.toString()+ ' cells in the X direction')
@@ -260,7 +260,7 @@ function loadData(bati_image){
     mUniforms.dx.value = dx;
     mUniforms.dy.value = dx;
     ymin = mUniforms.ymin.value
-    var lat_max = Math.max(Math.abs(ymin),Math.abs(ymax));
+    var lat_max = 60;//Math.max(Math.abs(ymin),Math.abs(ymax));
     var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
     var dy_real = R_earth*dy*rad_min;
 
@@ -285,7 +285,7 @@ function createCameras(){
 					 planeHeight/2, 
 					 planeHeight/-2, - 500, 1000 );
 	var r = screenWidth/screenHeight;
-	view_camera = new THREE.OrthographicCamera( -0.5*r, 0.5*r, 0.5, -0.5, - 500, 1000 );	
+	view_camera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );	
 	view_camera.position.set(0,0,5);
 	view_camera.lookAt(0,0,0);
 	orb_controls = new THREE.OrbitControls( view_camera, renderer.domElement );
@@ -440,8 +440,9 @@ function setColorMapBar(cmap_bati, cmap_water){
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
 	cbwater.width = screenWidth/4;//Math.min(screenWidth/2,300);
-    cbwater.height = 80;	
-    
+    cbwater.height = 80
+    // cbwater.height = 100;	
+    // cbwater.width = 80;
     
     var ncolors = 16;
 

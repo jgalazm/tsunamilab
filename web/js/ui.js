@@ -8,7 +8,7 @@ function tsunamiControls(){
 		doFaultModel();
         planeScreen.material = screenMaterial;
         nstep = 0;
-        renderer.render(scene,view_camera); 
+        renderer.render(calc_scene,view_camera); 
         //orb_controls.reset();
         writeTimeStamp(); 
 	}

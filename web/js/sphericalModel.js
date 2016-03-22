@@ -5,7 +5,7 @@
 
 var container;
 var screenWidth, screenHeight, ratio;
-var scene,calc_camera, view_camera, renderer;	
+var calc_scene,calc_camera,  view_scene, view_camera, renderer;	
 var width, height, ratio=1;
 var orb_controls;
 
@@ -21,9 +21,9 @@ var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
 var initCondition = 1;
 
 //bathhymetry stuff
-var batiname = "batiWorld"
+var batiname = "batiWorld"	
 var batiGeom, batiPlane, batidata;
-
+var earthMesh;
 //physical world variables
 var R_earth = 6378000.0,
     rad_deg = 0.01745329252,
@@ -102,7 +102,8 @@ function startSimulation(bati_image){
 	renderer.setSize(screenWidth, screenHeight);
 
 	// scene	
-	scene = new THREE.Scene();
+	calc_scene = new THREE.Scene();
+	view_scene = new THREE.Scene();
 
 	// create materials - uniforms
 
@@ -139,7 +140,7 @@ function startSimulation(bati_image){
 	//render to screen
 	mUniforms.tSource.value = mTextureBuffer1;
 	planeScreen.material = screenMaterial;
-	renderer.render(scene,view_camera);
+	renderer.render(calc_scene,view_camera);
 
 	// ----proceed with the simulation---
 	renderSimulation();
@@ -246,8 +247,8 @@ function loadData(bati_image){
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
-		simNx = simNx/4;
-		simNy = simNy/4;
+		simNx = simNx/2;
+		simNy = simNy/2;
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
 	console.log('There are '+simNy.toString()+ ' cells in the X direction')
@@ -284,14 +285,18 @@ function createCameras(){
 					 planeWidth/2,
 					 planeHeight/2, 
 					 planeHeight/-2, - 500, 1000 );
+	
 	var r = screenWidth/screenHeight;
 	view_camera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );	
 	view_camera.position.set(0,0,5);
 	view_camera.lookAt(0,0,0);
+	
 	orb_controls = new THREE.OrbitControls( view_camera, renderer.domElement );
-	// orb_controls.enableRotate = true;
+	orb_controls.enableRotate = true;
 }
 function createGeom(){
+	//create that sphere
+
 	//create a plane for bathymetry
 	batiGeom = new THREE.PlaneGeometry(planeWidth,planeHeight);
 	// batiPlane = new THREE.Mesh(batiGeom, batiMaterial);	
@@ -312,29 +317,41 @@ function createGeom(){
 	// batiMaterial2.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
 	// batiMaterial2.specular  = new THREE.Color('grey')
 	batiPlane2.material = batiMaterial2;
-	batiPlane2.position.z = -0.05;	
-	scene.add(batiPlane2);
+	batiPlane2.position.z = -0.001;	
+	calc_scene.add(batiPlane2);
+
+	//sphere
+	var sphere_geom = new THREE.SphereGeometry(0.5, 32, 32, 0, Math.PI*2, Math.PI/6, Math.PI*2/3);
+	var sphere_mat  = new THREE.MeshPhongMaterial();
+	sphere_mat.map = THREE.ImageUtils.loadTexture('img/'+batiname+'Map.jpg');
+	sphere_mat.bumpMaP = THREE.ImageUtils.loadTexture('img/'+batiname+'BumpMap.jpg');
+	batiMaterial2.bumpScale = 0.02;
+	earthMesh	= new THREE.Mesh(sphere_geom, sphere_mat);
+	earthMesh.position.x = 2.0;
+	earthMesh.rotateY(4/3*Math.PI);
+	calc_scene.add(earthMesh);
+
 
 	var light	= new THREE.AmbientLight( 0x888888)
-	scene.add( light );
+	calc_scene.add( light );
 
 	var light	= new THREE.DirectionalLight( 0xcccccc, 1 )
 	light.position.set(5,3,5)
-	scene.add( light );
+	calc_scene.add( light );
 
 	
 	// create a plane for simulation
 	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
 	planeScreen = new THREE.Mesh( geometry, screenMaterial );
-	scene.add( planeScreen );		
+	calc_scene.add( planeScreen );		
 
 	
 }
 
 function doFaultModel(){
 	planeScreen.material = initialMaterial;
-	renderer.render(scene, calc_camera, mTextureBuffer1, true);
-	renderer.render(scene, calc_camera, mTextureBuffer2, true);
+	renderer.render(calc_scene, calc_camera, mTextureBuffer1, true);
+	renderer.render(calc_scene, calc_camera, mTextureBuffer2, true);
 }
 
 function resizeSimulation(nx,ny){
@@ -389,12 +406,12 @@ function renderSimulation(){
 			writeTimeStamp();
 			if (!toggleBuffer){
 				mUniforms.tSource.value = mTextureBuffer1;		
-				renderer.render(scene, calc_camera, mTextureBuffer2, true);
+				renderer.render(calc_scene, calc_camera, mTextureBuffer2, true);
 				
 			}
 			else{
 				mUniforms.tSource.value = mTextureBuffer2;
-				renderer.render(scene, calc_camera, mTextureBuffer1, true);
+				renderer.render(calc_scene, calc_camera, mTextureBuffer1, true);
 				
 			}
 
@@ -415,7 +432,7 @@ function renderSimulation(){
 	planeScreen.material = screenMaterial;
 	stats.end();
 	orb_controls.update();
-	renderer.render(scene, view_camera);		
+	renderer.render(calc_scene, view_camera);		
 
 	requestAnimationFrame(renderSimulation);
 }

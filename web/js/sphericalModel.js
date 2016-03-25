@@ -7,24 +7,29 @@ var container;
 var screenWidth, screenHeight, ratio;
 var calc_scene,calc_camera,  view_scene, view_camera, renderer;	
 var width, height, ratio=1;
-var orb_controls;
+var orb_controls, track_controls;
 
 //simulation object
+
 var planeScreen, planeWidth=1, planeHeight=1;
 var simNx, simNy ;
 
 
-//simulation texture-materials related stuff
+//simulation texture-materials related vars
+
 var toggleBuffer = false;
 var mTextureBuffer1, mTextureBuffer2, batiTextureBuffer,batiTextureBufferColored;
 var screenMaterial, modelMaterial, initialMaterial, batiMaterial;
 var initCondition = 1;
 
 //bathhymetry stuff
+
 var batiname = "batiWorld"	
 var batiGeom, batiPlane, batidata;
 var earthMesh;
-//physical world variables
+
+//physical world constants
+
 var R_earth = 6378000.0,
     rad_deg = 0.01745329252,
     rad_min = 0.000290888208665721,
@@ -32,12 +37,14 @@ var R_earth = 6378000.0,
 
 
 //ui
+
 var info
 var time=0, dt;
 var speed = 1, paused = 1;
 var nstep = 0;
 var colors;
 var stats = new Stats();
+
 stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
 
 // align top-left
@@ -247,8 +254,8 @@ function loadData(bati_image){
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
-		simNx = simNx/2;
-		simNy = simNy/2;
+		simNx = simNx/4;
+		simNy = simNy/4;
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
 	console.log('There are '+simNy.toString()+ ' cells in the X direction')
@@ -287,12 +294,23 @@ function createCameras(){
 					 planeHeight/-2, - 500, 1000 );
 	
 	var r = screenWidth/screenHeight;
-	view_camera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );	
-	view_camera.position.set(0,0,5);
-	view_camera.lookAt(0,0,0);
+	// view_camera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );	
+	view_camera = new THREE.PerspectiveCamera(45,screenWidth/screenHeight,0.01,500);
+	view_camera.position.x = 0.0;
+	view_camera.position.y = 0.0;
+	view_camera.position.z = 1.0;
+	view_camera.lookAt(new THREE.Vector3(0,0,0));
+	view_scene.add(view_camera);
 	
-	orb_controls = new THREE.OrbitControls( view_camera, renderer.domElement );
-	orb_controls.enableRotate = true;
+	// orb_controls = new THREE.OrbitControls( view_camera);
+	// orb_controls.enableRotate = true;
+	track_controls = new THREE.TrackballControls(view_camera);
+	// track_controls.target.set(0,0,0);
+	track_controls.zoomSpeed = 1.2/100.0;
+	track_controls.rotateSpeed = 2.0/2.50;
+	track_controls.noZoom = false;
+	track_controls.panSpeed = 0.08;
+	// track_controls.dynamicDampingFactor = 0.3;
 }
 function createGeom(){
 	//create that sphere
@@ -318,27 +336,51 @@ function createGeom(){
 	// batiMaterial2.specular  = new THREE.Color('grey')
 	batiPlane2.material = batiMaterial2;
 	batiPlane2.position.z = -0.001;	
-	calc_scene.add(batiPlane2);
+	// calc_scene.add(batiPlane2);
 
-	//sphere
-	var sphere_geom = new THREE.SphereGeometry(0.5, 32, 32, 0, Math.PI*2, Math.PI/6, Math.PI*2/3);
-	var sphere_mat  = new THREE.MeshPhongMaterial();
-	sphere_mat.map = THREE.ImageUtils.loadTexture('img/'+batiname+'Map.jpg');
-	sphere_mat.bumpMaP = THREE.ImageUtils.loadTexture('img/'+batiname+'BumpMap.jpg');
-	batiMaterial2.bumpScale = 0.02;
-	earthMesh	= new THREE.Mesh(sphere_geom, sphere_mat);
-	earthMesh.position.x = 2.0;
-	earthMesh.rotateY(4/3*Math.PI);
-	calc_scene.add(earthMesh);
+	//bati sphere
+	var ysouth = Math.PI/2 - mUniforms.ymin.value*Math.PI/180.0;
+	var ynorth = Math.PI/2 - mUniforms.ymax.value*Math.PI/180.0;
+
+	var sphereBatiGeom = new THREE.SphereGeometry(0.5, 32*4, 32*4, 
+												0, Math.PI*2,
+													ynorth, ysouth-ynorth);
+	var sphereBatiMat  = new THREE.MeshPhongMaterial();
+	sphereBatiMat.map = THREE.ImageUtils.loadTexture('img/'+batiname+'Map.jpg');
+	sphereBatiMat.bumpMap = THREE.ImageUtils.loadTexture('img/'+batiname+'BumpMap.jpg');
+	sphereBatiMat.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
+	sphereBatiMat.bumpScale = 0.01745329252;
+	// sphereBatiMat.emissive = 0xffffff;
+
+	earthBatiMesh	= new THREE.Mesh(sphereBatiGeom, sphereBatiMat);
+	// earthBatiMesh.position.x = 2.0;
+	earthBatiMesh.rotateY(4/3*Math.PI);
+	view_scene.add(earthBatiMesh);
+
+	//model sphere
+
+	// var sphereModelGeom = new THREE.SphereGeometry(0.5*1.01, 32, 32, 0, Math.PI*2, Math.PI/6, Math.PI*2/3);
+
+	var sphereModelGeom = new THREE.SphereGeometry(0.5*1.01, 32, 32, 
+													0, Math.PI*2,
+													ynorth, ysouth-ynorth);
+	var sphereModelMat  = screenMaterial;
+	earthModelMesh	= new THREE.Mesh(sphereModelGeom, sphereModelMat);
+	// earthModelMesh.position.x = 2.0;
+	earthModelMesh.rotateY(4/3*Math.PI);
+	view_scene.add(earthModelMesh);
 
 
-	var light	= new THREE.AmbientLight( 0x888888)
-	calc_scene.add( light );
+	var light	= new THREE.AmbientLight( 0xaaaaaa*0.8);
+	view_scene.add( light );
 
-	var light	= new THREE.DirectionalLight( 0xcccccc, 1 )
-	light.position.set(5,3,5)
-	calc_scene.add( light );
+	var light	= new THREE.DirectionalLight( 0xffffff, 1 )
+	light.position.set(3,3,5)
+	view_scene.add( light );
 
+	var light = new THREE.PointLight( 0xaaaaaa, 0.5, 0 );
+	light.position.set( 0, 0, 50 );
+	view_scene.add( light );
 	
 	// create a plane for simulation
 	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
@@ -431,8 +473,9 @@ function renderSimulation(){
 	
 	planeScreen.material = screenMaterial;
 	stats.end();
-	orb_controls.update();
-	renderer.render(calc_scene, view_camera);		
+	// orb_controls.update();
+	track_controls.update();
+	renderer.render(view_scene, view_camera);		
 
 	requestAnimationFrame(renderSimulation);
 }

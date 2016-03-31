@@ -39,7 +39,7 @@ function initControls() {
 
 
     //speed
-    speedControl = folderGeneral.add(controls, "speed", 1, 20).name('Speed').step(1);
+    speedControl = folderGeneral.add(controls, "speed", 1, 20).name('Speed');
     speedControl.onChange(function(value){
     	speed = Math.floor(value);
     });  
@@ -66,13 +66,13 @@ function initControls() {
 
 
     //---fault model controls-----
-    fNorthingControl = folderFault.add(controls, "cn", -90, 90).name('Northing (m)');
+    fNorthingControl = folderFault.add(controls, "cn",-90,90).name('Northing (m)').step(0.5);
     fNorthingControl.onChange(function(value){
         mUniforms.cn.value = value;
         controls.restart();
     }); 
 
-    fEastingControl = folderFault.add(controls, "ce", -240,120   ).name('Easting (m)');
+    fEastingControl = folderFault.add(controls, "ce", -240.0,120.1   ).name('Easting (m)').step(0.1);
     fEastingControl.onChange(function(value){
         mUniforms.ce.value = value;
         controls.restart();

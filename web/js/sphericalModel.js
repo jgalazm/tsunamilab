@@ -297,8 +297,8 @@ function createCameras(){
 	// view_camera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );	
 	view_camera = new THREE.PerspectiveCamera(45,screenWidth/screenHeight,0.01,500);
 	view_camera.position.x = 0.0;
-	view_camera.position.y = 0.0;
-	view_camera.position.z = 1.0;
+	view_camera.position.y = Math.sin(mUniforms.cn.value*Math.PI/180.0);
+	view_camera.position.z = Math.cos(mUniforms.cn.value*Math.PI/180.0);
 	view_camera.lookAt(new THREE.Vector3(0,0,0));
 	view_scene.add(view_camera);
 	
@@ -336,7 +336,7 @@ function createGeom(){
 	// batiMaterial2.specular  = new THREE.Color('grey')
 	batiPlane2.material = batiMaterial2;
 	batiPlane2.position.z = -0.001;	
-	// calc_scene.add(batiPlane2);
+	// view_scene.add(batiPlane2);
 
 	//bati sphere
 	var ysouth = Math.PI/2 - mUniforms.ymin.value*Math.PI/180.0;
@@ -354,7 +354,8 @@ function createGeom(){
 
 	earthBatiMesh	= new THREE.Mesh(sphereBatiGeom, sphereBatiMat);
 	// earthBatiMesh.position.x = 2.0;
-	earthBatiMesh.rotateY(4/3*Math.PI);
+	var d =  	-(mUniforms.ce.value - mUniforms.xmin.value)*Math.PI/180.0;
+	earthBatiMesh.rotateY(d+Math.PI/2.0);;
 	view_scene.add(earthBatiMesh);
 
 	//model sphere
@@ -367,7 +368,8 @@ function createGeom(){
 	var sphereModelMat  = screenMaterial;
 	earthModelMesh	= new THREE.Mesh(sphereModelGeom, sphereModelMat);
 	// earthModelMesh.position.x = 2.0;
-	earthModelMesh.rotateY(4/3*Math.PI);
+	
+	earthModelMesh.rotateY(d+Math.PI/2.0);
 	view_scene.add(earthModelMesh);
 
 
@@ -386,6 +388,10 @@ function createGeom(){
 	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
 	planeScreen = new THREE.Mesh( geometry, screenMaterial );
 	calc_scene.add( planeScreen );		
+
+
+	var axisHelper = new THREE.AxisHelper( 5 );
+	view_scene.add( axisHelper );
 
 	
 }

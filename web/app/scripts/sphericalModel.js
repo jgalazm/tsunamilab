@@ -310,6 +310,8 @@ function createCameras(){
 	track_controls.rotateSpeed = 2.0/2.50;
 	track_controls.noZoom = false;
 	track_controls.panSpeed = 0.08;
+	track_controls.minDistance = 0.8;
+	track_controls.maxDistance = 2.0;
 	// track_controls.dynamicDampingFactor = 0.3;
 }
 function createGeom(){
@@ -390,8 +392,8 @@ function createGeom(){
 	calc_scene.add( planeScreen );		
 
 
-	var axisHelper = new THREE.AxisHelper( 5 );
-	view_scene.add( axisHelper );
+	// var axisHelper = new THREE.AxisHelper( 5 );
+	// view_scene.add( axisHelper );
 
 	
 }
@@ -505,8 +507,8 @@ function setColorMapBar(cmap_bati, cmap_water){
 
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
-	cbwater.width = screenWidth/4;//Math.min(screenWidth/2,300);
-    cbwater.height = 80
+	cbwater.width = screenWidth/5;//Math.min(screenWidth/2,300);
+    cbwater.height = 40
     // cbwater.height = 100;	
     // cbwater.width = 80;
     

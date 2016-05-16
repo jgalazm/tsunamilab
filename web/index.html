@@ -3,16 +3,23 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title> Tsunami (jgalazm) </title>		
-		<script src="js/three.min.js"></script>
-		<script src="js/jquery-1.11.3.min.js"></script>				
-		<script src="js/dat.gui.min.js"></script>				
-		<script src="js/stats.js"></script>
+		<title> TsunamiLab (jgalazm) </title>		
+
+		<!-- Bower componentes -->
+		<script src="bower_components/three.js/three.min.js"></script>
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>				
+		<script src="bower_components/dat-gui/build/dat.gui.min.js"></script>				
+		<script src="bower_components/stats.js/build/stats.min.js"></script>		
+
+
+		<!-- packages that must be downloaded manually-->
+		<script src="js/TrackballControls.js"></script>
+		<script src="js/orbitcontrols.js"></script>
+
+		<!--custom packages-->
 		<script src="js/sphericalModel.js"></script>
 		<script src="js/colormap.js"></script>
 		<script src="js/ui.js"></script>
-		<script src="js/TrackballControls.js"></script>
-		<script src="js/orbitcontrols.js"></script>
 
 		<script>
 			var vshader = 'shaders/vshader.glsl';
@@ -23,7 +30,8 @@
 			$(function(){
 				init();
 			});
-		</script>		
+		</script>	
+
 		<style>
 			body {
 				color: #cccccc;
@@ -67,13 +75,15 @@
 		<div id="simulation" style='display:inline-block;'>
 			<canvas id="container" > Chrome please</canvas>
 		</div>
+		
 		<br>
+		
 		<canvas width="50" height="512" id="cbwater"></canvas>	
+		
 		<h4 id="time"> Time: </h4>
 
 		<div id="controls">
 		</div>
-
 
 	</body>
 

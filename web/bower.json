@@ -1,0 +1,28 @@
+{
+  "name": "TsunamiLab",
+  "authors": [
+    "José Galaz"
+  ],
+  "description": "Interactive Tsunami Laboratory",
+  "main": "index.html",
+  "moduleType": [],
+  "keywords": [
+    "tsunamilab",
+    "tsunami"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "dat-gui": "^0.5.1",
+    "three.js": "^0.76.0",
+    "jquery": "^2.2.3",
+    "stats.js": "*"
+  }
+}

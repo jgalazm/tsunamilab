@@ -201,26 +201,26 @@ function createMaterials(){
 
 	batiMaterial = new THREE.ShaderMaterial({
 		uniforms: mUniforms,
-		vertexShader: $.ajax(vshader, {async:false}).responseText,
-		fragmentShader: $.ajax(bFshader,{async:false}).responseText
+		vertexShader: vshader_text,
+		fragmentShader: bFshader_text
 	});
 
 	initialMaterial = new THREE.ShaderMaterial({
 		uniforms: mUniforms,
-		vertexShader: $.ajax(vshader, {async:false}).responseText,
-		fragmentShader: $.ajax(iFshader,{async:false}).responseText
+		vertexShader: vshader_text,
+		fragmentShader: iFshader_text
 	});
 
 	modelMaterial = new THREE.ShaderMaterial({
 		uniforms: mUniforms,
-		vertexShader: $.ajax(vshader, {async:false}).responseText,
-		fragmentShader: $.ajax(mFshader,{async:false}).responseText
+		vertexShader: vshader_text,
+		fragmentShader: mFshader_text
 	});
 
 	screenMaterial = new THREE.ShaderMaterial({
 		uniforms: mUniforms,
-		vertexShader: $.ajax(vshader,{async:false}).responseText,
-		fragmentShader: $.ajax(sFshader,{async:false}).responseText,
+		vertexShader: vshader_text,
+		fragmentShader: sFshader_text,
 		transparent:true
 	});
 

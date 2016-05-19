@@ -272,7 +272,7 @@ function loadData(bati_image){
     var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
     var dy_real = R_earth*dy*rad_min;
 
-    dt = 0.45*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
+    dt = Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
     
     mUniforms.RR.value = dt/R_earth;
     mUniforms.RS.value = 9.81*mUniforms.RR.value;
@@ -390,6 +390,16 @@ function createGeom(){
 	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
 	planeScreen = new THREE.Mesh( geometry, screenMaterial );
 	calc_scene.add( planeScreen );		
+
+
+	var stars_geometry  = new THREE.SphereGeometry(90, 32, 32)
+	// create the material, using a texture of startfield
+	var stars_material  = new THREE.MeshBasicMaterial()
+	stars_material.map   = THREE.ImageUtils.loadTexture('img/galaxy_starfield.png')
+	stars_material.side  = THREE.BackSide
+	// create the mesh based on geometry and material
+	var stars_mesh  = new THREE.Mesh(stars_geometry, stars_material)
+	view_scene.add(stars_mesh);
 
 
 	// var axisHelper = new THREE.AxisHelper( 5 );

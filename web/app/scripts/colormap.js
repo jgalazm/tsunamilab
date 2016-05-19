@@ -1,3 +1,5 @@
+"use strict";
+
 function getColormapArray(cmap,k,d){
 	colors = {
 		'heat': [new THREE.Vector4(1, 1, 1, (-1-d)*k), //white
@@ -127,7 +129,7 @@ function getColormapArray(cmap,k,d){
 }
 
 function getColormapLabels(cmap,k,d){
-	label_colors = {
+	var label_colors = {
 		'batitopo': [[mUniforms.zmin.value,0.0],
 					[0.0, d], 
 					[ mUniforms.zmax.value, 1.0]],
@@ -157,7 +159,7 @@ function mix(cleft,cright,t){
 	c[0] = parseInt(c[0]*255);
 	c[1] = parseInt(c[1]*255);
 	c[2] = parseInt(c[2]*255);
-	return c
+	return c;
 }
 function getpcolor(value, colors, ncolors){
 	//float value
@@ -197,7 +199,8 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 	  labels: list of labels and cuts to put on the colorbar
 	
 	*/
-	if (typeof(fstart)=="undefined"){
+	var istart = 0;
+	if (typeof(fstart)==="undefined"){
 		istart = 0;
 	}
 	else{

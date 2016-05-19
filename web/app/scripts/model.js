@@ -1,3 +1,4 @@
+"use strict";
 //------------------------------------------------------
 //it requires variables: vshader, mFshader and sFshader
 //with url's of vertex/fragment shaders to work.
@@ -63,7 +64,7 @@ function init(){
 	simulationDiv.appendChild( info );	
 
 	//event handlers
-	container.oncontextmenu = function(){return false};
+	container.oncontextmenu = function(){return false;};
 	$(document).keyup(function(evt) {
 	if (evt.keyCode == 80)
 		mUniforms.pause.value = 1.0 - mUniforms.pause.value;

@@ -304,7 +304,7 @@ function createCameras(){
 	
 	// orb_controls = new THREE.OrbitControls( view_camera);
 	// orb_controls.enableRotate = true;
-	track_controls = new THREE.TrackballControls(view_camera);
+	track_controls = new THREE.TrackballControls(view_camera, document.getElementById('simulation'));
 	// track_controls.target.set(0,0,0);
 	track_controls.zoomSpeed = 1.2/100.0;
 	track_controls.rotateSpeed = 2.0/2.50;

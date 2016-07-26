@@ -58,7 +58,7 @@ function init(){
 
 	screenHeight = window.innerHeight;
 	// ratio = 432/594;
-	screenWidth = window.innerWidth*0.8;
+	screenWidth = window.innerWidth;
 
 	simulationDiv = document.getElementById('simulation');
 	container = document.getElementById( 'container' );
@@ -258,7 +258,7 @@ function loadData(bati_image){
 		simNy = simNy/4;
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
-	console.log('There are '+simNy.tox|String()+ ' cells in the X direction')
+	console.log('There are '+simNy.toString()+ ' cells in the X direction')
 	planeHeight = 1.0;
 	planeWidth = planeHeight*simNx/simNy;
 	mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy)

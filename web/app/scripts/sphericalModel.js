@@ -58,7 +58,7 @@ function init(){
 
 	screenHeight = window.innerHeight;
 	// ratio = 432/594;
-	screenWidth = window.innerWidth;
+	screenWidth = window.innerWidth*0.8;
 
 	simulationDiv = document.getElementById('simulation');
 	container = document.getElementById( 'container' );
@@ -258,7 +258,7 @@ function loadData(bati_image){
 		simNy = simNy/4;
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
-	console.log('There are '+simNy.toString()+ ' cells in the X direction')
+	console.log('There are '+simNy.tox|String()+ ' cells in the X direction')
 	planeHeight = 1.0;
 	planeWidth = planeHeight*simNx/simNy;
 	mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy)
@@ -304,7 +304,7 @@ function createCameras(){
 	
 	// orb_controls = new THREE.OrbitControls( view_camera);
 	// orb_controls.enableRotate = true;
-	track_controls = new THREE.TrackballControls(view_camera);
+	track_controls = new THREE.TrackballControls(view_camera, document.getElementById('simulation'));
 	// track_controls.target.set(0,0,0);
 	track_controls.zoomSpeed = 1.2/100.0;
 	track_controls.rotateSpeed = 2.0/2.50;
@@ -346,18 +346,18 @@ function createGeom(){
 
 	var sphereBatiGeom = new THREE.SphereGeometry(0.5, 32*4, 32*4, 
 												0, Math.PI*2,
-													ynorth, ysouth-ynorth);
+													0, Math.PI);
 	var sphereBatiMat  = new THREE.MeshPhongMaterial();
-	sphereBatiMat.map = THREE.ImageUtils.loadTexture('img/'+batiname+'Map.jpg');
-	sphereBatiMat.bumpMap = THREE.ImageUtils.loadTexture('img/'+batiname+'BumpMap.jpg');
-	sphereBatiMat.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
-	sphereBatiMat.bumpScale = 0.01745329252;
+	sphereBatiMat.map = THREE.ImageUtils.loadTexture('img/'+batiname+'Map_NASA.jpg');
+	sphereBatiMat.bumpMap = THREE.ImageUtils.loadTexture('img/batiWholeWorldBumpMap.jpg');
+	// sphereBatiMat.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
+	sphereBatiMat.bumpScale = 0.01;
 	// sphereBatiMat.emissive = 0xffffff;
 
 	earthBatiMesh	= new THREE.Mesh(sphereBatiGeom, sphereBatiMat);
 	// earthBatiMesh.position.x = 2.0;
 	var d =  	-(mUniforms.ce.value - mUniforms.xmin.value)*Math.PI/180.0;
-	earthBatiMesh.rotateY(d+Math.PI/2.0);;
+	earthBatiMesh.rotateY(d-Math.PI/2.0);;
 	view_scene.add(earthBatiMesh);
 
 	//model sphere

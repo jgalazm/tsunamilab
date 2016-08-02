@@ -34,13 +34,14 @@ var R_earth = 6378000.0,
     rad_deg = 0.01745329252,
     rad_min = 0.000290888208665721,
     cori_w = 7.2722e-5;
-
+// historical scenarios
+var historicalData;
 
 //ui
 
 var info
 var time=0, dt;
-var speed = 1, paused = 1;
+var speed = 1, paused = 0;
 var nstep = 0;
 var colors;
 var stats = new Stats();
@@ -225,6 +226,24 @@ function createMaterials(){
 	});
 
 }
+function changeScenario(scenario){
+
+	mUniforms.L.value = historicalData[scenario].L;
+	mUniforms.W.value = historicalData[scenario].W
+	mUniforms.depth.value = historicalData[scenario].depth;
+	mUniforms.slip.value = historicalData[scenario].slip;
+	mUniforms.strike.value = historicalData[scenario].strike;
+	mUniforms.dip.value = historicalData[scenario].dip;
+	mUniforms.rake.value = historicalData[scenario].rake;
+	mUniforms.U3.value = historicalData[scenario].U3;
+	mUniforms.cn.value = historicalData[scenario].cn;
+	mUniforms.ce.value = historicalData[scenario].ce;
+	doFaultModel();
+    planeScreen.material = screenMaterial;
+    nstep = 0;
+    renderer.render(view_scene,view_camera); 
+    console.log('render fault');
+}
 
 function loadData(bati_image){
 	var data = $.ajax("img/"+batiname+".txt",{async:false}).responseText;
@@ -234,8 +253,24 @@ function loadData(bati_image){
     	nx:parseInt(dataarray[1].split(':')[1]),
     }; 
 
-   
+	$.getJSON( "data/faults.json", function(data) {
+	  historicalData = data;	  
+	  console.log( "success" );
+	})
+	  .done(function() {
+	    console.log( "second success" );
+	    changeScenario("biobio2010");
+	  })
+	  .fail(function(val) {
+	  	console.log(val);
+	    console.log( "error" );
+	  })
+	  .always(function() {
+	    console.log( "complete" );
+	  });   
+
    	
+
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
     mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
 	mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
@@ -246,7 +281,7 @@ function loadData(bati_image){
     mUniforms.zmax.value = parseFloat(dataarray[7].split(':')[1]);
 
     if (mUniforms.zmin.value>0.0){
-    	var e = new Error('zmin negative on bathymetry image file'); 
+    	var e = new Error('zmin positive on bathymetry image file'); 
     	throw e;
     }
             
@@ -259,15 +294,17 @@ function loadData(bati_image){
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
 	console.log('There are '+simNy.toString()+ ' cells in the X direction')
+
+
 	planeHeight = 1.0;
 	planeWidth = planeHeight*simNx/simNy;
 	mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy)
 
-    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/simNx*60.0;
-    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/simNy*60.0;
+    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/(simNx)*60.0;
+    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/(simNy)*60.0;
     mUniforms.dx.value = dx;
     mUniforms.dy.value = dx;
-    ymin = mUniforms.ymin.value
+    // ymin = mUniforms.ymin.value
     var lat_max = 60;//Math.max(Math.abs(ymin),Math.abs(ymax));
     var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
     var dy_real = R_earth*dy*rad_min;
@@ -375,7 +412,7 @@ function createGeom(){
 	view_scene.add(earthModelMesh);
 
 
-	var light	= new THREE.AmbientLight( 0xaaaaaa*0.8);
+	var light	= new THREE.AmbientLight( 0xffffff,0.9);
 	view_scene.add( light );
 
 	var light	= new THREE.DirectionalLight( 0xffffff, 1 )

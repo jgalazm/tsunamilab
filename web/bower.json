@@ -23,6 +23,7 @@
     "dat-gui": "^0.5.1",
     "three.js": "^0.76.0",
     "jquery": "^2.2.3",
-    "stats.js": "*"
+    "stats.js": "*",
+    "flexboxgrid": "^6.3.0"
   }
 }

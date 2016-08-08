@@ -3,6 +3,7 @@
   "authors": [
     "José Galaz"
   ],
+  "version": "0.0.1",
   "description": "Interactive Tsunami Laboratory",
   "main": "index.html",
   "moduleType": [],
@@ -24,6 +25,7 @@
     "three.js": "^0.76.0",
     "jquery": "^2.2.3",
     "stats.js": "*",
-    "flexboxgrid": "^6.3.0"
+    "flexboxgrid": "^6.3.0",
+    "bootstrap": "^3.3.7"
   }
 }

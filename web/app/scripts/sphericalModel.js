@@ -58,7 +58,10 @@ function init(){
 	stats.domElement.style.top = '0px';
 
 	console.log(stats);
-	document.body.appendChild(stats.domElement);	
+
+
+	/*Add FPS to html*/
+	//document.body.appendChild(stats.domElement);	
 
 	screenHeight = window.innerHeight;
 	// ratio = 432/594;

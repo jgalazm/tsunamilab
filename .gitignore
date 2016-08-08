@@ -60,3 +60,7 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Created folders in web
+web/.tmp/
+web/dist/

@@ -299,8 +299,8 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 	    var x = e.offsetX,
 	        y = e.offsetY,
 	        p = ctx.getImageData(x, y, 1, 1),
-	        x = p.data;
+	        rgb = p.data;
 	    
-	    alert('Color: rgb(' + x[0] + ', ' + x[1] + ', ' + x[2] + ')');
+	    alert('Color: rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')');
 	};
 }

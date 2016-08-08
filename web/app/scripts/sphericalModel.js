@@ -571,8 +571,5 @@ function setColorMapBar(cmap_bati, cmap_water){
     // cbwater.height = 100;	
     // cbwater.width = 80;
     
-    var ncolors = 16;
-
-    var waterlabels = getColormapLabels(cmap_water,1,0);
-	colorbar(watermap,cbwater,ncolors,0.0,waterlabels);
+	colorbar(watermap,cbwater,0.0);
 }

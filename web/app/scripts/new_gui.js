@@ -51,11 +51,11 @@ function init_new_gui(){
 	});
 
 	$("#btn-minus").click(function(){
-		speed = max(speed - 1, 1);
+		speed = Math.max(speed - 1, 1);
 	});
 
 	$("#btn-plus").click(function(){
-		speed = min(speed +1, 20);
+		speed = Math.min(speed +1, 20);
 	});
 };
 

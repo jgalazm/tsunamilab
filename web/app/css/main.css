@@ -90,3 +90,7 @@ a {
 	opacity: 1.0;
 	font-size: xx-large;
 }
+
+.form-control{
+	opacity: 0.5;
+}

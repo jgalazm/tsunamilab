@@ -61,9 +61,12 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-
 ### Jupyter Notebooks ###
 .ipynb_checkpoints
 data/.ipynb_checkpoints
 okada/.ipynb_checkpoints
 ipynb/.ipynb_checkpoints
+
+# Created folders in web
+web/.tmp/
+web/dist/

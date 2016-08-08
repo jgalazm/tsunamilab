@@ -3,10 +3,20 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title> TsunamiLab (jgalazm) </title>		
+		<title> TsunamiLab (jgalazm) </title>
+
+		
 
 		<!-- build:js scripts/main.js -->
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!-- Bower components -->
+		
+		<!--link rel="stylesheet" type="text/css" href="../bower_components/flexboxgrid/dist/flexboxgrid.css"-->
+		<!--link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"-->
+
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+
 		<script src="../bower_components/jquery/dist/jquery.min.js"></script>				
 		<script src="../bower_components/three.js/three.min.js"></script>		
 		<script src="../bower_components/dat-gui/build/dat.gui.min.js"></script>				
@@ -22,67 +32,89 @@
 		<script src="scripts/colormap.js"></script>
 		<script src="scripts/ui.js"></script>
 		<script src="scripts/shaders.js"></script>
+
+		<script src="scripts/new_gui.js"></script>
+		<script src="scripts/simulation.js"></script>
+
+		<script src="scripts/main.js"></script>
 		<!-- endbuild -->
 		
-		<script>
-			$(function(){
-				init();
-			});
-		</script>
 
-		
-		<style>
-			body {
-				color: #cccccc;
-				font-family:Monospace;
-				font-size:13px;
-				text-align:center;
-
-				background-color: #050505;
-				margin: 0px;
-				overflow: hidden;
-			}
-
-			#time {
-				position: absolute;
-				top: 0px; width: 100%;
-				padding: 5px;
-			}
-			#cv{
-
-			}
-
-			a {
-				color: #0080ff;
-			}
-			#controls{
-				position: absolute;
-				bottom: 10%;
-			}
-
-			#cbwater{
-			    position: fixed;
-			    top: 0%;
-			    right: 5%;				
-			}
-
-		</style>	
 
 	</head>		
 
 	<body>
 		
-		<div id="simulation" style='display:inline-block;'>
-			<canvas id="container" > Chrome please</canvas>
-		</div>
-		
-		<br>
-		
+			
 		<canvas width="50" height="512" id="cbwater"></canvas>	
 		
 		<h4 id="time"> Time: </h4>
 
 		<div id="controls">
+		</div>
+
+		<div id="new-gui" class="mipanel">
+
+
+
+			<div class="row">
+				<div class="col-xs-12">
+					<select class="form-control">
+					  <option>1</option>
+					  <option>2</option>
+					  <option>3</option>
+					  <option>4</option>
+					  <option>5</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row">
+
+
+
+				<div class="col-xs-4">
+					<div id="btn-minus" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-minus"></span>
+					</div>
+				</div>
+
+				<div class="col-xs-4">
+					<div id="btn-play" class="btn btn-default btn-lg">
+						<span id="icon-play" class="glyphicon glyphicon-play"></span>
+						<span id="icon-pause" class="glyphicon glyphicon-pause"></span>
+					</div>
+				</div>
+
+				<div class="col-xs-4">
+					<div id="btn-plus" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-plus"></span>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="btn-restart" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="btn-snapshot" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-camera"></span>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+
+
+		<div id="simulation" style='display:inline-block;'>
+			<canvas id="container" > Chrome please</canvas>
 		</div>
 
 	</body>

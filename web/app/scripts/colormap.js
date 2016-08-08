@@ -190,23 +190,15 @@ function getpcolor(value, colors, ncolors){
     return pseudoColor;
 }
 
-function colorbar(cmap3js, canvas, ncolors, fstart, labels){
+function colorbar(cmap3js, canvas){
 	/*cmap3js: list of THREE.Vector4 containing rgb colors 
 			and cuts in  the alpha channel
 	  canvas: where to plot the colorbar, now horizontal only
-	  ncolors: length of the cmap3js list
 	  fstart: fraction (in (0,1]) from where to start in the colorbar range
 	  labels: list of labels and cuts to put on the colorbar
 	
 	*/
 	var istart = 0;
-	if (typeof(fstart)==="undefined"){
-		istart = 0;
-	}
-	else{
-		istart = parseInt(canvas.width * fstart);
-	}
-
 	//number of color segments
 
 	var n = 8;
@@ -299,8 +291,8 @@ function colorbar(cmap3js, canvas, ncolors, fstart, labels){
 	    var x = e.offsetX,
 	        y = e.offsetY,
 	        p = ctx.getImageData(x, y, 1, 1),
-	        x = p.data;
+	        rgb = p.data;
 	    
-	    alert('Color: rgb(' + x[0] + ', ' + x[1] + ', ' + x[2] + ')');
+	    alert('Color: rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')');
 	};
 }

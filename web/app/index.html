@@ -5,11 +5,18 @@
 		<meta charset="utf-8">
 		<title> TsunamiLab (jgalazm) </title>
 
-		<link rel="stylesheet" href="../bower_components/flexboxgrid/dist/flexboxgrid.min.css" type="text/css">
-		<link rel="stylesheet" type="text/css" href="css/main.css">
+		
 
 		<!-- build:js scripts/main.js -->
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!-- Bower components -->
+		
+		<!--link rel="stylesheet" type="text/css" href="../bower_components/flexboxgrid/dist/flexboxgrid.css"-->
+		<!--link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"-->
+
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+
 		<script src="../bower_components/jquery/dist/jquery.min.js"></script>				
 		<script src="../bower_components/three.js/three.min.js"></script>		
 		<script src="../bower_components/dat-gui/build/dat.gui.min.js"></script>				
@@ -38,12 +45,7 @@
 
 	<body>
 		
-		<div id="simulation" style='display:inline-block;'>
-			<canvas id="container" > Chrome please</canvas>
-		</div>
-		
-		<br>
-		
+			
 		<canvas width="50" height="512" id="cbwater"></canvas>	
 		
 		<h4 id="time"> Time: </h4>
@@ -51,14 +53,52 @@
 		<div id="controls">
 		</div>
 
-		<div id="new-gui">
+		<div id="new-gui" class="mipanel">
 
-			<div id="btn-play" class="movable">PLAY/PAUSE</div>
-			<div id="btn-restart" class="movable">RESTART</div>
-			<div id="btn-snapshot" class="movable">SNAPSHOT</div>
-			<div id="btn-x" class="movable">X</div>
+			<div class="row">
+
+				<div class="col-xs-4">
+					<div id="btn-minus" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-minus"></span>
+					</div>
+				</div>
+
+				<div class="col-xs-4">
+					<div id="btn-play" class="btn btn-default btn-lg">
+						<span id="icon-play" class="glyphicon glyphicon-play"></span>
+						<span id="icon-pause" class="glyphicon glyphicon-pause"></span>
+					</div>
+				</div>
+
+				<div class="col-xs-4">
+					<div id="btn-plus" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-plus"></span>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="btn-restart" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-stop"></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="btn-snapshot" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-camera"></span>
+					</div>
+				</div>
+			</div>
 
 
+		</div>
+
+
+
+		<div id="simulation" style='display:inline-block;'>
+			<canvas id="container" > Chrome please</canvas>
 		</div>
 
 	</body>

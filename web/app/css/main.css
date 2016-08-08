@@ -60,3 +60,33 @@ a {
 	text-align: center;
 
 }
+
+.mipanel{
+	position: absolute;
+	
+	/*background-color: rgba(10, 10, 10, 0.5);
+
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	border-radius: 4px;*/
+
+	top: 20%;
+	left: 2%;
+
+	width: 20%;
+	height: 70%;
+}
+
+.btn{
+	opacity: 0.5;
+
+	/*
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 4px;*/
+
+	margin: 20px 0px 10px 0px;
+}
+.glyphicon{
+	opacity: 1.0;
+	font-size: xx-large;
+}

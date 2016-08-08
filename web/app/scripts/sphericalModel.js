@@ -556,10 +556,17 @@ function renderSimulation(){
 
 function writeTimeStamp(){
 	nstep = nstep+1;
-	time = nstep*dt/60;
-	var timetext = "Time: "
-	timetext = timetext.concat(time.toFixed(2));
-	timetext = timetext.concat(" min.");
+	time = nstep*dt;
+	var timetext = "Time: ";
+	// timetext = timetext.concat(time.toFixed(2));
+	// timetext = timetext.concat(" min.");
+
+	var hours = Math.floor(time/60/60),
+        minutes = Math.floor((time - (hours * 60 * 60))/60),
+        seconds = Math.round(time - (hours * 60 * 60) - (minutes * 60));
+    var timetext = timetext.concat(hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds));
+
+
 	var timeDomEl = document.getElementById("time");
 	timeDomEl.textContent = timetext;
 }
@@ -567,7 +574,7 @@ function writeTimeStamp(){
 function setColorMapBar(cmap_bati, cmap_water){
 	//requires colormap.js
 	
-	var c = -mUniforms.zmin.value/(mUniforms.zmax.value - mUniforms.zmin.value);
+	//var c = -mUniforms.zmin.value/(mUniforms.zmax.value - mUniforms.zmin.value);
 	var watermap = getColormapArray(cmap_water,1,0);
 	mUniforms.colors.value = watermap;
 

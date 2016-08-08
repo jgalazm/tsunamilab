@@ -50,6 +50,13 @@ function init_new_gui(){
 		changeScenario($(this).val());
 	});
 
+	$("#btn-minus").click(function(){
+		speed = max(speed - 1, 1);
+	});
+
+	$("#btn-plus").click(function(){
+		speed = min(speed +1, 20);
+	});
 };
 
 

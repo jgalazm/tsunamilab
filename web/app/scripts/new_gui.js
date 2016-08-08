@@ -45,10 +45,10 @@ function init_new_gui(){
 		simulationControls.snapshot();
 	});
 
-	
-
-
-
+	$("#scenarios").change(function(value){
+		console.log($(this).val())
+		changeScenario($(this).val());
+	});
 
 };
 

@@ -238,6 +238,7 @@ function changeScenario(scenario){
 	mUniforms.U3.value = historicalData[scenario].U3;
 	mUniforms.cn.value = historicalData[scenario].cn;
 	mUniforms.ce.value = historicalData[scenario].ce;
+
 	doFaultModel();
     planeScreen.material = screenMaterial;
     nstep = 0;
@@ -253,22 +254,33 @@ function loadData(bati_image){
     	nx:parseInt(dataarray[1].split(':')[1]),
     }; 
 
-	$.getJSON( "data/faults.json", function(data) {
-	  historicalData = data;	  
-	  console.log( "success" );
-	})
-	  .done(function() {
-	    console.log( "second success" );
-	    changeScenario("biobio2010");
-	  })
-	  .fail(function(val) {
-	  	console.log(val);
-	    console.log( "error" );
-	  })
-	  .always(function() {
-	    console.log( "complete" );
-	  });   
+	// $.getJSON( "data/faults.json", function(data) {
+	//   historicalData = data;
+	//   changeScenario("japan2011");
+	//   console.log( "success" );
+	// })
+	//   .done(function() {
+	//     console.log( "second success" );
+	//     // changeScenario("japan2011");
+	//   })
+	//   .fail(function(val) {
+	//   	console.log(val);
+	//     console.log( "error" );
+	//   })
+	//   .always(function() {
+	//     console.log( "complete" );
+	//   });   
 
+	$.ajax({
+	  dataType: "json",
+	  url: "data/historicalData.json",
+	  async: false,
+	  success: function(data) {
+		  historicalData = data;	  
+		  console.log( "success" );
+		  changeScenario("valdivia1960");
+		}
+	});
    	
 
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
@@ -289,11 +301,11 @@ function loadData(bati_image){
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
-		simNx = simNx/4;
-		simNy = simNy/4;
+		simNx = simNx/3;
+		simNy = simNy/3;
 	}
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
-	console.log('There are '+simNy.toString()+ ' cells in the X direction')
+	console.log('There are '+simNy.toString()+ ' cells in the Y direction')
 
 
 	planeHeight = 1.0;
@@ -309,7 +321,7 @@ function loadData(bati_image){
     var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
     var dy_real = R_earth*dy*rad_min;
 
-    dt = Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
+    dt = 0.5*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
     
     mUniforms.RR.value = dt/R_earth;
     mUniforms.RS.value = 9.81*mUniforms.RR.value;
@@ -393,7 +405,7 @@ function createGeom(){
 
 	earthBatiMesh	= new THREE.Mesh(sphereBatiGeom, sphereBatiMat);
 	// earthBatiMesh.position.x = 2.0;
-	var d =  	-(mUniforms.ce.value - mUniforms.xmin.value)*Math.PI/180.0;
+	var d =  -(mUniforms.ce.value - mUniforms.xmin.value)*Math.PI/180.0;
 	earthBatiMesh.rotateY(d-Math.PI/2.0);;
 	view_scene.add(earthBatiMesh);
 

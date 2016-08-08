@@ -14,6 +14,7 @@ function tsunamiControls(){
 	}
 	this.snapshot = snapshot;
     this.colormap = "wave2";
+    this.scenario = "valdivia1960";
 
     this.L = mUniforms.L.value;
     this.W = mUniforms.W.value;
@@ -64,6 +65,15 @@ function initControls() {
         setColorMapBar('batitopo',value);
     });
 
+    //scenario control
+
+    scenarioControl = folderGeneral.add(controls, "scenario",
+        Object.keys(historicalData))
+    scenarioControl.onChange(function(value){
+        changeScenario(value);
+        // view_camera.position.y = Math.sin(mUniforms.cn.value*Math.PI/180.0);
+        // view_camera.position.z = Math.cos(mUniforms.cn.value*Math.PI/180.0);
+    });
 
     //---fault model controls-----
     fNorthingControl = folderFault.add(controls, "cn",-90,90).name('Northing (m)').step(0.5);

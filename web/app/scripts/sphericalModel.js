@@ -154,7 +154,7 @@ function startSimulation(bati_image){
 	//set initial condition
     // render initial condition and bathymetry to both buffers
     doFaultModel();
-
+    changeScenario("valdivia1960");
 	//render to screen
 	mUniforms.tSource.value = mTextureBuffer1;
 	planeScreen.material = screenMaterial;
@@ -288,7 +288,6 @@ function loadData(bati_image){
 	  success: function(data) {
 		  historicalData = data;	  
 		  console.log( "success" );
-		  changeScenario("valdivia1960");
 		}
 	});
    	

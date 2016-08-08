@@ -1,9 +1,15 @@
 
 function tsunamiControls(){
+    
+    // Changed by function in simulation.js 
 	this.pause = function(){
-         paused = 1-paused;
+         //paused = 1-paused;
+         simulationControls.pause();
 	}
+
 	this.speed = speed;
+
+    /* Changed by function in simulation.js
 	this.restart = function(){
 		doFaultModel();
         planeScreen.material = screenMaterial;
@@ -12,7 +18,11 @@ function tsunamiControls(){
         //orb_controls.reset();
         writeTimeStamp(); 
 	}
-	this.snapshot = snapshot;
+    */
+    this.restart = simulationControls.restart;
+    // Function is in simulation.js now
+	this.snapshot = simulationControls.snapshot;
+    
     this.colormap = "wave2";
     this.scenario = "valdivia1960";
 
@@ -29,9 +39,16 @@ function tsunamiControls(){
 }
 function initControls() {
     var controls = new tsunamiControls;
+
+
+    dat.GUI.TEXT_CLOSED = 'Close Advanced Controls';
+    dat.GUI.TEXT_OPEN = 'Open Advanced Controls';
     var gui = new dat.GUI({
         autoPlace: false
-    }); 
+
+    });
+
+
 
     // gui.remember(controls);
     //folders    
@@ -142,9 +159,22 @@ function initControls() {
 
     var customContainer = document.getElementById('controls');
     customContainer.appendChild(gui.domElement);
+
+
+    console.log(gui.closed);
+    gui.closed = true;
+
+    //gui.TEXT_OPEN = "Advanced Controls";
+
+    
+
+    //$(".close-button").text("Advanced Controls");
+
+
 }
 
+/*
 function snapshot(){
 	var dataURL = container.toDataURL("image/png");
 	window.open(dataURL, "tsunami-"+Math.random());
-}	
+}	*/

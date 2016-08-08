@@ -3,7 +3,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title> TsunamiLab (jgalazm) </title>		
+		<title> TsunamiLab (jgalazm) </title>
+
+		<link rel="stylesheet" href="../bower_components/flexboxgrid/dist/flexboxgrid.min.css" type="text/css">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 
 		<!-- build:js scripts/main.js -->
 		<!-- Bower components -->
@@ -22,51 +25,14 @@
 		<script src="scripts/colormap.js"></script>
 		<script src="scripts/ui.js"></script>
 		<script src="scripts/shaders.js"></script>
+
+		<script src="scripts/new_gui.js"></script>
+		<script src="scripts/simulation.js"></script>
+
+		<script src="scripts/main.js"></script>
 		<!-- endbuild -->
 		
-		<script>
-			$(function(){
-				init();
-			});
-		</script>
 
-		
-		<style>
-			body {
-				color: #cccccc;
-				font-family:Monospace;
-				font-size:13px;
-				text-align:center;
-
-				background-color: #050505;
-				margin: 0px;
-				overflow: hidden;
-			}
-
-			#time {
-				position: absolute;
-				top: 0px; width: 100%;
-				padding: 5px;
-			}
-			#cv{
-
-			}
-
-			a {
-				color: #0080ff;
-			}
-			#controls{
-				position: absolute;
-				bottom: 10%;
-			}
-
-			#cbwater{
-			    position: fixed;
-			    top: 0%;
-			    right: 5%;				
-			}
-
-		</style>	
 
 	</head>		
 
@@ -83,6 +49,16 @@
 		<h4 id="time"> Time: </h4>
 
 		<div id="controls">
+		</div>
+
+		<div id="new-gui">
+
+			<div id="btn-play" class="movable">PLAY/PAUSE</div>
+			<div id="btn-restart" class="movable">RESTART</div>
+			<div id="btn-snapshot" class="movable">SNAPSHOT</div>
+			<div id="btn-x" class="movable">X</div>
+
+
 		</div>
 
 	</body>

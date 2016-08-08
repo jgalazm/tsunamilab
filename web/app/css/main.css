@@ -1,0 +1,62 @@
+body {
+	color: #cccccc;
+	font-family:Monospace;
+	font-size:13px;
+	text-align:center;
+
+	background-color: #050505;
+	margin: 0px;
+	overflow: hidden;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+	-khtml-user-select: none;    /* Konqueror */
+	-moz-user-select: none;      /* Firefox */
+	-ms-user-select: none;       /* Internet Explorer/Edge */
+	user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+
+}
+
+#time {
+	position: absolute;
+	top: 0px; width: 100%;
+	padding: 5px;
+}
+#cv{
+
+}
+
+a {
+	color: #0080ff;
+}
+#controls{
+	position: absolute;
+	bottom: 10%;
+}
+
+#cbwater{
+    position: fixed;
+    top: 0%;
+    right: 5%;				
+}
+
+
+
+
+
+.movable{
+
+	background-color: rgba(255, 255, 255, 0.5);
+	color:  black;
+	position: absolute;
+
+	left: 50%;
+	/*right: 0px;*/
+	bottom: 0px;
+
+	width: 50px;
+	height: 50px;
+
+	text-align: center;
+
+}

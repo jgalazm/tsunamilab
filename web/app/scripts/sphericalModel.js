@@ -52,13 +52,17 @@ stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
 
 
 function init(){
+	console.log("init()");
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.left = '0px';
-	stats.domElement.style.top = '90%';
+	stats.domElement.style.top = '0px';
+
+	console.log(stats);
 	document.body.appendChild(stats.domElement);	
 
 	screenHeight = window.innerHeight;
 	// ratio = 432/594;
+	//screenWidth = window.innerWidth*0.8;
 	screenWidth = window.innerWidth;
 
 	simulationDiv = document.getElementById('simulation');
@@ -101,9 +105,12 @@ function init(){
 		}
 	);
 
+	console.log("init_end");
+
 }
 
 function startSimulation(bati_image){
+	console.log("startSimulation()");
 	//renderer
 	renderer = new THREE.WebGLRenderer({canvas:container, preserveDrawingBuffer: true});
 	renderer.setClearColor( 0x000000);

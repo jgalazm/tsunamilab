@@ -1,6 +1,6 @@
 var container;
 var screenWidth, screenHeight, ratio;
-var simulationScene, simulationCamera,  viewScene, viewCamera, renderer;	
+var simulationScene, simulationCamera,  viewScene, viewCamera, renderer;
 var width, height, ratio=1;
 var orbitControls, trackBallControls;
 
@@ -68,7 +68,7 @@ function init(){
 			function ( texture ) {
 				batiTexture = texture;
 
-				loadData();	
+				loadData();
 
 				startSimulation();
 			},
@@ -84,7 +84,7 @@ function init(){
 	};
 	loadBathymetry();
 
-	
+
 }
 function loadData(){
 	var data = $.ajax("img/"+batiname+".txt",{async:false}).responseText;
@@ -100,7 +100,7 @@ function loadData(){
 	  url: "data/historicalData.json",
 	  async: false,
 	  success: function(data) {
-		  historicalData = data;	  
+		  historicalData = data;
 		  console.log( "success" );
 		}
 	});
@@ -124,7 +124,7 @@ function startSimulation(){
 	renderer.setClearColor( 0x000000);
 	renderer.setSize(screenWidth, screenHeight);
 
-	// scene	
+	// scene
 	simulationScene = new THREE.Scene();
 	viewScene = new THREE.Scene();
 
@@ -136,7 +136,7 @@ function startSimulation(){
 
     setSimulation();
 
-    //create Buffers  
+    //create Buffers
 
 	resizeSimulation(simNx,simNy);
 
@@ -144,7 +144,7 @@ function startSimulation(){
 	createLights();
 
     //create cameras
-    
+
 	createCameras();
 
 	//create geometries
@@ -154,11 +154,11 @@ function startSimulation(){
 	//add GUI controls
 
  	initControls();
- 	
+
 	//set default colors
 	setColorMapBar('batitopo','wave2');
 
-	
+
 	//set initial condition
     // render initial condition and bathymetry to both buffers
 
@@ -185,9 +185,9 @@ function createMaterials(){
 		tBati: {type: "t", value: undefined},
 		colors: {type: "v4v", value: undefined},
 		bcolors: {type: "v4v", value: undefined},
-		
-		//sim params	
-		rad_min: {type: 'f', value: rad_min},	
+
+		//sim params
+		rad_min: {type: 'f', value: rad_min},
 		rad_deg: {type: 'f', value: rad_deg},
 		gx : {type: 'f', value: 0.01},
 		dx : {type: 'f', value:undefined},
@@ -202,15 +202,15 @@ function createMaterials(){
 		zmin: {type: "f", value: 0.0},
 		zmax: {type: "f", value: 1.0},
 
-		//fault params		
+		//fault params
 		L : {type: 'f', value: 450000.0},
-		W : {type: 'f', value: 150000.0},		
+		W : {type: 'f', value: 150000.0},
 		depth : {type: 'f', value: 30100.0},
 		slip : {type: 'f', value:  6.06},
 		strike : {type: 'f', value: 18.0},
 		dip : {type: 'f', value: 18.0},
 		rake :  {type:  'f', value: 112.0},
-		U3 : {type: 'f', value:  0.0},	
+		U3 : {type: 'f', value:  0.0},
 		cn : {type: 'f', value:  -35.5},   //centroid N coordinate, 18zone
 		ce : {type: 'f', value:  -73.0},    //centroid E coordinate, 18zone
 
@@ -232,13 +232,13 @@ function createMaterials(){
 		bumpMap : batiMatBumpMap,
 		//specularMap : THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
 		bumpScale : 0.01
-		//emissive : 0xffffff;	
-	});	
+		//emissive : 0xffffff;
+	});
 
 	stars_material  = new THREE.MeshBasicMaterial({
 		map: starsMap,
 		side: THREE.BackSide
-	});	
+	});
 
 	initialMaterial = new THREE.ShaderMaterial({
 		uniforms: mUniforms,
@@ -273,10 +273,10 @@ function setSimulation(){
     mUniforms.zmax.value = parseFloat(dataarray[7].split(':')[1]);
 
     if (mUniforms.zmin.value>0.0){
-    	var e = new Error('zmin positive on bathymetry image file'); 
+    	var e = new Error('zmin positive on bathymetry image file');
     	throw e;
     }
-            
+
 
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
@@ -302,31 +302,31 @@ function setSimulation(){
     var dy_real = R_earth*dy*rad_min;
 
     dt = 0.5*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
-    
+
     mUniforms.RR.value = dt/R_earth;
     mUniforms.RS.value = 9.81*mUniforms.RR.value;
 
-    mUniforms.tBati.value = batiTexture; 
+    mUniforms.tBati.value = batiTexture;
 }
 
 
 function resizeSimulation(nx,ny){
 
 	mUniforms.delta.value = new THREE.Vector2(1/nx,1/ny);
-	
+
 	// create buffers
 	if (!mTextureBuffer1){
 
     batiTexture.wrapS = THREE.ClampToEdgeWrapping;
     batiTexture.wrapT = THREE.ClampToEdgeWrapping;
-    batiTexture.needsUpdate = true; //this IS necessary	
+    batiTexture.needsUpdate = true; //this IS necessary
 
-	mTextureBuffer1 = new THREE.WebGLRenderTarget( nx, ny, 
+	mTextureBuffer1 = new THREE.WebGLRenderTarget( nx, ny,
 		 					{minFilter: THREE.LinearFilter,
 	                         magFilter: THREE.LinearFilter,
 	                         format: THREE.RGBAFormat,
 	                         type: THREE.FloatType});
-	mTextureBuffer2 = new THREE.WebGLRenderTarget( nx, ny, 
+	mTextureBuffer2 = new THREE.WebGLRenderTarget( nx, ny,
 		 					{minFilter: THREE.LinearFilter,
 	                         magFilter: THREE.LinearFilter,
 	                         format: THREE.RGBAFormat,
@@ -340,11 +340,11 @@ function resizeSimulation(nx,ny){
 	else{
 		if (!toggleBuffer){
 			mTextureBuffer1.setSize(nx,ny);
-		}	
-		else{
-			mTextureBuffer2.setSize(nx,ny);	
 		}
-	
+		else{
+			mTextureBuffer2.setSize(nx,ny);
+		}
+
 	}
 
 }
@@ -366,7 +366,7 @@ function changeScenario(scenario){
 
     simulationPlane.material = screenMaterial;
     nstep = 0;
-    renderer.render(viewScene,viewCamera); 
+    renderer.render(viewScene,viewCamera);
 }
 
 function setView(cn,ce){
@@ -390,11 +390,11 @@ function setView(cn,ce){
 function createCameras(){
 	simulationCamera = new THREE.OrthographicCamera( planeWidth/-2,
 					 planeWidth/2,
-					 planeHeight/2, 
+					 planeHeight/2,
 					 planeHeight/-2, - 500, 1000 );
-	
+
 	var r = screenWidth/screenHeight;
-	// viewCamera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );	
+	// viewCamera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );
 	viewCamera = new THREE.PerspectiveCamera(45,screenWidth/screenHeight,0.01,500);
 	// viewCamera.position.x = 0.0;
 	// viewCamera.position.y = Math.sin(mUniforms.cn.value*Math.PI/180.0);
@@ -402,9 +402,9 @@ function createCameras(){
 	// viewCamera.lookAt(new THREE.Vector3(0,0,0));
 
 	viewScene.add(viewCamera);
-	
-	
-	/* use these with OrtgraphicCamera 
+
+
+	/* use these with OrtgraphicCamera
 	 orbitControls = new THREE.OrbitControls( viewCamera);
 	 orbitControls.enableRotate = true;*/
 
@@ -424,41 +424,32 @@ function createObjects(){
 
 	var simulationGeometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
 	simulationPlane = new THREE.Mesh( simulationGeometry, screenMaterial );
-	simulationScene.add( simulationPlane);		
+	simulationScene.add( simulationPlane);
 
 	// --------- 3D Sphere visualization ----------------
 
 	/* Sphere showing a satellite image of the earth*/
 
-	var sphereBatiGeom = new THREE.SphereGeometry(0.5, 32*4, 32*4, 
+	var sphereBatiGeom = new THREE.SphereGeometry(0.5, 32*4, 32*4,
 							0, Math.PI*2.0, 0, Math.PI);
 	earthBatiMesh	= new THREE.Mesh(sphereBatiGeom, sphereBatiMat);
-	// earthBatiMesh.position.z = 0.5;
-
-	// rotate to location of epicenter
-	var d =  -(mUniforms.ce.value - mUniforms.xmin.value)*Math.PI/180.0;	
-	d = d + Math.PI/2;
-	d = 0.0;
-	earthBatiMesh.rotateY(d);
 	viewScene.add(earthBatiMesh);
 
 	/*
-	Sphere mesh to show the simulation 
+	Sphere mesh to show the simulation
 	*/
 
 	// total extent of latitude of the texture
 	var ysouth = Math.PI/2 - mUniforms.ymin.value*Math.PI/180.0;
 	var ynorth = Math.PI/2 - mUniforms.ymax.value*Math.PI/180.0;
 
-	
-	var sphereModelGeometry = new THREE.SphereGeometry(0.5*1.001, 32*4, 32*4, 
+
+	var sphereModelGeometry = new THREE.SphereGeometry(0.5*1.001, 32*4, 32*4,
 													0, Math.PI*2,
 													ynorth, ysouth-ynorth)
 	earthModelMesh	= new THREE.Mesh(sphereModelGeometry, screenMaterial);
-	// earthModelMesh.position.z = 0.5;	
-	earthModelMesh.rotateY(d);
-	viewScene.add(earthModelMesh);								
-	
+	viewScene.add(earthModelMesh);
+
 	var starsGeometry  = new THREE.SphereGeometry(90, 32, 32)
 	var starsMesh  = new THREE.Mesh(starsGeometry, stars_material)
 	viewScene.add(starsMesh);
@@ -469,13 +460,13 @@ function createObjects(){
 	//create a plane for bathymetry
 	batiGeometry = new THREE.PlaneGeometry(planeWidth,planeWidth/2.0);
 	batiPlane = new THREE.Mesh(batiGeometry, batiMaterial);
-	batiPlane.position.z = -0.001;	
+	batiPlane.position.z = -0.001;
 	// viewScene.add(batiPlane);
 
 	var viewGeometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
 	viewPlane = new THREE.Mesh( viewGeometry, screenMaterial );
 	viewPlane.position.z = 0.01;
-	// viewScene.add( viewPlane );	
+	// viewScene.add( viewPlane );
 
 
 }
@@ -496,8 +487,8 @@ function createLights(){
 	// viewScene.add( light );
 
 
-	var axisHelper = new THREE.AxisHelper( 5 );
-	viewScene.add( axisHelper );	
+	// var axisHelper = new THREE.AxisHelper( 5 );
+	// viewScene.add( axisHelper );
 }
 
 function doFaultModel(){
@@ -508,41 +499,38 @@ function doFaultModel(){
 }
 
 
-function renderSimulation(){		
-
+function renderSimulation(){
 	if (paused != 1){
 		simulationPlane.material = modelMaterial;
-		for (var i=0; i<Math.floor(speed); i++){			
+		for (var i=0; i<Math.floor(speed); i++){
 			writeTimeStamp();
 			if (!toggleBuffer){
-				mUniforms.tSource.value = mTextureBuffer1;		
+				mUniforms.tSource.value = mTextureBuffer1;
 				renderer.render(simulationScene, simulationCamera, mTextureBuffer2, true);
-				
+
 			}
 			else{
 				mUniforms.tSource.value = mTextureBuffer2;
 				renderer.render(simulationScene, simulationCamera, mTextureBuffer1, true);
-				
+
 			}
 
 			toggleBuffer = !toggleBuffer;
 		}
 
 		if (!toggleBuffer){
-			mUniforms.tSource.value = mTextureBuffer2;		
+			mUniforms.tSource.value = mTextureBuffer2;
 		}
 		else{
 			mUniforms.tSource.value = mTextureBuffer1;
 		}
 
-	
 	}
-			
-	
+
 	simulationPlane.material = screenMaterial;
 	// orbitControls.update();
 	trackBallControls.update();
-	renderer.render(viewScene, viewCamera);		
+	renderer.render(viewScene, viewCamera);
 
 	requestAnimationFrame(renderSimulation);
 }
@@ -555,7 +543,7 @@ function writeTimeStamp(){
 	var hours = Math.floor(time/60/60),
         minutes = Math.floor((time - (hours * 60 * 60))/60),
         seconds = Math.round(time - (hours * 60 * 60) - (minutes * 60));
-    var timetext = timetext.concat(hours + ':' + 
+    var timetext = timetext.concat(hours + ':' +
     					((minutes < 10) ? '0' + minutes : minutes) + ':' +
     					((seconds < 10) ? '0' + seconds : seconds));
 
@@ -566,7 +554,7 @@ function writeTimeStamp(){
 
 function setColorMapBar(cmap_bati, cmap_water){
 	//requires colormap.js
-	
+
 	//var c = -mUniforms.zmin.value/(mUniforms.zmax.value - mUniforms.zmin.value);
 	var watermap = getColormapArray(cmap_water,1,0);
 	mUniforms.colors.value = watermap;
@@ -575,8 +563,8 @@ function setColorMapBar(cmap_bati, cmap_water){
 	var cbwater  = document.getElementById('cbwater');
 	cbwater.width = screenWidth/5;//Math.min(screenWidth/2,300);
     cbwater.height = 40
-    // cbwater.height = 100;	
+    // cbwater.height = 100;
     // cbwater.width = 80;
-    
+
 	colorbar(watermap,cbwater,0.0);
 }

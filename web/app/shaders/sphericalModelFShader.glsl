@@ -17,26 +17,21 @@ uniform float ymax;
 uniform float zmin;
 uniform float zmax;
 
-float periodicBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
+float peridicBoundaries(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 	float h_ij, float h_ijm){
+		/*
+			I keep this in case the other one does not work
+			I need a real proof that these "open" boundary
+			conditions are good...
+		*/
 	float eta = 0.0;
-
-	if (vUv.x<=delta.x){
-		float un = texture2D(tSource,vec2(1.0-delta.x,vUv.y)).r;
-		eta = un;
-	}
-	else if(vUv.x>=1.0-delta.x){
-		float u0 = texture2D(tSource,vec2(delta.x,vUv.y)).r;
-		eta = u0;
-	}
-	
 
 	//j=0
 	float k = 1.0;
 	if (vUv.y>=1.0-k*delta.y){
 		eta = 0.0;
 	}
-	if (vUv.y <=k*delta.y){ 
+	if (vUv.y <=k*delta.y){
 		if (vUv.x > k*delta.x && vUv.x <=1.0-k*delta.x){
 			if (h_ij>gx){
 				float cc = sqrt(g*h_ij);
@@ -49,28 +44,21 @@ float periodicBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 				eta = zz;
 			}
 			else {
-				eta = 0.0;	
+				eta = 0.0;
 			}
 		}
 	}
 
-	return eta;	
-
-
+	return eta;
 }
 
-float openBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
+float openBoundaries(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 	float h_ij, float h_ijm){
-	
-	float eta = 0.0;
-	float k = 1.0; //debug thing
-					//to test if im catching the right texels;
 
- 	//boundaries
-	
+	float eta = 0.0;
+
 	//j=0
-	if (vUv.y <=k*delta.y){ 
-		if (vUv.x > k*delta.x && vUv.x <=1.0-k*delta.x){
+	if (vUv.y <=delta.y){
 			if (h_ij>gx){
 				float cc = sqrt(g*h_ij);
 				float uh = 0.5*(u_ij.g+u_imj.g);
@@ -82,14 +70,11 @@ float openBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 				eta = zz;
 			}
 			else {
-				eta = 0.0;	
+				eta = 0.0;
 			}
-		}
 	}
-
-	//j=ny
-	else if (vUv.y>1.0-k*delta.y) {
-		if (vUv.x > k*delta.x && vUv.x <=1.0-k*delta.x){
+		//j=ny
+	else if (vUv.y>=1.0-delta.y) {
 			if (h_ij>gx){
 				float cc = sqrt(g*h_ij);
 				float uh = 0.5*(u_ij.g+u_imj.g);
@@ -102,130 +87,9 @@ float openBoundary(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 			}
 			else {
 				eta = 0.0;
-
 			}
-		}
 	}
-
-	// i = 0
-	if (vUv.x <=k*delta.x){ 
-		//j in range(1,ny-1)
-		if (vUv.y > k*delta.y && vUv.y <=1.0-k*delta.y){
-			if (h_ij>gx){
-				float cc = sqrt(g*h_ij);
-				float uh;
-				if (h_ijm>gx){
-					uh =  0.5*(u_ij.b+u_ijm.b);
-				}
-				else{
-					uh = u_ij.b;
-				}
-				float uu = sqrt(uh*uh+u_ij.g*u_ij.g);
-				float zz = uu/cc;
-				if (u_ij.g>0.0){
-					zz = -zz;
-				}
-				eta = zz;
-			}
-			else {
-				eta = 0.0;
-			}
-		}
-	}
-	else if (vUv.x >1.0-k*delta.x){ // i = nx
-		if (vUv.y >= k*delta.y && vUv.y <=1.0-k*delta.y){
-			if (h_ij>gx){
-				float cc = sqrt(g*h_ij);
-				float uh = 0.5*(u_ij.b+u_ijm.b);
-				float uu = sqrt(uh*uh+u_imj.g*u_imj.g);
-				float zz = uu/cc;
-				if (u_imj.g<0.0){
-					zz = -zz;
-				}
-				eta = zz;
-			}
-			else {
-				eta = 0.0;
-			}
-		}	  
-	}
-
-
-	// i = 0, j = 0
-	if (vUv.x <= k*delta.x && vUv.y <= k*delta.y){
-		if (h_ij>gx){
-			float cc = sqrt(g*h_ij);
-			float qx = u_ij.g;
-			float qy = u_ij.b;
-			float uu = sqrt(qx*qx+qy*qy);
-			float zz = uu/cc;
-			if (qx>0.0|| qy>0.0){
-				zz = -zz;
-			}
-			eta = zz;
-
-		}
-		else {
-			eta = 0.0;
-		}		
-	}
-   
-	// // i = 0, j = ny
-	if (vUv.x<= k*delta.x && vUv.y > 1.0-k*delta.y){
-		if (h_ij>gx){
-			float cc = sqrt(g*h_ij);
-			float qx = u_ij.g;
-			float qy = u_ijm.b;
-			float uu = sqrt(qx*qx+qy*qy);
-			float zz = uu/cc;
-			if (qx>0.0 || qy<0.0){
-				zz = -zz;
-			}
-			eta = zz;
-
-		}
-		else {
-			eta = 0.0;
-		}
-	}
-
-	// // i = nx, j = 0
-	if (vUv.x > 1.0 - k*delta.x && vUv.y <= k*delta.y){
-		if (h_ij>gx){
-			float cc = sqrt(g*h_ij);
-			float qx = u_imj.g;
-			float qy = u_ij.b;
-			float uu = sqrt(qx*qx+qy*qy);
-			float zz = uu/cc;
-			if (qx<0.0 || qy>0.0){
-				zz = -zz;
-			}
-			eta = zz;
-		}
-		else {
-			eta = 0.0;
-		}
-	}
-	
-	// i = nx, j = ny
-	if (vUv.x >  1.0 - k*delta.x && vUv.y > 1.0-k*delta.y){
-		if (h_ij>gx){
-			float cc = sqrt(g*h_ij);
-			float qx = u_imj.g;
-			float qy = u_ijm.b;
-			float uu = sqrt(qx*qx+qy*qy);
-			float zz = uu/cc;
-			if (qx<0.0 || qy<0.0){
-				zz = -zz;
-			}
-			eta = zz;
-		}
-		else {
-			eta = 0.0;
-		}
-	}				
 	return eta;
-	
 }
 
 vec3 getR1R11R6(float V){
@@ -253,6 +117,25 @@ vec2 getR2R4(float V, float hp, float hq){
 	return r2r4;
 }
 
+float massEquation(vec2 vUv, float h_ij, vec4 u_ij, vec4 u_imj, vec4 u_ijm){
+	float eta2_ij = 0.0;
+	//mass equation for ij
+	if (h_ij >gx){
+		vec3 RRRij = getR1R11R6(vUv.y);
+		float  R1ij = RRRij.x;
+		float R11ij = RRRij.g;
+		float R6ij = RRRij.b;
+
+		vec3 RRRijm = getR1R11R6(vUv.y-delta.y);
+		float  R1ijm = RRRijm.r;
+		float R11ijm = RRRijm.g;
+		float R6ijm = RRRijm.b;
+
+		eta2_ij = u_ij.r -R1ij*(u_ij.g-u_imj.g) - R11ij*(R6ij*u_ij.b - R6ijm*u_ijm.b);
+	}
+	return eta2_ij;
+}
+
 void main()
 {
 	// u = (eta, p, q, h)
@@ -260,22 +143,19 @@ void main()
 	// p: x-momentum
 	// q: y-momentum
 	// h: water depth, >0 if wet, <0 if dry.
-
-
-
-
-	//old vals
+	//
+	// old vals
 	vec4 u_ij = texture2D(tSource,vUv);
 
 	//neighbors old vals
-	vec4 u_imj = texture2D(tSource, vUv+vec2(-1.0*delta.x,0.0));
-	vec4 u_ipj = texture2D(tSource, vUv+vec2(delta.x,0.0));
-	vec4 u_ijm = texture2D(tSource, vUv+vec2(0.0,-1.0*delta.y));
-	vec4 u_ijp = texture2D(tSource, vUv+vec2(0.0,delta.y));
+	vec4 u_imj = texture2D(tSource, vUv + vec2(-delta.x, 0.0));
+	vec4 u_ipj = texture2D(tSource, vUv + vec2(delta.x, 0.0));
+	vec4 u_ijm = texture2D(tSource, vUv + vec2(0.0, -delta.y));
+	vec4 u_ijp = texture2D(tSource, vUv + vec2(0.0, delta.y));
 
-	vec4 u_ipjm = texture2D(tSource, vUv+vec2(delta.x,-1.0*delta.y));
-	vec4 u_imjp = texture2D(tSource, vUv+vec2(-1.0*delta.x,delta.y));
-	
+	vec4 u_ipjm = texture2D(tSource, vUv + vec2(delta.x, -delta.y));
+	vec4 u_imjp = texture2D(tSource, vUv + vec2(-delta.x, delta.y));
+
 
 	//new vals
 	vec4 u2_ij, u2_ipj, u2_ijp;
@@ -286,74 +166,24 @@ void main()
 	float h_ijp = -(u_ijp.a*(zmax-zmin)+zmin);
 	float h_ijm = -(u_ijm.a*(zmax-zmin)+zmin);
 
-	// parameters (should be uniforms)
+	// solve mass equation in three points
+	// this is needed for the momentum equation
+	// (blame the leapfrog scheme)
 
-
-	
 	//mass equation for ij
-	if (h_ij >gx){
-		vec3 RRRij = getR1R11R6(vUv.y);
-		float  R1ij = RRRij.x;
-		float R11ij = RRRij.g;
-		float R6ij = RRRij.b;
-		
-		vec3 RRRijm = getR1R11R6(vUv.y-delta.y);
-		float  R1ijm = RRRijm.r;
-		float R11ijm = RRRijm.g;
-		float R6ijm = RRRijm.b;
-		
-		u2_ij.r = u_ij.r -R1ij*(u_ij.g-u_imj.g) - R11ij*(R6ij*u_ij.b - R6ijm*u_ijm.b);
-	}
-	else{
-		u2_ij.r = 0.0;
-	}
-	
+	u2_ij.r = massEquation(vUv, h_ij, u_ij, u_imj, u_ijm);
+
 	// mass equation for i+1,j
-	if (h_ipj >gx){
-		vec3 RRRipj = getR1R11R6(vUv.y);
-		float  R1ipj = RRRipj.r;
-		float R11ipj = RRRipj.g;
-		float R6ipj = RRRipj.b;
-		
-		vec3 RRRipjm = getR1R11R6(vUv.y-delta.y);
-		float  R1ipjm = RRRipjm.r;
-		float R11ipjm = RRRipjm.g;
-		float R6ipjm = RRRipjm.b;
+	u2_ipj.r = massEquation(vUv+vec2(delta.x,0.0), h_ipj, u_ipj, u_ij, u_ipjm);
 
-		u2_ipj.r = u_ipj.r -R1ipj*(u_ipj.g-u_ij.g)-R11ipj*(R6ipj*u_ipj.b - R6ipjm*u_ipjm.b);
-	}
-	else{
-		u2_ipj.r = 0.0;
-	}
-
-
-	//mas equation for  i,j+1
-	if (h_ijp >gx){
-		
-		vec3 RRRijp = getR1R11R6(vUv.y+delta.y);
-		float  R1ijp = RRRijp.r;
-		float R11ijp = RRRijp.g;
-		float R6ijp = RRRijp.b;
-		
-		vec3 RRRij = getR1R11R6(vUv.y);
-		float  R1ij = RRRij.r;
-		float R11ij = RRRij.g;
-		float R6ij = RRRij.b;		
-		u2_ijp.r = u_ijp.r -R1ijp*(u_ijp.g - u_imjp.g) -R11ijp*(R6ijp*u_ijp.b - R6ij*u_ij.b);
-	}
-	else{
-		u2_ijp.r = 0.0;
-	}	
-	
+  //mas equation for  i,j+1
+	u2_ijp.r = massEquation(vUv+vec2(0.0,delta.x), h_ijp, u_ijp, u_imjp, u_ij);
 
 	//handle boundaries (Open)
-	if (vUv.x<=1.0*delta.x || vUv.x>1.0-1.0*delta.x || 
-		vUv.y <=1.0*delta.y || vUv.y>1.0-1.0*delta.y){
-		// u2_ij.r = openBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
-		u2_ij.r = periodicBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
+	if (vUv.y <=delta.y || vUv.y>1.0-delta.y){
+		u2_ij.r = openBoundaries(u_ij, 	u_ijm, u_imj, h_ij, h_ijm);
+		// u2_ij.r = periodicBoundary(u_ij, u_ijm, u_imj, h_ij, h_ijm);
 	}
-
-
 
 	float hpij = 0.5*(h_ij+h_ipj);
 	float hqij = 0.5*(h_ij+h_ijp);
@@ -362,32 +192,24 @@ void main()
 	float R4ij = RRij.g;
 
 	// x -momentum
-	if (vUv.x<1.0-delta.x && vUv.y<1.0-delta.y){
+	if (vUv.y<1.0-delta.y && vUv.y>delta.y){
 		if ((h_ij>gx) && (h_ipj>gx)){
 			u2_ij.g = u_ij.g - R2ij*(u2_ipj.r-u2_ij.r);
 		}
 		else{
 			u2_ij.g = 0.0;
-		}			
-	}
-	else{
-		u2_ij.g = 0.0;
+		}
 	}
 
 	// y - momentum
-	if (vUv.x<1.0-delta.x && vUv.y<1.0-delta.y){
+	if (vUv.y<1.0-delta.y  && vUv.y>delta.y){
 		if ( (h_ij>gx) && (h_ijp>gx)){
-			
 			u2_ij.b = u_ij.b - R4ij*(u2_ijp.r-u2_ij.r);
 		}
 		else{
 			u2_ij.b = 0.0;
-		}		
+		}
 	}
-	else{
-		u2_ij.b = 0.0;
-	}
-
 
 	u2_ij.a = u_ij.a;
 
@@ -399,5 +221,4 @@ void main()
 	}
 
 	gl_FragColor = vec4(u2_ij);
-	// gl_FragColor = vec4(R1ij, 0.0, 0.0, u_ij.a);
 }

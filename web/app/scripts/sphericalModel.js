@@ -66,8 +66,11 @@ function init(){
 			"img/"+batiname+".jpg",
 			// Function when resource is loaded
 			function ( texture ) {
+        // texture.wrapS=  THREE.RepeatWrapping;
 				batiTexture = texture;
-
+        batiTexture.wrapS = THREE.RepeatWrapping;
+        batiTexture.wrapT = THREE.ClampToEdgeWrapping;
+        batiTexture.needsUpdate = true;
 				loadData();
 
 				startSimulation();
@@ -108,10 +111,12 @@ function loadData(){
 	batiMatMap = THREE.ImageUtils.loadTexture('img/'+batiname+'Map_NASA.jpg');
 	batiMatMap.offset.x = 0.5;
 	batiMatMap.wrapS = THREE.RepeatWrapping;
+  batiMatMap.wrapT = THREE.ClampToEdgeWrapping;
 
 	batiMatBumpMap = THREE.ImageUtils.loadTexture('img/batiWholeWorldBumpMap.jpg');
 	batiMatBumpMap.offset.x = 0.5;
 	batiMatBumpMap.wrapS = THREE.RepeatWrapping;
+  batiMatBumpMap.wrapT = THREE.ClampToEdgeWrapping;
 
 	starsMap = THREE.ImageUtils.loadTexture('img/galaxy_starfield.png');
 };
@@ -156,7 +161,7 @@ function startSimulation(){
  	initControls();
 
 	//set default colors
-	setColorMapBar('batitopo','wave2');
+	setColorMapBar('batitopo','wave');
 
 
 	//set initial condition
@@ -179,6 +184,7 @@ function startSimulation(){
 function createMaterials(){
 	// uniforms
 	mUniforms = {
+    t:{type:"f",value:0.0},
 		texel: {type: "v2", value: undefined},
 		delta: {type:  "v2", value: undefined},
 		tSource: {type: "t", value: undefined},
@@ -262,7 +268,6 @@ function createMaterials(){
 
 
 function setSimulation(){
-
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
     mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
 	mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
@@ -281,9 +286,17 @@ function setSimulation(){
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
-		simNx = simNx/6;
-		simNy = simNy/6;
-	}
+		simNx = simNx/8;
+		simNy = simNy/8;
+  }
+  // needs to be a power of 2,
+  // otherwise the periodic boundary (wrapS) does not work
+  var xpower=  Math.floor(Math.log(simNx)/Math.log(2));
+  var ypower=  Math.floor(Math.log(simNy)/Math.log(2));
+  simNx = Math.pow(2,xpower);
+  simNy = Math.pow(2,ypower);
+  mUniforms.xmin.value = 0.0;
+  mUniforms.xmax.value = 360-360/simNx/2.0;
 	console.log('There are '+simNx.toString()+ ' cells in the X direction')
 	console.log('There are '+simNy.toString()+ ' cells in the Y direction')
 
@@ -317,25 +330,22 @@ function resizeSimulation(nx,ny){
 	// create buffers
 	if (!mTextureBuffer1){
 
-    batiTexture.wrapS = THREE.ClampToEdgeWrapping;
-    batiTexture.wrapT = THREE.ClampToEdgeWrapping;
-    batiTexture.needsUpdate = true; //this IS necessary
-
 	mTextureBuffer1 = new THREE.WebGLRenderTarget( nx, ny,
 		 					{minFilter: THREE.LinearFilter,
-	                         magFilter: THREE.LinearFilter,
-	                         format: THREE.RGBAFormat,
-	                         type: THREE.FloatType});
+	                          magFilter: THREE.LinearFilter,
+	                          format: THREE.RGBAFormat,
+	                          type: THREE.FloatType,
+                            wrapS: THREE.RepeatWrapping,
+                            wrapT: THREE.ClampToEdgeWrapping,
+                            needsUpdate: true});
 	mTextureBuffer2 = new THREE.WebGLRenderTarget( nx, ny,
 		 					{minFilter: THREE.LinearFilter,
 	                         magFilter: THREE.LinearFilter,
 	                         format: THREE.RGBAFormat,
-	                         type: THREE.FloatType});
-
-	mTextureBuffer1.texture.wrapS  = THREE.ClampToEdgeWrapping;
-	mTextureBuffer1.texture.wrapT  = THREE.ClampToEdgeWrapping;
-	mTextureBuffer2.texture.wrapS  = THREE.ClampToEdgeWrapping;
-	mTextureBuffer2.texture.wrapT  = THREE.ClampToEdgeWrapping;
+	                         type: THREE.FloatType,
+                           wrapS: THREE.RepeatWrapping,
+                         wrapT: THREE.ClampToEdgeWrapping,
+                       needsUpdate: true});
 	}
 	else{
 		if (!toggleBuffer){
@@ -396,11 +406,10 @@ function createCameras(){
 	var r = screenWidth/screenHeight;
 	// viewCamera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );
 	viewCamera = new THREE.PerspectiveCamera(45,screenWidth/screenHeight,0.01,500);
-	// viewCamera.position.x = 0.0;
-	// viewCamera.position.y = Math.sin(mUniforms.cn.value*Math.PI/180.0);
-	// viewCamera.position.z = Math.cos(mUniforms.cn.value*Math.PI/180.0);
-	// viewCamera.lookAt(new THREE.Vector3(0,0,0));
-
+	viewCamera.position.x = 0.0;
+	viewCamera.position.y = 0.0;
+	viewCamera.position.z = 1.0;
+	viewCamera.lookAt(new THREE.Vector3(0,0,0));
 	viewScene.add(viewCamera);
 
 
@@ -444,9 +453,7 @@ function createObjects(){
 	var ynorth = Math.PI/2 - mUniforms.ymax.value*Math.PI/180.0;
 
 
-	var sphereModelGeometry = new THREE.SphereGeometry(0.5*1.001, 32*4, 32*4,
-													0, Math.PI*2,
-													ynorth, ysouth-ynorth)
+	var sphereModelGeometry = new THREE.SphereGeometry(0.5*1.001, 32*4, 32*4,	0, Math.PI*2.0,	ynorth, ysouth-ynorth)
 	earthModelMesh	= new THREE.Mesh(sphereModelGeometry, screenMaterial);
 	viewScene.add(earthModelMesh);
 
@@ -482,13 +489,6 @@ function createLights(){
 	light.name = "directional Light";
 	viewScene.add( light );
 
-	// var light = new THREE.PointLight( 0xaaaaaa, 0.5, 0 );
-	// light.position.set( 0, 0, 50 );
-	// viewScene.add( light );
-
-
-	// var axisHelper = new THREE.AxisHelper( 5 );
-	// viewScene.add( axisHelper );
 }
 
 function doFaultModel(){
@@ -496,6 +496,7 @@ function doFaultModel(){
 	setView(mUniforms.cn.value,mUniforms.ce.value);
 	renderer.render(simulationScene, simulationCamera, mTextureBuffer1, true);
 	renderer.render(simulationScene, simulationCamera, mTextureBuffer2, true);
+  mUniforms.t.value = 0.0;
 }
 
 
@@ -512,17 +513,16 @@ function renderSimulation(){
 			else{
 				mUniforms.tSource.value = mTextureBuffer2;
 				renderer.render(simulationScene, simulationCamera, mTextureBuffer1, true);
-
 			}
 
 			toggleBuffer = !toggleBuffer;
 		}
 
-		if (!toggleBuffer){
-			mUniforms.tSource.value = mTextureBuffer2;
+		if (toggleBuffer){
+			mUniforms.tSource.value = mTextureBuffer1;
 		}
 		else{
-			mUniforms.tSource.value = mTextureBuffer1;
+			mUniforms.tSource.value = mTextureBuffer2;
 		}
 
 	}
@@ -531,6 +531,8 @@ function renderSimulation(){
 	// orbitControls.update();
 	trackBallControls.update();
 	renderer.render(viewScene, viewCamera);
+
+  mUniforms.t.value = mUniforms.t.value +1;
 
 	requestAnimationFrame(renderSimulation);
 }
@@ -555,16 +557,13 @@ function writeTimeStamp(){
 function setColorMapBar(cmap_bati, cmap_water){
 	//requires colormap.js
 
-	//var c = -mUniforms.zmin.value/(mUniforms.zmax.value - mUniforms.zmin.value);
 	var watermap = getColormapArray(cmap_water,1,0);
 	mUniforms.colors.value = watermap;
 
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
-	cbwater.width = screenWidth/5;//Math.min(screenWidth/2,300);
-    cbwater.height = 40
-    // cbwater.height = 100;
-    // cbwater.width = 80;
+	cbwater.width = screenWidth/5;
+  cbwater.height = 40
 
 	colorbar(watermap,cbwater,0.0);
 }

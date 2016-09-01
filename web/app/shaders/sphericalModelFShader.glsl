@@ -111,7 +111,7 @@ vec2 getR2R4(float V, float hp, float hq){
 	float cosM = cos(angM);
 
 	float R2 = RS*max(hp,0.0)/(cosM*dx*rad_min);
-	float R4 = RS*max(hq,0.0)/(cosM*dx*rad_min);
+	float R4 = RS*max(hq,0.0)/(cosM*dy*rad_min);
 
 	vec2 r2r4 = vec2(R2,R4);
 	return r2r4;

@@ -270,8 +270,8 @@ function createMaterials(){
 function setSimulation(){
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
     mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
-	mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
-	var ymin = parseFloat(dataarray[4].split(':')[1]);
+	  mUniforms.ymin.value = parseFloat(dataarray[4].split(':')[1]);
+    var ymin = parseFloat(dataarray[4].split(':')[1]);
     mUniforms.ymax.value = parseFloat(dataarray[5].split(':')[1]);
     var ymax = parseFloat(dataarray[5].split(':')[1]);
     mUniforms.zmin.value = parseFloat(dataarray[6].split(':')[1]);
@@ -282,44 +282,53 @@ function setSimulation(){
     	throw e;
     }
 
-
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
 		simNx = simNx/8;
 		simNy = simNy/8;
   }
-  // needs to be a power of 2,
-  // otherwise the periodic boundary (wrapS) does not work
+  // set simNx and simNy as the nearest power of two
+  // this is needed by THREE.RepeatWrapping
   var xpower=  Math.floor(Math.log(simNx)/Math.log(2));
   var ypower=  Math.floor(Math.log(simNy)/Math.log(2));
-  simNx = Math.pow(2,xpower);
-  simNy = Math.pow(2,ypower);
-  mUniforms.xmin.value = 0.0;
-  mUniforms.xmax.value = 360-360/simNx/2.0;
-	console.log('There are '+simNx.toString()+ ' cells in the X direction')
-	console.log('There are '+simNy.toString()+ ' cells in the Y direction')
 
+  if (simNx-Math.pow(2,xpower)<Math.pow(2,xpower+1)-simNx){
+    simNx = Math.pow(2,xpower);
+  }
+  else{
+    simNx = Math.pow(2,xpower+1)
+  }
+
+  if (simNy-Math.pow(2,ypower)<Math.pow(2,ypower+1)-simNy){
+    simNy = Math.pow(2,ypower);
+  }
+  else{
+    simNy = Math.pow(2,ypower+1)
+  }
+  mUniforms.xmin.value = 0.0;
+  mUniforms.xmax.value = 360-360/simNx/2.0; // dont touch the south pole!
 
 	planeHeight = 1.0;
 	planeWidth = planeHeight*simNx/simNy;
 	mUniforms.texel.value = new THREE.Vector2(1/simNx,1/simNy)
 
-    var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/(simNx)*60.0;
-    var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/(simNy)*60.0;
-    mUniforms.dx.value = dx;
-    mUniforms.dy.value = dx;
-    // ymin = mUniforms.ymin.value
-    var lat_max = 60;//Math.max(Math.abs(ymin),Math.abs(ymax));
-    var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
-    var dy_real = R_earth*dy*rad_min;
+  var dx = (mUniforms.xmax.value-mUniforms.xmin.value)/(simNx)*60.0;
+  var dy = (mUniforms.ymax.value-mUniforms.ymin.value)/(simNy)*60.0;
+  mUniforms.dx.value = dx;
+  mUniforms.dy.value = dy;
 
-    dt = 0.5*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
+  // ymin = mUniforms.ymin.value
+  var lat_max = 85;//Math.max(Math.abs(ymin),Math.abs(ymax));
+  var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
+  var dy_real = R_earth*dy*rad_min;
 
-    mUniforms.RR.value = dt/R_earth;
-    mUniforms.RS.value = 9.81*mUniforms.RR.value;
+  dt = 0.5*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
 
-    mUniforms.tBati.value = batiTexture;
+  mUniforms.RR.value = dt/R_earth;
+  mUniforms.RS.value = 9.81*mUniforms.RR.value;
+
+  mUniforms.tBati.value = batiTexture;
 }
 
 

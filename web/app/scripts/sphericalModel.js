@@ -310,7 +310,7 @@ function setSimulation(){
     mUniforms.dx.value = dx;
     mUniforms.dy.value = dx;
     // ymin = mUniforms.ymin.value
-    var lat_max = 60;//Math.max(Math.abs(ymin),Math.abs(ymax));
+    var lat_max = 85;//Math.max(Math.abs(ymin),Math.abs(ymax));
     var dx_real = R_earth*Math.cos(lat_max*rad_deg)*dx*rad_min;
     var dy_real = R_earth*dy*rad_min;
 

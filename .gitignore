@@ -70,6 +70,9 @@ ipynb/.ipynb_checkpoints
 # unnecessary data
 data/*.jpg
 data/*.txt
+data/bathymetry/*.jpg
+data/bathymetry/*.txt
+data/bathymetry/batiWorld.jpg
 
 # large files
 *.mat
@@ -80,5 +83,3 @@ data/*.txt
 # Created folders in web
 web/.tmp/
 web/dist/
-
-

@@ -5,7 +5,7 @@
 
 var container;
 var screenWidth, screenHeight, ratio;
-var calc_scene,calc_camera,  view_scene, view_camera, renderer;	
+var calc_scene,calc_camera,  view_scene, view_camera, renderer;
 var width, height, ratio=1;
 var orb_controls, track_controls;
 
@@ -24,7 +24,7 @@ var initCondition = 1;
 
 //bathhymetry stuff
 
-var batiname = "batiWorld"	
+var batiname = "batiWorld"
 var batiGeom, batiPlane, batidata;
 var earthMesh;
 
@@ -61,7 +61,7 @@ function init(){
 
 
 	/*Add FPS to html*/
-	//document.body.appendChild(stats.domElement);	
+	//document.body.appendChild(stats.domElement);
 
 	screenHeight = window.innerHeight;
 	// ratio = 432/594;
@@ -78,7 +78,7 @@ function init(){
 	info.style.top = '10px';
 	info.style.width = '100%';
 	info.style.textAlign = 'center';
-	simulationDiv.appendChild( info );	
+	simulationDiv.appendChild( info );
 
 	//event handlers
 	container.oncontextmenu = function(){return false};
@@ -95,7 +95,7 @@ function init(){
 		// resource URL
 		"img/"+batiname+".jpg",
 		// Function when resource is loaded
-		function ( image ) {			
+		function ( image ) {
 			startSimulation(image);
 		},
 		// Function called when download progresses
@@ -119,7 +119,7 @@ function startSimulation(bati_image){
 	renderer.setClearColor( 0x000000);
 	renderer.setSize(screenWidth, screenHeight);
 
-	// scene	
+	// scene
 	calc_scene = new THREE.Scene();
 	view_scene = new THREE.Scene();
 
@@ -132,25 +132,26 @@ function startSimulation(bati_image){
     loadData(bati_image);
 
     //create cameras
-    
+
 	createCameras();
 
 	//create geometries
 
 	createGeom();
 
-    //create Buffers  
+    //create Buffers
 
 	resizeSimulation(simNx,simNy);
 
 	//add GUI controls
+  makeQuery();
 
  	initControls();
- 	
+
 	//set default colors
 	setColorMapBar('batitopo','wave2');
 
-	
+
 	//set initial condition
     // render initial condition and bathymetry to both buffers
     doFaultModel();
@@ -159,6 +160,7 @@ function startSimulation(bati_image){
 	mUniforms.tSource.value = mTextureBuffer1;
 	planeScreen.material = screenMaterial;
 	renderer.render(calc_scene,view_camera);
+
 
 	// ----proceed with the simulation---
 	renderSimulation();
@@ -173,9 +175,9 @@ function createMaterials(){
 		tBati: {type: "t", value: undefined},
 		colors: {type: "v4v", value: undefined},
 		bcolors: {type: "v4v", value: undefined},
-		
-		//sim params	
-		rad_min: {type: 'f', value: rad_min},	
+
+		//sim params
+		rad_min: {type: 'f', value: rad_min},
 		rad_deg: {type: 'f', value: rad_deg},
 		gx : {type: 'f', value: 0.01},
 		dx : {type: 'f', value:undefined},
@@ -190,9 +192,9 @@ function createMaterials(){
 		zmin: {type: "f", value: 0.0},
 		zmax: {type: "f", value: 1.0},
 
-		//fault params		
+		//fault params
 		L : {type: 'f', value: 450000.0},
-		W : {type: 'f', value: 150000.0},		
+		W : {type: 'f', value: 150000.0},
 		depth : {type: 'f', value: 30100.0},
 		slip : {type: 'f', value:  6.06},
 		strike : {type: 'f', value: 18.0},
@@ -200,7 +202,7 @@ function createMaterials(){
 		rake :  {type:  'f', value: 112.0},
 		U3 : {type: 'f', value:  0.0},
 		// cn : {type: 'f', value:  6020015.52},   //centroid N coordinate, 16zone
-		// ce : {type: 'f', value: 666850.37},    //centroid E coordinate, 16zone		
+		// ce : {type: 'f', value: 666850.37},    //centroid E coordinate, 16zone
 		cn : {type: 'f', value:  -35.5},   //centroid N coordinate, 18zone
 		ce : {type: 'f', value:  -73.0},    //centroid E coordinate, 18zone
 
@@ -252,7 +254,7 @@ function changeScenario(scenario){
 	doFaultModel();
     planeScreen.material = screenMaterial;
     nstep = 0;
-    renderer.render(view_scene,view_camera); 
+    renderer.render(view_scene,view_camera);
     console.log('render fault');
 }
 
@@ -262,7 +264,7 @@ function loadData(bati_image){
     batidata = {
     	ny:parseInt(dataarray[0].split(':')[1]),
     	nx:parseInt(dataarray[1].split(':')[1]),
-    }; 
+    };
 
 	// $.getJSON( "data/faults.json", function(data) {
 	//   historicalData = data;
@@ -279,18 +281,18 @@ function loadData(bati_image){
 	//   })
 	//   .always(function() {
 	//     console.log( "complete" );
-	//   });   
+	//   });
 
 	$.ajax({
 	  dataType: "json",
 	  url: "data/historicalData.json",
 	  async: false,
 	  success: function(data) {
-		  historicalData = data;	  
+		  historicalData = data;
 		  console.log( "success" );
 		}
 	});
-   	
+
 
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
     mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
@@ -302,10 +304,10 @@ function loadData(bati_image){
     mUniforms.zmax.value = parseFloat(dataarray[7].split(':')[1]);
 
     if (mUniforms.zmin.value>0.0){
-    	var e = new Error('zmin positive on bathymetry image file'); 
+    	var e = new Error('zmin positive on bathymetry image file');
     	throw e;
     }
-            
+
 
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
@@ -331,7 +333,7 @@ function loadData(bati_image){
     var dy_real = R_earth*dy*rad_min;
 
     dt = 0.5*Math.min(dx_real,dy_real)/Math.sqrt(-9.81*mUniforms.zmin.value);
-    
+
     mUniforms.RR.value = dt/R_earth;
     mUniforms.RS.value = 9.81*mUniforms.RR.value;
 
@@ -339,8 +341,8 @@ function loadData(bati_image){
     batiTextureBuffer.wrapS = THREE.ClampToEdgeWrapping; // are these necessary?
     batiTextureBuffer.wrapT = THREE.ClampToEdgeWrapping;
     // batiTextureBuffer.repeat.x = batiTextureBuffer.repeat.y = 2;
-    batiTextureBuffer.needsUpdate = true; //this IS necessary	
-    mUniforms.tBati.value = batiTextureBuffer; 
+    batiTextureBuffer.needsUpdate = true; //this IS necessary
+    mUniforms.tBati.value = batiTextureBuffer;
 
 
 }
@@ -348,18 +350,18 @@ function loadData(bati_image){
 function createCameras(){
 	calc_camera = new THREE.OrthographicCamera( planeWidth/-2,
 					 planeWidth/2,
-					 planeHeight/2, 
+					 planeHeight/2,
 					 planeHeight/-2, - 500, 1000 );
-	
+
 	var r = screenWidth/screenHeight;
-	// view_camera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );	
+	// view_camera = new THREE.OrthographicCamera( -0.5*r*2, 0.5*r*2, 0.5*2, -0.5*2, - 500, 1000 );
 	view_camera = new THREE.PerspectiveCamera(45,screenWidth/screenHeight,0.01,500);
 	view_camera.position.x = 0.0;
 	view_camera.position.y = Math.sin(mUniforms.cn.value*Math.PI/180.0);
 	view_camera.position.z = Math.cos(mUniforms.cn.value*Math.PI/180.0);
 	view_camera.lookAt(new THREE.Vector3(0,0,0));
 	view_scene.add(view_camera);
-	
+
 	// orb_controls = new THREE.OrbitControls( view_camera);
 	// orb_controls.enableRotate = true;
 	track_controls = new THREE.TrackballControls(view_camera, document.getElementById('simulation'));
@@ -377,32 +379,32 @@ function createGeom(){
 
 	//create a plane for bathymetry
 	batiGeom = new THREE.PlaneGeometry(planeWidth,planeHeight);
-	// batiPlane = new THREE.Mesh(batiGeom, batiMaterial);	
+	// batiPlane = new THREE.Mesh(batiGeom, batiMaterial);
 	// batiPlane.position.z = -0.1;
 	// scene.add(batiPlane);
 
 	batiGeom2 = new THREE.PlaneGeometry(planeWidth, planeHeight);
 
-	
+
 	//first use batiMaterial1 to render to buffer
 	batiPlane2 = new THREE.Mesh(batiGeom, batiMaterial);
 
 	//now use material2, to render to screen
-	
+
 	batiMaterial2.map =  THREE.ImageUtils.loadTexture('img/'+batiname+'Map.jpg');
 	batiMaterial2.bumpMap = THREE.ImageUtils.loadTexture('img/'+batiname+'BumpMap.jpg');;
 	batiMaterial2.bumpScale = 0.02;
 	// batiMaterial2.specularMap    = THREE.ImageUtils.loadTexture('img/'+batiname+'SpecMap.jpg')
 	// batiMaterial2.specular  = new THREE.Color('grey')
 	batiPlane2.material = batiMaterial2;
-	batiPlane2.position.z = -0.001;	
+	batiPlane2.position.z = -0.001;
 	// view_scene.add(batiPlane2);
 
 	//bati sphere
 	var ysouth = Math.PI/2 - mUniforms.ymin.value*Math.PI/180.0;
 	var ynorth = Math.PI/2 - mUniforms.ymax.value*Math.PI/180.0;
 
-	var sphereBatiGeom = new THREE.SphereGeometry(0.5, 32*4, 32*4, 
+	var sphereBatiGeom = new THREE.SphereGeometry(0.5, 32*4, 32*4,
 												0, Math.PI*2,
 													0, Math.PI);
 	var sphereBatiMat  = new THREE.MeshPhongMaterial();
@@ -422,13 +424,13 @@ function createGeom(){
 
 	// var sphereModelGeom = new THREE.SphereGeometry(0.5*1.01, 32, 32, 0, Math.PI*2, Math.PI/6, Math.PI*2/3);
 
-	var sphereModelGeom = new THREE.SphereGeometry(0.5*1.01, 32, 32, 
+	var sphereModelGeom = new THREE.SphereGeometry(0.5*1.01, 32, 32,
 													0, Math.PI*2,
 													ynorth, ysouth-ynorth);
 	var sphereModelMat  = screenMaterial;
 	earthModelMesh	= new THREE.Mesh(sphereModelGeom, sphereModelMat);
 	// earthModelMesh.position.x = 2.0;
-	
+
 	earthModelMesh.rotateY(d+Math.PI/2.0);
 	view_scene.add(earthModelMesh);
 
@@ -443,11 +445,11 @@ function createGeom(){
 	var light = new THREE.PointLight( 0xaaaaaa, 0.5, 0 );
 	light.position.set( 0, 0, 50 );
 	view_scene.add( light );
-	
+
 	// create a plane for simulation
 	var geometry = new THREE.PlaneGeometry(planeWidth , planeHeight);
 	planeScreen = new THREE.Mesh( geometry, screenMaterial );
-	calc_scene.add( planeScreen );		
+	calc_scene.add( planeScreen );
 
 
 	var stars_geometry  = new THREE.SphereGeometry(90, 32, 32)
@@ -463,7 +465,7 @@ function createGeom(){
 	// var axisHelper = new THREE.AxisHelper( 5 );
 	// view_scene.add( axisHelper );
 
-	
+
 }
 
 function doFaultModel(){
@@ -475,23 +477,23 @@ function doFaultModel(){
 function resizeSimulation(nx,ny){
 
 	mUniforms.delta.value = new THREE.Vector2(1/nx,1/ny);
-	
+
 	// create buffers
 	if (!mTextureBuffer1){
 
 
-	batiTextureBufferColored = new THREE.WebGLRenderTarget( nx, ny, 
+	batiTextureBufferColored = new THREE.WebGLRenderTarget( nx, ny,
 		 					{minFilter: THREE.LinearFilter,
 	                         magFilter: THREE.LinearFilter,
 	                         format: THREE.RGBAFormat,
 	                         type: THREE.FloatType});
 
-	mTextureBuffer1 = new THREE.WebGLRenderTarget( nx, ny, 
+	mTextureBuffer1 = new THREE.WebGLRenderTarget( nx, ny,
 		 					{minFilter: THREE.LinearFilter,
 	                         magFilter: THREE.LinearFilter,
 	                         format: THREE.RGBAFormat,
 	                         type: THREE.FloatType});
-	mTextureBuffer2 = new THREE.WebGLRenderTarget( nx, ny, 
+	mTextureBuffer2 = new THREE.WebGLRenderTarget( nx, ny,
 		 					{minFilter: THREE.LinearFilter,
 	                         magFilter: THREE.LinearFilter,
 	                         format: THREE.RGBAFormat,
@@ -505,53 +507,53 @@ function resizeSimulation(nx,ny){
 	else{
 		if (!toggleBuffer){
 			mTextureBuffer1.setSize(nx,ny);
-		}	
-		else{
-			mTextureBuffer2.setSize(nx,ny);	
 		}
-	
+		else{
+			mTextureBuffer2.setSize(nx,ny);
+		}
+
 	}
 
 }
 
-function renderSimulation(){		
+function renderSimulation(){
 
 	stats.begin();
 
 	if (paused != 1){
 		planeScreen.material = modelMaterial;
-		for (var i=0; i<Math.floor(speed); i++){			
+		for (var i=0; i<Math.floor(speed); i++){
 			writeTimeStamp();
 			if (!toggleBuffer){
-				mUniforms.tSource.value = mTextureBuffer1;		
+				mUniforms.tSource.value = mTextureBuffer1;
 				renderer.render(calc_scene, calc_camera, mTextureBuffer2, true);
-				
+
 			}
 			else{
 				mUniforms.tSource.value = mTextureBuffer2;
 				renderer.render(calc_scene, calc_camera, mTextureBuffer1, true);
-				
+
 			}
 
 			toggleBuffer = !toggleBuffer;
 		}
 
 		if (!toggleBuffer){
-			mUniforms.tSource.value = mTextureBuffer2;		
+			mUniforms.tSource.value = mTextureBuffer2;
 		}
 		else{
 			mUniforms.tSource.value = mTextureBuffer1;
 		}
 
-	
+
 	}
-			
-	
+
+
 	planeScreen.material = screenMaterial;
 	stats.end();
 	// orb_controls.update();
 	track_controls.update();
-	renderer.render(view_scene, view_camera);		
+	renderer.render(view_scene, view_camera);
 
 	requestAnimationFrame(renderSimulation);
 }
@@ -575,7 +577,7 @@ function writeTimeStamp(){
 
 function setColorMapBar(cmap_bati, cmap_water){
 	//requires colormap.js
-	
+
 	//var c = -mUniforms.zmin.value/(mUniforms.zmax.value - mUniforms.zmin.value);
 	var watermap = getColormapArray(cmap_water,1,0);
 	mUniforms.colors.value = watermap;
@@ -584,8 +586,8 @@ function setColorMapBar(cmap_bati, cmap_water){
 	var cbwater  = document.getElementById('cbwater');
 	cbwater.width = screenWidth/5;//Math.min(screenWidth/2,300);
     cbwater.height = 40
-    // cbwater.height = 100;	
+    // cbwater.height = 100;
     // cbwater.width = 80;
-    
+
 	colorbar(watermap,cbwater,0.0);
 }

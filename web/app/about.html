@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title> TsunamiLab </title>
+	</head>		
+
+	<body>
+		<h1>Acerca de TsunamiLab</h1>
+		<h2>¿Qué estoy viendo?</h2>
+		<p>
+Para estudiantes, comunicadores y público general con interés en la ciencia que necesitan informarse y aprender acerca de tsunamis, Tsunamilabs es una plataforma educativa que permite simular y visualizar el efecto de tsunamis. A diferencia de otros materiales ,como por ejemplo, los videos de la NOAA, Tsunamilabs permite interactuar y configurar distintos escenarios.
+Historia del proyecto
+Tsunamilab nace como una idea de José Galaz, mientras trabajaba en Cigiden, luego de observar que la educación de las personas es una de las medidas que más ha salvado vidas ante el impacto de los tsunamis en Chile en el último tiempo. Esto, sumado al descubrimiento de nuevas tecnologías, motivaron el inicio del desarrollo de esta aplicación. Es así como posteriormente nace una colaboración entre Cigiden e Inria para potenciar el desarrollo de este proyecto.
+Motivación del proyecto
+Generar herramienta útil para la comunidad
+Crear software de calidad
+Educación de la población por medio de experimentación
+Espíritu del proyecto
+Permitir que cualquier interesado en utilizar Tsunamilab para uso educativo lo pueda hacer libremente, sin temor a cobros o compromisos posteriores, y con la confianza de utilizar un software de alta calidad.
+Visión del proyecto 
+Tsunamilab es la herramienta principal de consulta sobre tsunamis para que niños y adultos de todo el mundo puedan aprender y enseñar, logrando que todos puedan conocer y experimentar cómo realmente se ven los tsunamis y cómo afectan a las personas.
+
+una plataforma educacional donde personas de todo el mundo aprenden, como en un laboratorio interactivo, sobre cómo son y funcionan los tsunamis, siendo la herramienta de consulta principal sobre estos temas por niños y adultos, ya sea para aprendizaje personal o enseñar, como también para informar a grupos de personas.
+Nuestros próximos pasos
+Participar en los eventos de difusión
+Mejoras de la app (tutorial, arreglar bugs, nuevas features)
+Mejoras del portal (Agregar videos, imágenes, información)
+</p>
+
+<h2>Para qué es el proyecto</h2>
+<p>
+	¿Qué NO es el proyecto?
+No es un predictor oficial
+No implementa un modelo de inundación
+Software pagado
+Herramienta de gestión
+Sistema de alerta
+¿Puedo usarlo para mis clases?
+Bueno
+¿Qué conceptos se pueden enseñar? ¿De cuántos metros es la ola?
+Múltiples olas por tsunami
+Primera ola no siempre es la más grande, especialmente en Chile.
+Velocidad de propagación
+Altura de olas
+Parámetros que caracterizan el tsunami (Modo avanzado)
+Eventos históricos
+	
+</p>
+
+
+<h2>Equipo</h2>
+<h3>¿Quién hizo esto?</h3>
+Primero iniciò como un desarrollo de Josè Galaz para Cigiden, y luego para que creciera se iniciò una colaboraciòn con Inria Chile.
+<h3>Contacto</h3>
+jdgalaz<arroba>uc.cl
+
+<h2>Implementación</h2>
+<h3>Tecnologías web</h3>
+<ul>
+<li>Three.js para visualización</li> 
+<li>WebGL para visualización y cálculos en la tarjeta de video para simulación en tiempo real</li>
+</ul>
+
+
+<h3>Modelo matemático</h3>
+<ul>
+<li>Basado en el modelo de la Universidad de Cornell (<a href=http://ceeserver.cee.cornell.edu/pll-group/comcot.htm>COMCOT</a>)</li>
+<li>Ecuaciones lineales de aguas someras en coordenadas esféricas.</li>
+<li>Modelo de diferencias finitas Leap-Frog en el tiempo</li>
+<li>Formulación escalonada para la conservación de masa y cantidad de movimiento.</li>
+</ul>
+
+<h3>Precisión y detalles de simulación</h3>
+
+<ul>
+	<li>Latitud: [-85°, 75°]</li>
+	<li>Longitud: [0, 360°]</li>
+	<li>Resolución: 48 arcmin</li>
+</ul>
+
+<p>
+	Los polos están excluidos de la simulación por inestabilidad de las condiciones de borde Norte y Sur
+La línea de costa se considera como un borde fijo que refleja de forma perfecta las olas.
+Esto quiere decir que no se calcula inundación
+</p>
+
+<h2>QUIERO COMENTAR</h2>
+
+<form method="POST" action="https://formspree.io/jdgalaz@uc.cl">
+  <input type="name" name="name" placeholder="Su nombre">
+  <textarea name="message" placeholder="Su mensaje"></textarea>
+  <button type="submit">Send</button>
+</form>
+
+	</body>
+
+
+</html>
+

@@ -45,6 +45,10 @@ function init_new_gui(){
 		simulationControls.snapshot();
 	});
 
+	$("#btn-info").click(function(){
+		$("#init_modal").modal("show");
+	});
+
 	$("#scenarios").change(function(value){
 		console.log($(this).val())
 		changeScenario($(this).val());

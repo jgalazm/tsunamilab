@@ -55,7 +55,7 @@ module.exports = function (grunt) {
         }
     },
     useminPrepare: {
-        html: 'app/index.html',
+        html: ['app/index.html','app/about.html'],
         options: {
             dest: 'dist'
         }
@@ -63,7 +63,13 @@ module.exports = function (grunt) {
       // Concat
     concat: {
         options: {
-            separator: ';'
+            // there's no easy way to set the separator differently between JS and CSS
+	        process: function (src, filepath) {
+	          if (filepath.split(/\./).pop === 'js') {
+	            return src + ';\n';
+	          }
+	          return src;
+	        }
         },
         // dist configuration is provided by useminPrepare
         dist: {}

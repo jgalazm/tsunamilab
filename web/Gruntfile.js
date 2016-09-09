@@ -88,8 +88,8 @@ module.exports = function (grunt) {
             // in dist directory
             files: [{
                 src: [
-                    'dist/scripts/*.js'//,
-                    //'dist/styles/*.css',
+                    'dist/scripts/*.js',
+                    'dist/styles/*.css',
                 ]
             }]
         }
@@ -102,7 +102,7 @@ module.exports = function (grunt) {
         html: ['dist/*.html'],
         //css: ['dist/styles/*.css'],
         options: {
-            assetsDirs: ['dist']//, 'dist/styles']
+            assetsDirs: ['dist', 'dist/styles']
         }
     },
     clean: {

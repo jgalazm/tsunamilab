@@ -5,22 +5,19 @@
 		<meta charset="utf-8">
 		<title> TsunamiLab (jgalazm) </title>
 
-		
+		<!-- build:css styles/main.css -->
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<!--link rel="stylesheet" type="text/css" href="../bower_components/flexboxgrid/dist/flexboxgrid.css"-->
+		<!--link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css"-->
+		<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<!-- endbuild -->
 
 		<!-- build:js scripts/main.js -->
-		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!-- Bower components -->
-		
-		<!--link rel="stylesheet" type="text/css" href="../bower_components/flexboxgrid/dist/flexboxgrid.css"-->
-		<!--link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"-->
-
-		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-		<script src="../bower_components/jquery/dist/jquery.min.js"></script>	
-		<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>					
-		<script src="../bower_components/three.js/three.min.js"></script>		
-		<script src="../bower_components/dat-gui/build/dat.gui.min.js"></script>				
-		<script src="../bower_components/stats.js/build/stats.min.js"></script>		
+		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="../bower_components/three.js/three.min.js"></script>
+		<script src="../bower_components/dat-gui/build/dat.gui.min.js"></script>
+		<script src="../bower_components/stats.js/build/stats.min.js"></script>
 
 
 		<!-- packages that must be downloaded manually-->
@@ -38,25 +35,13 @@
 
 		<script src="scripts/main.js"></script>
 		<!-- endbuild -->
-		
 
-
-	</head>		
+	</head>
 
 	<body>
-		<div id="top">
-			<div class="row">
-				<div class="col-xs-4">
-					<canvas width="50" height="512" id="cbwater"></canvas>	
-				</div>
-				<div class="col-xs-4">
-					<h4 id="time"> Time: </h4>
-				</div>
-		</div>
-		<div id="controls">
-		</div>
-		
-		
+		<canvas width="50" height="512" id="cbwater"></canvas>
+
+		<h4 id="time"> Time: </h4>
 
 		<div id="new-gui" class="mipanel">
 			<div class="row">
@@ -148,4 +133,3 @@
 
 
 </html>
-

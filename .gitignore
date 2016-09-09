@@ -67,6 +67,19 @@ data/.ipynb_checkpoints
 okada/.ipynb_checkpoints
 ipynb/.ipynb_checkpoints
 
+# unnecessary data
+data/*.jpg
+data/*.txt
+data/bathymetry/*.jpg
+data/bathymetry/*.txt
+data/bathymetry/batiWorld.jpg
+
+# large files
+*.mat
+*.zip
+*.asc
+*.npy
+
 # Created folders in web
 web/.tmp/
 web/dist/

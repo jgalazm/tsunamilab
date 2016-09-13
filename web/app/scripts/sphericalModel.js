@@ -137,7 +137,7 @@ function startSimulation(){
 
 	//load input data and planeWidth, planeHeight for simulationCamera and objects
 
-    setSimulation();
+  setSimulation();
 
     //create Buffers
 

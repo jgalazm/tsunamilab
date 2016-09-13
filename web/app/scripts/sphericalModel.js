@@ -144,7 +144,7 @@ function startSimulation(bati_image){
 	resizeSimulation(simNx,simNy);
 
 	//add GUI controls
-  makeQuery();
+  makeUSGSQuery();
 
  	initControls();
 
@@ -153,9 +153,9 @@ function startSimulation(bati_image){
 
 
 	//set initial condition
-    // render initial condition and bathymetry to both buffers
-    doFaultModel();
-    changeScenario("valdivia1960");
+  // render initial condition and bathymetry to both buffers
+  doFaultModel();
+  changeScenario("valdivia1960");
 	//render to screen
 	mUniforms.tSource.value = mTextureBuffer1;
 	planeScreen.material = screenMaterial;

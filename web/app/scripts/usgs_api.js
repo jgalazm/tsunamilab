@@ -1,8 +1,12 @@
 function makeUSGSQuery(){
+  /* loads data from the usgs
+  select only scenarios with moment tensor information available*/
+
   var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
   var startTime = "&starttime=0000-01-01"
   var endTime = "&endtime=2016-01-02"
   var minMagnitudeString = "&minmagnitude=8.0"
+  var productType = "&producttype=moment-tensor"
   qString = baseQueryString + startTime + endTime + minMagnitudeString
   $.ajax({
     dataType: "json",
@@ -38,6 +42,46 @@ function loadUSGSScenario(data){
     rake: 45.0,
     U3: 0.0
   }
+  makeMomentTensorQuery(place, f["id"]);
+}
+
+
+
+function makeMomentTensorQuery(place,eventid){
+  // query moment tensor data
+  var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
+  var eventIdString ="&eventid="+eventid;
+  var qMomentString = baseQueryString + eventIdString
+  $.ajax({
+    dataType: "json",
+    url: qMomentString,
+    async: false,
+    success: function(data) {
+      loadMomentTensorData(place,data);
+      console.log( "success" );
+    }
+  });
+}
+
+function loadMomentTensorData(place, data){
+  var tensors = data['properties']['products']['moment-tensor'];
+  var ntensors = tensors.length;
+  var nBestTensor = 0;
+  var weightBestTensor = 0;
+  for (var itensor=0; itensor<ntensors; itensor++){
+    if (tensors[itensor]['preferredWeight']>weightBestTensor){
+      nBestTensor = itensor;
+      weightBestTensor = tensors[itensor]['preferredWeight'];
+    }
+  }
+
+  var dip = tensors[nBestTensor]['properties']['nodal-plane-1-dip'];
+  var rake = tensors[nBestTensor]['properties']['nodal-plane-1-rake'];
+  var strike = tensors[nBestTensor]['properties']['nodal-plane-1-strike'];
+
+  historicalData[place]["dip"] = dip;
+  historicalData[place]["rake"] = rake;
+  historicalData[place]["strike"] = strike;
 }
 
 function Mw2Mo(Mw){

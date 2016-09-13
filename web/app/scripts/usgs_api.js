@@ -3,7 +3,7 @@ function makeUSGSQuery(){
   select only scenarios with moment tensor information available*/
 
   var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
-  var startTime = "&starttime=0000-01-01"
+  var startTime = "&starttime=1990-01-01"
   var endTime = "&endtime=2016-01-02"
   var minMagnitudeString = "&minmagnitude=8.0"
   var productType = "&producttype=moment-tensor"
@@ -20,29 +20,32 @@ function makeUSGSQuery(){
 }
 
 function loadUSGSScenario(data){
-  var f = data["features"][0];//feature
-  var coords = f['geometry']['coordinates']
-  var place = f['properties']['place']
-  var mag = f['properties']['mag']
-  var magType = f['properties']['magType']
-  var tsunamiFlag = f['properties']['tsunami']
+  var nfeatures = data["features"].length;
+  for (var ifeature=0; ifeature<nfeatures; ifeature++){
+    var f = data["features"][ifeature];//feature
+    var coords = f['geometry']['coordinates']
+    var place = f['properties']['place']
+    var mag = f['properties']['mag']
+    var magType = f['properties']['magType']
+    var tsunamiFlag = f['properties']['tsunami']
 
-  var LWslip = getLengthWidthSlip(mag);
+    var LWslip = getLengthWidthSlip(mag);
 
-  historicalData[place] = {
-    cn: coords[1],
-    ce: coords[0],
-    depth: coords[2],
-    Mw: mag,
-    L: LWslip.L,
-    W: LWslip.W,
-    slip: LWslip.slip,
-    strike: 0.0,
-    dip: 9.0,
-    rake: 45.0,
-    U3: 0.0
+    historicalData[place] = {
+      cn: coords[1],
+      ce: coords[0],
+      depth: coords[2],
+      Mw: mag,
+      L: LWslip.L,
+      W: LWslip.W,
+      slip: LWslip.slip,
+      strike: 0.0,
+      dip: 9.0,
+      rake: 45.0,
+      U3: 0.0
+    }
+    makeMomentTensorQuery(place, f["id"]);
   }
-  makeMomentTensorQuery(place, f["id"]);
 }
 
 

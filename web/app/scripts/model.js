@@ -91,6 +91,8 @@ function init(){
 		}
 	);
 
+	
+
 }
 
 function startSimulation(bati_image){

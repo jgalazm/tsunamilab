@@ -3,21 +3,19 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title> TsunamiLab (jgalazm) </title>
+		<title> Tsunami-Lab </title>
 
-
+		<!-- build:css styles/main.css -->
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<!--link rel="stylesheet" type="text/css" href="../bower_components/flexboxgrid/dist/flexboxgrid.css"-->
+		<!--link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css"-->
+		<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<!-- endbuild -->
 
 		<!-- build:js scripts/main.js -->
-		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!-- Bower components -->
-
-		<!--link rel="stylesheet" type="text/css" href="../bower_components/flexboxgrid/dist/flexboxgrid.css"-->
-		<!--link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"-->
-
-		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-
 		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="../bower_components/three.js/three.min.js"></script>
 		<script src="../bower_components/dat-gui/build/dat.gui.min.js"></script>
 		<script src="../bower_components/stats.js/build/stats.min.js"></script>
@@ -39,25 +37,14 @@
 
 		<script src="scripts/main.js"></script>
 		<!-- endbuild -->
-
-
-
 	</head>
 
 	<body>
-
-
 		<canvas width="50" height="512" id="cbwater"></canvas>
 
 		<h4 id="time"> Time: </h4>
 
-		<div id="controls">
-		</div>
-
 		<div id="new-gui" class="mipanel">
-
-
-
 			<div class="row">
 				<div class="col-xs-12">
 					<select id="scenarios" class="form-control">
@@ -70,9 +57,6 @@
 			</div>
 
 			<div class="row">
-
-
-
 				<div class="col-xs-4">
 					<div id="btn-minus" class="btn btn-default btn-lg">
 						<span class="glyphicon glyphicon-minus"></span>
@@ -94,29 +78,59 @@
 
 			</div>
 			<div class="row">
-				<div class="col-xs-12">
-					<div id="btn-restart" class="btn btn-default btn-lg">
-						<span class="glyphicon glyphicon-repeat"></span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-xs-4">
 					<div id="btn-snapshot" class="btn btn-default btn-lg">
 						<span class="glyphicon glyphicon-camera"></span>
 					</div>
 				</div>
+				<div class="col-xs-4">
+					<div id="btn-restart" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</div>
+				</div>
+				<div class="col-xs-4">
+					<div id="btn-info" class="btn btn-default btn-lg">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+				</div>
 			</div>
 
-
 		</div>
-
-
 
 		<div id="simulation" style='display:inline-block;'>
 			<canvas id="container" > Chrome please</canvas>
 		</div>
 
+		<!--Modal-->
+		<div id="init_modal" class="modal fade" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Tsunami-Lab</h4>
+			  </div>
+			  <div class="modal-body">
+			  	<h3>¿Qué estoy viendo?</h3>
+					<p><strong>Tsunami-Lab</strong> es una plataforma educativa que te permite simular y visualizar el efecto de tsunamis en tiempo real. Para esto puedes elegir escenarios históricos o configurar
+					escenarios ficticios y moverte por la tierra para ver sus efectos.</p>
+
+
+					<h3>Acerca del proyecto</h3>
+					<p><strong>Tsunami-Lab</strong> nace como una idea de José Galaz, mientras trabajaba en Cigiden y está siendo apoyada por Inria Chile en su desarrollo.
+					La motivación detrás del proyecto es educar a la comunidad, ya que esta es una de las medidas más efectivas para prevenir desgracias y disminuir el impacto de los tsunamis en Chile.</p>
+					<p>Esta plataforma se encuentra en desarrollo activo, orientándose a estudiantes, comunicadores y público general con interés en la ciencia.</p>
+
+					<h3>Más información</h3>
+					<p>Puedes encontrar información adicional sobre el proyecto, el equipo, las tecnologías utilizadas y más en el <a href="about.html">siguiente enlace</a>.</p>
+			  </div>
+			  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			  </div>
+			</div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<div id="controls">
+		</div>
 	</body>
 
 

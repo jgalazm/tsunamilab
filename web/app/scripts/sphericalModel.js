@@ -158,7 +158,7 @@ function startSimulation(){
 
 	//add GUI controls
 
- 	initControls();
+ 	// initControls();
 
 	//set default colors
 	setColorMapBar('batitopo','wave');
@@ -549,7 +549,7 @@ function renderSimulation(){
 function writeTimeStamp(){
 	nstep = nstep+1;
 	time = nstep*dt;
-	var timetext = "Time: ";
+	var timetext = "";
 
 	var hours = Math.floor(time/60/60),
         minutes = Math.floor((time - (hours * 60 * 60))/60),

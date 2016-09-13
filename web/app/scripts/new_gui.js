@@ -14,11 +14,15 @@ function init_new_gui(){
 
 	if(paused){
 		$("#icon-play").show();
+		$("#text-play").show();
 		$("#icon-pause").hide();
+		$("#text-pause").hide();
 	}
 	else{
 		$("#icon-play").hide();
+		$("#text-play").hide();
 		$("#icon-pause").show();
+		$("#text-pause").show();
 	}
 
 
@@ -28,11 +32,15 @@ function init_new_gui(){
 
 		if(paused){
 			$("#icon-play").show();
+			$("#text-play").show();
 			$("#icon-pause").hide();
+			$("#text-pause").hide();
 		}
 		else{
 			$("#icon-play").hide();
+			$("#text-play").hide();
 			$("#icon-pause").show();
+			$("#text-pause").show();
 		}
 
 	});
@@ -46,6 +54,10 @@ function init_new_gui(){
 	});
 
 	$("#btn-info").click(function(){
+		$("#init_modal").modal("show");
+	});
+
+	$("#btn-help").click(function(){
 		$("#init_modal").modal("show");
 	});
 

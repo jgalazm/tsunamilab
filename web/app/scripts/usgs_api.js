@@ -28,6 +28,9 @@ function loadUSGSScenario(data){
     var mag = f['properties']['mag']
     var magType = f['properties']['magType']
     var tsunamiFlag = f['properties']['tsunami']
+    if (place.toUpperCase().indexOf("BOLIVIA")>-1){
+      break;
+    }
 
     var LWslip = getLengthWidthSlip(mag);
 

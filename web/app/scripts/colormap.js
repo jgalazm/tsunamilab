@@ -252,8 +252,9 @@ function colorbar(cmap3js, canvas){
 
 	//write labels
 
-	ctx.font = "8pt Arial";//better exact px based on % of canvas.height?
-	ctx.fillStyle ="#aaaaaa";
+	var fontSize = L*0.038;
+	ctx.font = "" + fontSize + "pt Verdana";//better exact px based on % of canvas.height?
+	ctx.fillStyle ="#635c5c";
 	ctx.textAlign = "right";
 	// for (var i=0; i<labels.length;i++){
 	for (var i=0; i<n;i++){
@@ -261,7 +262,7 @@ function colorbar(cmap3js, canvas){
 		// if (i<n){
 		var labelText  = cmap3js[Math.min(2*i,2*n-1)].w.toFixed(2).toString();
 		var labelPosX = (i+1)/n*L*0.9;
-		var labelPosY = W*0.8;
+		var labelPosY = W*1.0;
 		// }
 		
 		// ctx.fillText(labels[i][0].toFixed(2),
@@ -279,7 +280,17 @@ function colorbar(cmap3js, canvas){
 	}
 
 	//last label
-
+	var labelText,labelPosX,labelPosY;
+	var labelText  = '1+';
+	var labelPosX = L*1.0;
+	var labelPosY = W*1.0;
+	ctx.fillText(labelText, labelPosX, labelPosY);	
+	ctx.beginPath();
+	ctx.strokeStyle = "white";
+	labelPosX = labelPosX - L*0.95/n/2-1;
+	ctx.moveTo(labelPosX,W/2);
+	ctx.lineTo(labelPosX,W/2*1.1);
+	ctx.stroke();
 
 	//draw colorbar border
 	ctx.rect(0.05*L, 0, L*0.95, W/2);

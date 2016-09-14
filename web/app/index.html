@@ -35,8 +35,7 @@
 		<script src="scripts/new_gui.js"></script>
 		<script src="scripts/simulation.js"></script>
 		<script src="scripts/usgs_api.js"></script>
-
-			<script src="scripts/main.js"></script>
+		<script src="scripts/main.js"></script>
 		<!-- endbuild -->
 	</head>
 
@@ -64,8 +63,6 @@
 			  </div><!--/.nav-collapse -->
 			</div>
 		</div>
-
-		<canvas width="50" height="512" style="display: none" id="cbwater"></canvas>
 
 		<div id="simulation" style='display:inline-block;'>
 			<canvas id="container" > Chrome please</canvas>
@@ -100,14 +97,13 @@
 
 		<!-- SIDEBAR -->
 		<div id="widget" class="col-xs-3 col-sm-3 col-md-2 col-lg-2 text-center">
-
       <div id="radioDiv" class="row">
         <h5>TSUNAMIS HISTORICOS</h5>
         <div class="row">
 			<div class="col-xs-12">
 				<select id="scenarios" class="form-control">
-				  <!-- <option value="alaska1964">Alaska </option> -->
-				  <option value="valdivia1960">9.6 M - (1960) Valdivia, Bio-Bio, Chile</option>
+					<!-- <option value="alaska1964">Alaska </option> -->
+					<option value="valdivia1960">9.6 M - (1960) Valdivia, Bio-Bio, Chile</option>
 					<option value="alaska1964"> 9.3 M - (1963) Sur de Alaska </option>
 				</select>
 			</div>
@@ -162,22 +158,15 @@
 			<p class="hidden-xs">Screenshot</p>
           </div>
         </div>
-        <!--
-        <div class="row-fluid">
-          <div class="col-xs-12 col-sm-6 col-md-6">
-            <div id="manzana" class="btn-polygon" value="inactive">
-              <img class="img-responsive  hidden-xs" src="{% static "img/manzana_inactive.png" %}" />
-              <p class="hidden-xs">MANZANA</p>
-              <span class="visible-xs btn-mini"><img class="img-small" src="{% static "img/manzana_inactive.png" %}" />MANZANA</span>
-            </div>
-          </div>
-        </div>-->
       </div>
       <div id="sliderDiv" class="row-fluid">
       	<h5> Tiempo transcurrido: </h5>
       	<span id=time>00:00:00</span>
       </div>
-
+      <div id="cbwaterDiv" class="row-fluid">
+      	<h5> Altura en metros: </h5>
+      	<canvas id="cbwater"></canvas>
+      </div>
     </div>
 
 	</body>

@@ -17,12 +17,6 @@ body {
 
 }
 
-#time {
-	position: absolute;
-	top: 0px; width: 100%;
-	padding: 5px;
-	color: #ffffff;
-}
 #cv{
 
 }
@@ -40,10 +34,6 @@ a {
     top: 0%;
     right: 5%;				
 }
-
-
-
-
 
 .movable{
 
@@ -148,4 +138,8 @@ a {
 
 .modal-body img {
 	margin-bottom: 15px;
+}
+
+#container {
+	cursor: pointer;
 }

@@ -73,9 +73,13 @@ function init_new_gui(){
 	$("#btn-plus").click(function(){
 		speed = Math.min(speed +1, 20);
 	});
+
+	var speedValues = [1,10,20];
+	var r = $('#slider-speed').slider()
+		.on('change', function(e){
+			speed = speedValues[e.value.newValue]
+		})
+		.data('slider');
 };
-
-
-
 
 

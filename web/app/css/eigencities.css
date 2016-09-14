@@ -385,3 +385,23 @@ div[value="active"] p {
 	    font-size: 11px;
 	}
 }
+
+#slider-element .slider-selection{
+	background: #0b93bf;
+}
+
+#slider-element .slider-handle{
+	background: #107e90;
+}
+
+#slider-element .slider-tick.in-selection {
+    background-image: linear-gradient(to bottom,#0b8eba 0,#0b8eba 100%);
+}
+
+.slider {
+    width: 75% !important;
+}
+
+#time{
+    font-size: 36px;
+}

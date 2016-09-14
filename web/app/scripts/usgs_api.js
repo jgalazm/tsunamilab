@@ -76,6 +76,8 @@ function makeMomentTensorQuery(place,eventid){
     success: function(data) {
       loadMomentTensorData(place,data);
       console.log( "success" );
+
+      document.getElementById("scenarios").selectedIndex = "2";
     }
   });
 }

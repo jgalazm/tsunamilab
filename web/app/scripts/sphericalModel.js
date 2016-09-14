@@ -168,7 +168,8 @@ function startSimulation(){
   // render initial condition and bathymetry to both buffers
 
   doFaultModel();
-  changeScenario("valdivia1960");
+  // changeScenario("valdivia1960");
+  changeScenario("48km W of Illapel, Chile");
 
 	//render to screen
 
@@ -432,7 +433,7 @@ function createCameras(){
 	trackBallControls.rotateSpeed = 2.0/2.50;
 	trackBallControls.noZoom = false;
 	trackBallControls.panSpeed = 0.08;
-	trackBallControls.minDistance = 0.8;
+	trackBallControls.minDistance = 0.65;
 	trackBallControls.maxDistance = 2.0;
 	trackBallControls.dynamicDampingFactor = 0.1;
 }

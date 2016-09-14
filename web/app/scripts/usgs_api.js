@@ -44,6 +44,12 @@ function loadUSGSScenario(data){
       rake: 45.0,
       U3: 0.0
     }
+
+    $('#scenarios').append($('<option>', {
+    value: place,
+    text: place
+    }));
+
     makeMomentTensorQuery(place, f["id"]);
   }
 }

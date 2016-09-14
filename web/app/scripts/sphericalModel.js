@@ -48,7 +48,6 @@ var historicalData, batidata, dataarray,
 
 
 function init(){
-
 	screenHeight = window.innerHeight;
 	screenWidth = window.innerWidth;
 
@@ -132,14 +131,13 @@ function startSimulation(){
 	// scene
 	simulationScene = new THREE.Scene();
 	viewScene = new THREE.Scene();
-
 	// create materials - uniforms
 
 	createMaterials();
 
 	//load input data and planeWidth, planeHeight for simulationCamera and objects
 
-    setSimulation();
+  setSimulation();
 
     //create Buffers
 
@@ -154,9 +152,11 @@ function startSimulation(){
 
 	//create geometries
 
+
 	createObjects();
 
 	//add GUI controls
+  makeUSGSQuery();
 
  	// initControls();
 
@@ -164,17 +164,18 @@ function startSimulation(){
 	setColorMapBar('batitopo','wave');
 
 
-	//set initial condition
-    // render initial condition and bathymetry to both buffers
+  //set initial condition
+  // render initial condition and bathymetry to both buffers
 
-    doFaultModel();
-    changeScenario("valdivia1960");
+  doFaultModel();
+  changeScenario("valdivia1960");
 
 	//render to screen
 
 	mUniforms.tSource.value = mTextureBuffer1;
 	simulationPlane.material = screenMaterial;
 	renderer.render(simulationScene,viewCamera);
+
 
 	// ----proceed with the simulation---
 
@@ -266,7 +267,6 @@ function createMaterials(){
 	});
 }
 
-
 function setSimulation(){
     mUniforms.xmin.value = parseFloat(dataarray[2].split(':')[1]);
     mUniforms.xmax.value = parseFloat(dataarray[3].split(':')[1]);
@@ -285,8 +285,8 @@ function setSimulation(){
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
-		simNx = simNx/8;
-		simNy = simNy/8;
+		simNx = simNx/5;
+		simNy = simNy/5;
   }
   // set simNx and simNy as the nearest power of two
   // this is needed by THREE.RepeatWrapping
@@ -483,8 +483,6 @@ function createObjects(){
 	viewPlane = new THREE.Mesh( viewGeometry, screenMaterial );
 	viewPlane.position.z = 0.01;
 	// viewScene.add( viewPlane );
-
-
 }
 
 function createLights(){
@@ -508,7 +506,6 @@ function doFaultModel(){
   mUniforms.t.value = 0.0;
 }
 
-
 function renderSimulation(){
 	if (paused != 1){
 		simulationPlane.material = modelMaterial;
@@ -517,24 +514,23 @@ function renderSimulation(){
 			if (!toggleBuffer){
 				mUniforms.tSource.value = mTextureBuffer1;
 				renderer.render(simulationScene, simulationCamera, mTextureBuffer2, true);
-
 			}
 			else{
 				mUniforms.tSource.value = mTextureBuffer2;
-				renderer.render(simulationScene, simulationCamera, mTextureBuffer1, true);
+			  renderer.render(simulationScene, simulationCamera, mTextureBuffer1, true);
 			}
 
 			toggleBuffer = !toggleBuffer;
 		}
 
-		if (toggleBuffer){
+	if (toggleBuffer){
 			mUniforms.tSource.value = mTextureBuffer1;
 		}
 		else{
 			mUniforms.tSource.value = mTextureBuffer2;
 		}
 
-	}
+  }
 
 	simulationPlane.material = screenMaterial;
 	// orbitControls.update();
@@ -542,7 +538,6 @@ function renderSimulation(){
 	renderer.render(viewScene, viewCamera);
 
   mUniforms.t.value = mUniforms.t.value +1;
-
 	requestAnimationFrame(renderSimulation);
 }
 

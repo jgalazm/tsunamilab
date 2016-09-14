@@ -85,8 +85,8 @@ h6 {
 }
 
 .navbar-brand img {
-  height: 70%;
-  padding-right: 5px;
+  height: 50%;
+  padding-right: 10px;
 }
 
 span.eigen{
@@ -374,6 +374,10 @@ div[value="active"] p {
     margin: 10px 0px 10px 0px;
 }
 
+.btn-group-lg>.btn, .btn-lg {
+    padding: 6px 16px 1px 16px;
+}
+
 @media (max-width: 992px) {
 	.container {
 	    margin-left: 0px;
@@ -404,4 +408,27 @@ div[value="active"] p {
 
 #time{
     font-size: 36px;
+}
+
+.slider-tick {
+	width: 15px;
+	height: 15px;
+    background-image: linear-gradient(to bottom,#c2c2c2 0,#c4c4c4 100%);
+}
+
+.slider-handle {
+	width: 15px;
+	height: 15px;
+}
+
+.slider-track-high {
+	background: #cccccc;
+}
+
+.slider.slider-horizontal .slider-track {
+    height: 5px;
+}
+
+.slider.slider-horizontal .slider-tick-label-container .slider-tick-label {
+    padding-top: 0px;
 }

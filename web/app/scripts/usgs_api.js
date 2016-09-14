@@ -107,7 +107,8 @@ function Mw2Mo(Mw){
   return Math.pow(10., 1.5*Mw+9.1)
 }
 
-function getLengthWidthSlip(Mw,mu=2.0e10){
+function getLengthWidthSlip(Mw){
+  var mu = 2.0e10
   var L = Math.pow(10., 0.5*Mw-1.80)*1000
   var W = 0.5*L
   var slip = Mw2Mo(Mw)/(mu*L*W)

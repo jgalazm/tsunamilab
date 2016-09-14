@@ -79,12 +79,12 @@ hr.small {
   }
   .navbar-custom .navbar-brand:hover,
   .navbar-custom .navbar-brand:focus {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(228, 228, 228, 0.8);
   }
   .navbar-custom .nav li a {
     color: white;
     padding: 20px;
-    background-color: #2e4867;
+    background-color: #0596c7;
   }
   .navbar-custom .nav li a:hover,
   .navbar-custom .nav li a:focus {

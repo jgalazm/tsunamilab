@@ -69,23 +69,8 @@ h6 {
 }
 
 
-.navbar-inverse {
-    background-color: #e4e4e4;
-    border-color: none;
-}
-
-.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
- 	background-color: #c7c7c7;
- 	color: #797575;
-}
-
-
-.navbar-inverse .navbar-nav > li > a {
- 	color: #5e5858;
-}
-
-.navbar-inverse .navbar-nav>li>a:hover {
-	color: #4c4747;
+.navbar-default {
+    opacity: 0.7;
 }
 
 .navbar-brand {
@@ -246,7 +231,7 @@ div[value="active"] p {
 
 .middle-div{
   /*background-color:#2c323d;*/
-  background-color:rgba(228, 228, 228, 0.94);
+  background-color:rgba(240, 240, 240, 0.94);
   border-top: 3px solid #0596c7;
   border-bottom: 3px solid #0596c7;
   padding-bottom: 5px !important;
@@ -387,4 +372,16 @@ div[value="active"] p {
 .btn {
     opacity: 0.5;
     margin: 10px 0px 10px 0px;
+}
+
+@media (max-width: 992px) {
+	.container {
+	    margin-left: 0px;
+	}
+}
+
+@media (max-width: 860px) and (min-width: 768px){
+	.container {
+	    font-size: 11px;
+	}
 }

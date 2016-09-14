@@ -42,7 +42,7 @@
 
 	<body>
 
-		<div class="navbar navbar-inverse navbar-fixed-top" data-role="header">
+		<div class="navbar navbar-default navbar-fixed-top" data-role="header">
 			<div class="container">
 			  <div class="navbar-header">
 			    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -52,22 +52,22 @@
 			      <span class="icon-bar"></span>
 			    </button>
 			    <div class="navbar-brand">
-			    	<span><img src='img/marepoto.png' /></span><span class="eigen">TSUNAMI-</span><span class="cities">LABS</span>
+			    	<span><img src='img/marepoto.png' /></span><span class="eigen">TSUNAMI-</span><span class="cities">LAB</span>
 			    </div>
 			  </div>
 			  <div id="navbar" class="collapse navbar-collapse">
 			    <ul class="nav navbar-nav">
 			      <li class="active"><a href="#">Simulación</a></li>
-			      <li><a target="_blank" href="about.html">Sobre Tsunami-Labs</a></li>
+			      <li><a target="_blank" href="about.html">Sobre Tsunami-Lab</a></li>
 			      <li id="btn-help"><a href="#">Ayuda</a></li>
 			    </ul>
 			  </div><!--/.nav-collapse -->
 			</div>
 		</div>
 
-		<canvas width="50" height="512" id="cbwater"></canvas>
+		<canvas width="50" height="512" style="display: none" id="cbwater"></canvas>
 
- height="50px" /		<div id="simulation" style='display:inline-block;'>
+		<div id="simulation" style='display:inline-block;'>
 			<canvas id="container" > Chrome please</canvas>
 		</div>
 
@@ -81,16 +81,11 @@
 			  </div>
 			  <div class="modal-body">
 			  	<h3>¿Qué estoy viendo?</h3>
-					<p><strong>Tsunami-Lab</strong> es una plataforma educativa que te permite simular y visualizar el efecto de tsunamis en tiempo real. Para esto puedes elegir escenarios históricos o configurar
-					escenarios ficticios y moverte por la tierra para ver sus efectos.</p>
+					<p><strong>Tsunami-Lab</strong> es una plataforma educativa que permite simular y visualizar el efecto de los tsunamis en tiempo real,  a través de la  interacción y de la configuración de distintos escenarios, tanto históricos como ficticios.</p>
+			 		<p>La motivación detrás del proyecto es convertirse en una herramienta educativa, destinada tanto a estudiantes como a público general, que permita prevenir la pérdida de vidas humanas y disminuir el impacto de los tsunamis en Chile.</p>
+					<p>La  plataforma se encuentra en desarrollo.</p>
 
-
-					<h3>Acerca del proyecto</h3>
-					<p><strong>Tsunami-Lab</strong> nace como una idea de José Galaz, mientras trabajaba en Cigiden y está siendo apoyada por Inria Chile en su desarrollo.
-					La motivación detrás del proyecto es educar a la comunidad, ya que esta es una de las medidas más efectivas para prevenir desgracias y disminuir el impacto de los tsunamis en Chile.</p>
-					<p>Esta plataforma se encuentra en desarrollo activo, orientándose a estudiantes, comunicadores y público general con interés en la ciencia.</p>
-
-					<h3>Más información</h3>
+				<h3>Más información</h3>
 					<p>Puedes encontrar información adicional sobre el proyecto, el equipo, las tecnologías utilizadas y más en el <a href="about.html">siguiente enlace</a>.</p>
 			  </div>
 			  <div class="modal-footer">

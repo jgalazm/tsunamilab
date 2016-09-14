@@ -23,34 +23,39 @@ function loadUSGSScenario(data){
   var nfeatures = data["features"].length;
   for (var ifeature=0; ifeature<nfeatures; ifeature++){
     var f = data["features"][ifeature];//feature
-    var coords = f['geometry']['coordinates']
-    var place = f['properties']['place']
-    var mag = f['properties']['mag']
-    var magType = f['properties']['magType']
-    var tsunamiFlag = f['properties']['tsunami']
+    var coords = f['geometry']['coordinates'];
+    var place = f['properties']['place'];
+    var mag = f['properties']['mag'];
+    var magType = f['properties']['magType'];
+    var tsunamiFlag = f['properties']['tsunami'];
+    var title = f['properties']['title'];
+    var time = f['properties']['time'];
+    var date = new Date(time);
+    var year = date.getYear()+1900;
     if (place.toUpperCase().indexOf("BOLIVIA")>-1){
       break;
     }
 
     var LWslip = getLengthWidthSlip(mag);
 
-    historicalData[place] = {
-      cn: coords[1],
-      ce: coords[0],
-      depth: coords[2],
-      Mw: mag,
-      L: LWslip.L,
-      W: LWslip.W,
-      slip: LWslip.slip,
-      strike: 0.0,
-      dip: 9.0,
-      rake: 45.0,
-      U3: 0.0
-    }
+    historicalData[place]["cn"]= coords[1],
+    historicalData[place]["ce"]= coords[0],
+    historicalData[place]["depth"]= coords[2],
+    historicalData[place]["Mw"]= mag,
+    historicalData[place]["L"]= LWslip.L,
+    historicalData[place]["W"]= LWslip.W,
+    historicalData[place]["slip"]= LWslip.slip,
+    historicalData[place]["strike"]= 0.0,
+    historicalData[place]["dip"]= 9.0,
+    historicalData[place]["rake"]= 45.0,
+    historicalData[place]["U3"]= 0.0
+
 
     $('#scenarios').append($('<option>', {
-    value: place,
-    text: place
+      text: mag.toString()+' M - ' +
+          '('+year.toString() + ') '+
+          historicalData[place]["name"],
+      value: place
     }));
 
     makeMomentTensorQuery(place, f["id"]);

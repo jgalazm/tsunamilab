@@ -56,6 +56,8 @@ function init(){
 	container.width = screenWidth;
 	container.height = screenHeight;
 
+  window.addEventListener('resize', resizeCanvas, false);
+
 	// Load data and start the simulation
 	var loader = new THREE.TextureLoader();
 
@@ -330,6 +332,16 @@ function setSimulation(){
   mUniforms.RS.value = 9.81*mUniforms.RR.value;
 
   mUniforms.tBati.value = batiTexture;
+}
+
+function resizeCanvas(){
+	screenWidth = container.width;
+	screenHeight = container.height;
+	container.width = window.innerWidth;
+  container.height = window.innerHeight;
+	renderer.setSize(container.width, container.height);
+	viewCamera.aspect = container.width/container.height;
+	viewCamera.updateProjectionMatrix();
 }
 
 

@@ -79,7 +79,7 @@ function makeMomentTensorQuery(place,eventid){
 
       if(place=="48km W of Illapel, Chile"){
         document.getElementById("scenarios").selectedIndex = "2";
-        changeScenario(defaultScenario);
+        changeScenario("48km W of Illapel, Chile");
       }
     }
   });

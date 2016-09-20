@@ -565,10 +565,12 @@ function writeTimeStamp(){
     var timetext = timetext.concat(hours + ':' +
     					((minutes < 10) ? '0' + minutes : minutes) + ':' +
     					((seconds < 10) ? '0' + seconds : seconds));
-
-
-	var timeDomEl = document.getElementById("time");
-	timeDomEl.textContent = timetext;
+    var hoursText = ((hours < 10) ? '0' + hours : hours)
+    var minutesText = ((minutes < 10) ? '0' + minutes : minutes)
+	var hoursElement = document.getElementById("time-hours");
+	var minutesElement = document.getElementById("time-minutes");
+	hoursElement.textContent = hoursText;
+	minutesElement.textContent = minutesText;
 }
 
 function setColorMapBar(cmap_bati, cmap_water){

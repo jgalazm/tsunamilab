@@ -406,8 +406,12 @@ div[value="active"] p {
     width: 75% !important;
 }
 
-#time{
+.time-number{
     font-size: 36px;
+}
+
+.time-label{
+    font-size: 26px;
 }
 
 .slider-tick {

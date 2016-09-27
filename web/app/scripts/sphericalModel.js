@@ -157,22 +157,22 @@ function startSimulation(){
 
 	createObjects();
 
-	//add GUI controls
-  makeUSGSQuery();
+
 
  	// initControls();
 
 	//set default colors
 	setColorMapBar('batitopo','wave');
 
-
   //set initial condition
   // render initial condition and bathymetry to both buffers
 
   doFaultModel();
-  // changeScenario("valdivia1960");
-  changeScenario("48km W of Illapel, Chile");
+  changeScenario("valdivia1960");
 
+  //add GUI controls
+  makeUSGSQuery();
+  
 	//render to screen
 
 	mUniforms.tSource.value = mTextureBuffer1;
@@ -213,16 +213,16 @@ function createMaterials(){
 		zmax: {type: "f", value: 1.0},
 
 		//fault params
-		L : {type: 'f', value: 450000.0},
-		W : {type: 'f', value: 150000.0},
-		depth : {type: 'f', value: 30100.0},
-		slip : {type: 'f', value:  6.06},
-		strike : {type: 'f', value: 18.0},
-		dip : {type: 'f', value: 18.0},
-		rake :  {type:  'f', value: 112.0},
-		U3 : {type: 'f', value:  0.0},
-		cn : {type: 'f', value:  -35.5},   //centroid N coordinate, 18zone
-		ce : {type: 'f', value:  -73.0},    //centroid E coordinate, 18zone
+		L : {type: 'f', value: undefined},
+		W : {type: 'f', value: undefined},
+		depth : {type: 'f', value: undefined},
+		slip : {type: 'f', value:  undefined},
+		strike : {type: 'f', value: undefined},
+		dip : {type: 'f', value: undefined},
+		rake :  {type:  'f', value: undefined},
+		U3 : {type: 'f', value:  undefined},
+		cn : {type: 'f', value:  undefined},   //centroid N coordinate, 18zone
+		ce : {type: 'f', value:  undefined},    //centroid E coordinate, 18zone
 
 		//misc
 		pause: {type: 'i', value: 0}
@@ -310,7 +310,7 @@ function setSimulation(){
     simNy = Math.pow(2,ypower+1)
   }
   mUniforms.xmin.value = 0.0;
-  mUniforms.xmax.value = 360-360/simNx/2.0; // dont touch the south pole!
+  mUniforms.xmax.value = 360-360/simNx/2.0;
 
 	planeHeight = 1.0;
 	planeWidth = planeHeight*simNx/simNy;

@@ -11,10 +11,9 @@ function makeUSGSQuery(){
   $.ajax({
     dataType: "json",
     url: qString,
-    async: false,
+    async: true,
     success: function(data) {
       loadUSGSScenario(data);
-      console.log( "success" );
     }
   });
 }
@@ -69,17 +68,23 @@ function makeMomentTensorQuery(place,eventid){
   var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
   var eventIdString ="&eventid="+eventid;
   var qMomentString = baseQueryString + eventIdString
+
   $.ajax({
     dataType: "json",
     url: qMomentString,
-    async: false,
+    async: true,
     success: function(data) {
       loadMomentTensorData(place,data);
       console.log( "success" );
 
-      document.getElementById("scenarios").selectedIndex = "2";
+      if(place=="48km W of Illapel, Chile"){
+        document.getElementById("scenarios").selectedIndex = "2";
+        changeScenario("48km W of Illapel, Chile");
+      }
     }
   });
+
+
 }
 
 function loadMomentTensorData(place, data){
@@ -114,17 +119,3 @@ function getLengthWidthSlip(Mw){
   var slip = Mw2Mo(Mw)/(mu*L*W)
   return {L:L, W:W, slip:slip}
 }
-//
-// "alaska1964": {
-//   "depth": 25000.0,
-//   "slip": 9.9763115748443738,
-//   "rake": 90.0,
-//   "L": 630957.34448019299,
-//   "ce": -147.339,
-//   "Mw": 9.2,
-//   "U3": 0.0,
-//   "W": 315478.67224009649,
-//   "strike": 218.0,
-//   "dip": 8.0,
-//   "cn": 60.908
-// },

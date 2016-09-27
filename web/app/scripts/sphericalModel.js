@@ -402,22 +402,44 @@ function changeScenario(scenario){
 }
 
 function setView(cn,ce){
-
 	var alpha = Math.PI/180*ce;
 	var beta = Math.PI/180*cn;
 	var r = 1.0;
 
-	viewCamera.position.x = -r*Math.cos(beta)*Math.cos(alpha);
-	viewCamera.position.y = r*Math.sin(beta);
-	viewCamera.position.z = r*Math.cos(beta)*Math.sin(alpha);
+	var currentX = viewCamera.position.x;
+	var currentY = viewCamera.position.y;
+	var currentZ = viewCamera.position.z;
+
+	var currentR = Math.sqrt(currentX*currentX+currentY*currentY+currentZ*currentZ);
+	var currentTheta = Math.atan2(currentX,currentZ)+Math.PI/2;
+	var currentPhi = Math.asin(currentY/currentR);
+
+	var animate = function(time){
+		TWEEN.update(time);
+		requestAnimationFrame( animate );
+	}
 	viewCamera.up = new THREE.Vector3(0,1,0);
-	viewCamera.lookAt(new THREE.Vector3(0,0,0));
+	animate();
 
 	var light = viewScene.getObjectByName("directional Light");
-	light.position.x = viewCamera.position.x;
-	light.position.y = viewCamera.position.y;
-	light.position.z = viewCamera.position.z;
-
+ 	var tween = new TWEEN.Tween({r: currentR, theta: currentTheta, phi:currentPhi}).to({
+	    r: r, 
+	    theta: alpha, 
+	    phi: beta
+	}, 2000).easing(TWEEN.Easing.Quintic.InOut).onUpdate(function() {
+	    var targetX = -this.r*Math.cos(this.phi)*Math.cos(this.theta);
+		var targetY = this.r*Math.sin(this.phi);
+		var targetZ = this.r*Math.cos(this.phi)*Math.sin(this.theta);
+	    viewCamera.position.x = targetX;
+	    viewCamera.position.y = targetY;
+	    viewCamera.position.z = targetZ;
+	    light.position.x = viewCamera.position.x;
+		light.position.y = viewCamera.position.y;
+		light.position.z = viewCamera.position.z;
+	}).onComplete(function(){
+        animate = function(){};
+    }).start();
+    console.log(light)
 }
 function createCameras(){
 	simulationCamera = new THREE.OrthographicCamera( planeWidth/-2,
@@ -582,7 +604,7 @@ function setColorMapBar(cmap_bati, cmap_water){
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
 	cbwater.width = screenWidth/5;
-  cbwater.height = 40
+  	cbwater.height = 60
 
 	colorbar(watermap,cbwater,0.0);
 }

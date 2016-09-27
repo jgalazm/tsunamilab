@@ -604,7 +604,7 @@ function setColorMapBar(cmap_bati, cmap_water){
 	//setup colorbar
 	var cbwater  = document.getElementById('cbwater');
 	cbwater.width = screenWidth/5;
-  cbwater.height = 40
+  	cbwater.height = 60
 
 	colorbar(watermap,cbwater,0.0);
 }

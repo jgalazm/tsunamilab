@@ -75,6 +75,7 @@ function init(){
 				loadData();
 
 				startSimulation();
+				loadCities()
 			},
 			// Function called when download progresses
 			function ( xhr ) {
@@ -121,7 +122,6 @@ function loadData(){
 
 	starsMap = THREE.ImageUtils.loadTexture('img/galaxy_starfield.png');
 };
-
 
 function startSimulation(){
 	console.log("startSimulation()");
@@ -183,6 +183,75 @@ function startSimulation(){
 	// ----proceed with the simulation---
 
 	renderSimulation();
+}
+
+function loadCities(){
+	$.ajax({
+	  dataType: "json",
+	  url: "../../data/citiesLocation/cities.json",
+	  async: false,
+	  success: function(data) {
+	  	console.log(data)
+		  setCities(data);
+		}
+	});
+}
+
+function setCities(data){
+		var phiLength = 0.027*Math.PI,
+		thetaLength = 0.01*Math.PI
+		//ce == lon == phi == alpha, cn == lat == theta == beta
+	
+	data.forEach(function(city){
+		var alpha = Math.PI/180*city.lon;
+		var beta = Math.PI/180*city.lat;
+		var r = 0.5;
+		
+		city.name = "  " + city.name + "  "
+		
+		var geometry = new THREE.SphereBufferGeometry( 0.0025, 50, 50 );
+		var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(255,237,10,1)", side : THREE.DoubleSide} );
+	  materialSphere.transparent = true;
+		var object = new THREE.Mesh( geometry, materialSphere);
+		var x = -r*Math.cos(beta)*Math.cos(alpha);
+		var y = r*Math.sin(beta);
+		var z = r*Math.cos(beta)*Math.sin(alpha);
+		object.position.x = x;
+		object.position.y = y;
+		object.position.z = z;
+		viewScene.add( object );
+		
+		var canvas1 = document.createElement('canvas');
+		var context1 = canvas1.getContext('2d');
+		context1.font = "Bold 30px Helvetica";
+		context1.fillStyle = 'rgba(226,226,226,0.6)';
+	    
+	  var width = context1.measureText(city.name).width;
+	  var height = 60;
+	  context1.fillRect(0, 0, width, height);
+	    
+		context1.fillStyle = "rgba(69,62,62,1)";
+	  context1.fillText(city.name, 0, height/2 + 15);
+	  // canvas contents will be used for a texture
+		var texture1 = new THREE.Texture(canvas1) 
+		texture1.needsUpdate = true;
+	      
+	    var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
+	    material1.transparent = true;
+	    material1.alphaTest = 0.5;
+	
+		var mesh1Geometry = new THREE.SphereGeometry(0.5*1.005, 32*4, 32*4,	 alpha, phiLength, Math.PI/2 - beta, thetaLength)
+	
+	  
+	     mesh1 = new THREE.Mesh(
+	        mesh1Geometry,
+	        material1
+	      );
+		mesh1.position.set(0,0,0);
+		viewScene.add( mesh1 );
+	});
+		var axisHelper = new THREE.AxisHelper( 5 );
+	viewScene.add( axisHelper );
 }
 
 function createMaterials(){

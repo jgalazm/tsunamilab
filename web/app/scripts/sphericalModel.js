@@ -47,6 +47,7 @@ var historicalData, batidata, dataarray,
 	batiMap, batiMatMap, batiMatBumpMap, starsMap;
 
 
+
 function init(){
 	screenHeight = window.innerHeight;
 	screenWidth = window.innerWidth;
@@ -172,7 +173,7 @@ function startSimulation(){
 
   //add GUI controls
   makeUSGSQuery();
-  
+
 	//render to screen
 
 	mUniforms.tSource.value = mTextureBuffer1;
@@ -188,31 +189,43 @@ function startSimulation(){
 function loadCities(){
 	$.ajax({
 	  dataType: "json",
-	  url: "../../data/citiesLocation/cities.json",
+	  url: "data/cities.json",
 	  async: false,
 	  success: function(data) {
-	  	console.log(data)
+	  	// console.log(data)
 		  setCities(data);
-		}
+		},
+    error: function(data){
+      console.log('ERRORERRORERRORRERROOEROEROEOROEROEORORORORORO');
+    }
 	});
 }
 
+
+var cities = [];
 function setCities(data){
 		var phiLength = 0.027*Math.PI,
 		thetaLength = 0.01*Math.PI
 		//ce == lon == phi == alpha, cn == lat == theta == beta
-	
-	data.forEach(function(city){
-		var alpha = Math.PI/180*city.lon;
+
+    // var citiesPointsGeometry = new THREE.Geometry();
+
+    var canvas1 = document.createElement('canvas');
+    var context1 = canvas1.getContext('2d');
+	Object.keys(data).forEach(function(cityName){
+    var city = data[cityName];
+    console.log(city);
+    var alpha = Math.PI/180*city.lon;
 		var beta = Math.PI/180*city.lat;
-		var r = 0.5;
-		
+		var r = 0.51;
+
 		city.name = "  " + city.name + "  "
-		
-		var geometry = new THREE.SphereBufferGeometry( 0.0025, 50, 50 );
-		var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(255,237,10,1)", side : THREE.DoubleSide} );
+
+		var geometry = new THREE.SphereBufferGeometry( 0.0025, 10, 10 );
+		var materialSphere = new THREE.MeshPhongMaterial( { color: "rgba(255,237,10,1)", side : THREE.DoubleSide, specular:0xffffff,shininess:200} );
 	  materialSphere.transparent = true;
 		var object = new THREE.Mesh( geometry, materialSphere);
+    cities.push(object);
 		var x = -r*Math.cos(beta)*Math.cos(alpha);
 		var y = r*Math.sin(beta);
 		var z = r*Math.cos(beta)*Math.sin(alpha);
@@ -220,39 +233,53 @@ function setCities(data){
 		object.position.y = y;
 		object.position.z = z;
 		viewScene.add( object );
-		
-		var canvas1 = document.createElement('canvas');
-		var context1 = canvas1.getContext('2d');
+    // citiesPointsGeometry.vertices.push(new THREE.Vector3(x,y,z));
+
+    context1.clearRect(0, 0, canvas1.width, canvas1.height);
 		context1.font = "Bold 30px Helvetica";
 		context1.fillStyle = 'rgba(226,226,226,0.6)';
-	    
+
 	  var width = context1.measureText(city.name).width;
 	  var height = 60;
 	  context1.fillRect(0, 0, width, height);
-	    
+
 		context1.fillStyle = "rgba(69,62,62,1)";
+    console.log(city.name);
 	  context1.fillText(city.name, 0, height/2 + 15);
 	  // canvas contents will be used for a texture
-		var texture1 = new THREE.Texture(canvas1) 
+
+    var image = new Image();
+    image.id = "pic"
+    image.src = canvas1.toDataURL();
+
+		var texture1 = new THREE.Texture(image)
 		texture1.needsUpdate = true;
-	      
-	    var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
-	    material1.transparent = true;
-	    material1.alphaTest = 0.5;
-	
-		var mesh1Geometry = new THREE.SphereGeometry(0.5*1.005, 32*4, 32*4,	 alpha, phiLength, Math.PI/2 - beta, thetaLength)
-	
-	  
-	     mesh1 = new THREE.Mesh(
-	        mesh1Geometry,
-	        material1
-	      );
+
+    var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
+    material1.transparent = true;
+    material1.alphaTest = 0.5;
+
+		var mesh1Geometry = new THREE.SphereGeometry(0.5*1.005, 4, 4,	 alpha, phiLength, Math.PI/2 - beta, thetaLength)
+
+
+     mesh1 = new THREE.Mesh(
+        mesh1Geometry,
+        material1
+      );
 		mesh1.position.set(0,0,0);
 		viewScene.add( mesh1 );
 	});
+
+  // var citiesPointsMaterial = new THREE.PointsMaterial({
+  //   size: 0.01
+  // })
+  // var citiesPoints = new THREE.Points(citiesPointsGeometry,citiesPointsMaterial);
 		var axisHelper = new THREE.AxisHelper( 5 );
+  viewScene.add(citiesPoints);
 	viewScene.add( axisHelper );
 }
+// var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(255,237,10,1)", side : THREE.DoubleSide} );
+// materialSphere.transparent = true;
 
 function createMaterials(){
 	// uniforms
@@ -508,7 +535,7 @@ function onDocumentMouseDown( event ) {
 
     raycaster.setFromCamera( mouse, viewCamera );
     var objects = [viewScene.getObjectByName('epicenter')];
-    var intersects = raycaster.intersectObjects( objects ); 
+    var intersects = raycaster.intersectObjects( objects );
 
     if ( intersects.length > 0 ) {
         intersects[0].object.callback(event);
@@ -540,8 +567,8 @@ function setView(cn,ce, scenario){
 
 	var light = viewScene.getObjectByName("directional Light");
  	var tween = new TWEEN.Tween({r: currentR, theta: currentTheta, phi:currentPhi}).to({
-	    r: r, 
-	    theta: alpha, 
+	    r: r,
+	    theta: alpha,
 	    phi: beta
 	}, 2000).easing(TWEEN.Easing.Quintic.InOut).onUpdate(function() {
 	    var targetX = -this.r*Math.cos(this.phi)*Math.cos(this.theta);

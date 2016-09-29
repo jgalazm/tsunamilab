@@ -188,7 +188,7 @@ function startSimulation(){
 function loadCities(){
 	$.ajax({
 	  dataType: "json",
-	  url: "../../data/citiesLocation/cities.json",
+	  url: "data/citiesLocation/cities.json",
 	  async: false,
 	  success: function(data) {
 	  	console.log(data)
@@ -210,9 +210,13 @@ function setCities(data){
 		city.name = "  " + city.name + "  "
 		
 		var geometry = new THREE.SphereBufferGeometry( 0.0025, 50, 50 );
-		var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(255,237,10,1)", side : THREE.DoubleSide} );
-	  materialSphere.transparent = true;
+		var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(255,127,10,1)", side : THREE.DoubleSide} );
 		var object = new THREE.Mesh( geometry, materialSphere);
+
+		var geometryBorder = new THREE.SphereBufferGeometry( 0.0026, 50, 50, 0, Math.PI * 2, Math.PI / 5, Math.PI - Math.PI / 5 );
+		var materialSphereBorder = new THREE.MeshLambertMaterial( { color: "rgba(0,0,0,1)", side : THREE.DoubleSide} );
+		var objectBorder = new THREE.Mesh( geometryBorder, materialSphereBorder);
+
 		var x = -r*Math.cos(beta)*Math.cos(alpha);
 		var y = r*Math.sin(beta);
 		var z = r*Math.cos(beta)*Math.sin(alpha);
@@ -220,6 +224,17 @@ function setCities(data){
 		object.position.y = y;
 		object.position.z = z;
 		viewScene.add( object );
+
+		objectBorder.position.x = x;
+		objectBorder.position.y = y;
+		objectBorder.position.z = z;
+
+		teste = objectBorder;
+		// objectBorder.rotation.set(new THREE.Vector3(x,y,z));
+		viewScene.add( objectBorder );
+		objectBorder.up = new THREE.Vector3(0,0,-1)
+		objectBorder.lookAt(new THREE.Vector3(0,0,0));
+		objectBorder.rotateX(-Math.PI / 2)
 		
 		var canvas1 = document.createElement('canvas');
 		var context1 = canvas1.getContext('2d');

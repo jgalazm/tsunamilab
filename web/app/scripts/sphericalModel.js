@@ -188,7 +188,7 @@ function startSimulation(){
 function loadCities(){
 	$.ajax({
 	  dataType: "json",
-	  url: "data/citiesLocation/cities.json",
+	  url: "data/cities.json",
 	  async: false,
 	  success: function(data) {
 	  	console.log(data)

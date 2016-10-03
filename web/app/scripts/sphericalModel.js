@@ -266,8 +266,6 @@ function setCities(data){
 		mesh1.position.set(0,0,0);
 		viewScene.add( mesh1 );
 	};
-	var axisHelper = new THREE.AxisHelper( 5 );
-	viewScene.add( axisHelper );
 }
 
 function createMaterials(){

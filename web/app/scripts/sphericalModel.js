@@ -202,7 +202,7 @@ function setCities(data){
 	thetaLength = 0.01*Math.PI
 	//ce == lon == phi == alpha, cn == lat == theta == beta
 
-	var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(255,127,10,1)", side : THREE.DoubleSide} );
+	var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(46,201,243,1)", side : THREE.DoubleSide} );
 	var materialSphereBorder = new THREE.MeshLambertMaterial( { color: "rgba(0,0,0,1)", side : THREE.DoubleSide} );
 
 	for(var name in data){

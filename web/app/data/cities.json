@@ -22,22 +22,22 @@
   "Lima":{
     "lat":-12.046374,
     "lon":-77.042793,
-    "name": "Lima, Peru"
+    "name": "Lima"
   },
   "Tohoku":{
     "lat":40.727876,
     "lon":141.257882,
-    "name":"Tohoku, Japon"
+    "name":"Tohoku"
   },
   "Seattle":{
     "lat": 47.606209,
     "lon": -122.332071,
-    "name": "Seattle, EEUU"
+    "name": "Seattle"
   },
   "los angeles":{
     "lat":34.052234,
     "lon": -118.243685,
-    "name":" Los Angeles, EEUU"
+    "name":"Los Angeles"
   },
   "valdivia":{
     "lat":-39.817379,
@@ -47,9 +47,9 @@
   "new york":{
     "lat": 40.712784,
     "lon": -74.005941,
-    "name": "New york"
+    "name": "New York"
   },
-  "washington DC":{
+  "Washington DC":{
     "lat": 38.907192,
     "lon": -77.036871,
     "name": "Washington D.C"
@@ -67,11 +67,16 @@
   "anchorage, alaska":{
     "lat":61.218056,
     "lon":-149.900278,
-    "name":"Anchorage (Alaska)"
+    "name":"Anchorage"
   },
   "fukushima":{
     "lat":37.760834,
     "lon":140.474728,
     "name": "Fukushima"
+  },
+  "Isla de Pascua":{
+    "lat": -27.112990,
+    "lon": -109.349581,
+    "name": "Isla de Pascua"
   }
 }

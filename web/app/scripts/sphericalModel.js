@@ -188,7 +188,7 @@ function startSimulation(){
 function loadCities(){
 	$.ajax({
 	  dataType: "json",
-	  url: "../../data/citiesLocation/cities.json",
+	  url: "data/cities.json",
 	  async: false,
 	  success: function(data) {
 	  	console.log(data)
@@ -198,21 +198,28 @@ function loadCities(){
 }
 
 function setCities(data){
-		var phiLength = 0.027*Math.PI,
-		thetaLength = 0.01*Math.PI
-		//ce == lon == phi == alpha, cn == lat == theta == beta
-	
-	data.forEach(function(city){
+	var phiLength = 0.027*Math.PI,
+	thetaLength = 0.01*Math.PI
+	//ce == lon == phi == alpha, cn == lat == theta == beta
+
+	var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(46,201,243,1)", side : THREE.DoubleSide} );
+	var materialSphereBorder = new THREE.MeshLambertMaterial( { color: "rgba(0,0,0,1)", side : THREE.DoubleSide} );
+
+	for(var name in data){
+		var city = data[name];
+
 		var alpha = Math.PI/180*city.lon;
 		var beta = Math.PI/180*city.lat;
 		var r = 0.5;
 		
 		city.name = "  " + city.name + "  "
-		
-		var geometry = new THREE.SphereBufferGeometry( 0.0025, 50, 50 );
-		var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(255,237,10,1)", side : THREE.DoubleSide} );
-	  materialSphere.transparent = true;
+
+		var geometry = new THREE.SphereBufferGeometry( 0.0025, 32, 32 );
 		var object = new THREE.Mesh( geometry, materialSphere);
+
+		var geometryBorder = new THREE.SphereBufferGeometry( 0.0026, 32, 32, 0, Math.PI * 2, Math.PI / 5, Math.PI - Math.PI / 5 );
+		var objectBorder = new THREE.Mesh( geometryBorder, materialSphereBorder);
+
 		var x = -r*Math.cos(beta)*Math.cos(alpha);
 		var y = r*Math.sin(beta);
 		var z = r*Math.cos(beta)*Math.sin(alpha);
@@ -220,19 +227,32 @@ function setCities(data){
 		object.position.y = y;
 		object.position.z = z;
 		viewScene.add( object );
-		
+
+		objectBorder.position.x = x;
+		objectBorder.position.y = y;
+		objectBorder.position.z = z;
+
+		viewScene.add( objectBorder );
+		objectBorder.up = new THREE.Vector3(0,0,-1)
+		objectBorder.lookAt(new THREE.Vector3(0,0,0));
+		objectBorder.rotateX(-Math.PI / 2)
 		var canvas1 = document.createElement('canvas');
+		canvas1.width = 256;
+		canvas1.height = 128;
 		var context1 = canvas1.getContext('2d');
+		context1.clearRect(0, 0, canvas1.width, canvas1.height);
 		context1.font = "Bold 30px Helvetica";
 		context1.fillStyle = 'rgba(226,226,226,0.6)';
+		// context1.fillStyle = 'rgba('+Math.round(Math.random()*255)+','+Math.round(Math.random()*226)+','+Math.round(Math.random()*226)+',0.6)';
+		// console.log('rgba('+Math.random()*255+','+Math.random()*226+','+Math.random()*226+',0.6)')
 	    
-	  var width = context1.measureText(city.name).width;
-	  var height = 60;
-	  context1.fillRect(0, 0, width, height);
+		var width = context1.measureText(city.name).width;
+		var height = 60;
+		context1.fillRect(0, 0, width, height);
 	    
-		context1.fillStyle = "rgba(69,62,62,1)";
-	  context1.fillText(city.name, 0, height/2 + 15);
-	  // canvas contents will be used for a texture
+		context1.fillStyle = "rgba(29,22,22,1)";
+		context1.fillText(city.name, 0, height/2 + 15);
+		// canvas contents will be used for a texture
 		var texture1 = new THREE.Texture(canvas1) 
 		texture1.needsUpdate = true;
 	      
@@ -240,18 +260,12 @@ function setCities(data){
 	    material1.transparent = true;
 	    material1.alphaTest = 0.5;
 	
-		var mesh1Geometry = new THREE.SphereGeometry(0.5*1.005, 32*4, 32*4,	 alpha, phiLength, Math.PI/2 - beta, thetaLength)
+		var mesh1Geometry = new THREE.SphereGeometry(0.5*1.005, 16, 16,	 alpha, phiLength, Math.PI/2 - beta, thetaLength)
 	
-	  
-	     mesh1 = new THREE.Mesh(
-	        mesh1Geometry,
-	        material1
-	      );
+		mesh1 = new THREE.Mesh(mesh1Geometry, material1);
 		mesh1.position.set(0,0,0);
 		viewScene.add( mesh1 );
-	});
-		var axisHelper = new THREE.AxisHelper( 5 );
-	viewScene.add( axisHelper );
+	};
 }
 
 function createMaterials(){
@@ -463,65 +477,17 @@ function changeScenario(scenario){
 	mUniforms.cn.value = historicalData[scenario].cn;
 	mUniforms.ce.value = historicalData[scenario].ce;
 
-	doFaultModel(scenario);
+	doFaultModel();
 
     simulationPlane.material = screenMaterial;
     nstep = 0;
     renderer.render(viewScene,viewCamera);
 }
 
-function setEpicenter(alpha, beta, r, scenario){
-	viewScene.remove(viewScene.getObjectByName("epicenter"));
-	var geometry = new THREE.SphereBufferGeometry( 0.0035, 50, 50 );
-	var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( {color: 0xff0000, transparent: true, opacity: 0.8} ) );
-	var x = -r*Math.cos(beta)*Math.cos(alpha);
-	var y = r*Math.sin(beta);
-	var z = r*Math.cos(beta)*Math.sin(alpha);
-	object.position.x = x;
-	object.position.y = y;
-	object.position.z = z;
-	object.name = "epicenter";
-	object.callback = function(e){
-		console.log(alpha, beta, scenario);
-		var left = e.pageX;
-    	var top = e.pageY;
-    	var theHeight = $('.popover').height();
-    	$('.popover').text(scenario);
-		$('.popover').show();
-		$('.popover').css('left', (left+10) + 'px');
-    	$('.popover').css('top', (top-(theHeight/2)-10) + 'px');
-    	// setTimeout(function () {
-	    //     $('.popover').hide();
-	    // }, 4000);
-	}
-	viewScene.add( object );
-}
-
-var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
-document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-function onDocumentMouseDown( event ) {
-	console.log(event)
-	$('.popover').hide();
-    mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
-
-    raycaster.setFromCamera( mouse, viewCamera );
-    var objects = [viewScene.getObjectByName('epicenter')];
-    var intersects = raycaster.intersectObjects( objects ); 
-
-    if ( intersects.length > 0 ) {
-        intersects[0].object.callback(event);
-    }
-
-}
-
-function setView(cn,ce, scenario){
+function setView(cn,ce){
 	var alpha = Math.PI/180*ce;
 	var beta = Math.PI/180*cn;
 	var r = 1.0;
-
-	setEpicenter(alpha, beta, r/2, scenario);
 
 	var currentX = viewCamera.position.x;
 	var currentY = viewCamera.position.y;
@@ -650,12 +616,12 @@ function createLights(){
 
 }
 
-function doFaultModel(scenario){
+function doFaultModel(){
 	simulationPlane.material = initialMaterial;
-	setView(mUniforms.cn.value,mUniforms.ce.value, scenario);
+	setView(mUniforms.cn.value,mUniforms.ce.value);
 	renderer.render(simulationScene, simulationCamera, mTextureBuffer1, true);
 	renderer.render(simulationScene, simulationCamera, mTextureBuffer2, true);
-	mUniforms.t.value = 0.0;
+  mUniforms.t.value = 0.0;
 }
 
 function renderSimulation(){

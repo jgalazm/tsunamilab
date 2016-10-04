@@ -202,7 +202,7 @@ function setCities(data){
 	thetaLength = 0.01*Math.PI
 	//ce == lon == phi == alpha, cn == lat == theta == beta
 
-	var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(46,201,243,1)", side : THREE.DoubleSide} );
+	var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(0,255,255,1)", side : THREE.DoubleSide} );
 	var materialSphereBorder = new THREE.MeshLambertMaterial( { color: "rgba(0,0,0,1)", side : THREE.DoubleSide} );
 
 	for(var name in data){
@@ -488,8 +488,8 @@ function setEpicenter(alpha, beta, r, scenario){
 	viewScene.remove(viewScene.getObjectByName("epicenter"));
 	viewScene.remove(viewScene.getObjectByName("epicenterBorder"));
 	var geometry = new THREE.SphereBufferGeometry( 0.0035, 50, 50 );
-	var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( {color: 0xff0000, transparent: true, opacity: 0.8} ) );
-	var materialSphereBorder = new THREE.MeshLambertMaterial( { color: "rgba(0,0,0,1)", side : THREE.DoubleSide} );
+	var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( {color: 0xff0000, transparent: true, opacity: 1} ) );
+	var materialSphereBorder = new THREE.MeshLambertMaterial( { color: 0xffffff, side : THREE.DoubleSide, transparent: true, opacity: 1} );
 	var geometryBorder = new THREE.SphereBufferGeometry( 0.0036, 32, 32, 0, Math.PI * 2, Math.PI / 5, Math.PI - Math.PI / 5 );
 	var objectBorder = new THREE.Mesh( geometryBorder, materialSphereBorder);
 	var x = -r*Math.cos(beta)*Math.cos(alpha);

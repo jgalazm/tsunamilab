@@ -59,8 +59,8 @@
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Simulación</a></li>
-					<li><a target="_blank" href="about.html">Sobre Tsunami-Lab</a></li>
+					<li class="active"><a href="#">Simulateur</a></li>
+					<li><a target="_blank" href="about_fr.html">À propos de Tsunami-Lab</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
@@ -68,7 +68,7 @@
 	</div>
 
 	<div id="simulation" style='display:inline-block;'>
-		<canvas id="container"> Esta aplicación requiere el uso de un navegador moderno</canvas>
+		<canvas id="container"> Cette application requiert l'utilisation d'un navigateur moderne </canvas>
 	</div>
 
 	<!--Modal-->
@@ -79,16 +79,17 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title">Tsunami-Lab</h4>
 				</div>
-				<div class="modal-body">
-					<h3>¿Qué estoy viendo?</h3>
-					<p><strong>Tsunami-Lab</strong> es una plataforma educativa que permite simular y visualizar el efecto de los tsunamis en tiempo real, a través de la interacción y de la configuración de distintos escenarios, tanto históricos como ficticios.</p>
-					<p>La motivación detrás del proyecto es convertirse en una herramienta educativa, destinada tanto a estudiantes como a público general, que permita prevenir la pérdida de vidas humanas y disminuir el impacto de los tsunamis en Chile.</p>
-					<p>La plataforma se encuentra en desarrollo.</p>
-
-					<h3>Más información</h3>
-					<p>Puedes encontrar información adicional sobre el proyecto, el equipo, las tecnologías utilizadas y más en el <a target="_blank" href="about.html">siguiente enlace</a>.</p>
-				</div>
-				<div class="modal-footer">
+					<div class="modal-body">
+				  	<h3>Qu’est-ce que c’est ?</h3>
+						<p> <strong>Tsunami-Lab</strong>  est une plateforme éducative qui permet de simuler et visualiser l’effet des tsunamis en temps réel, en configurant différents scénarios, qu’ils se soient réellement produits ou qu’ils soient le fruit de votre imagination.</p>
+	
+						<p> L’objectif de ce projet est de proposer un outil éducatif à destination des étudiants comme du grand public, destiné à préserver les vies humaines et diminuer l’impact des tsunamis au Chili et dans le monde.</p>
+	
+						<p> Cette plateforme est toujours en cours de développement.</p>
+	
+					<h3>Plus d’informations</h3>
+						<p>Retrouvez des informations supplémentaires à propos du projet, de l’équipe, des technologies utilisées en cliquant sur  <a target="_blank" href="about_fr.html">le lien suivant</a>.</p>
+				  </div>				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
 				</div>
 			</div>
@@ -104,19 +105,19 @@
 	<!-- SIDEBAR -->
 	<div id="widget" class="col-xs-3 col-sm-3 col-md-2 col-lg-2 text-center">
 		<div id="radioDiv" class="row">
-			<h5>TSUNAMIS HISTÓRICOS</h5>
+			<h5> TSUNAMIS MAJEURS ENREGISTRÉS </h5>
 			<div class="row">
 				<div class="col-xs-12">
 					<select id="scenarios" class="form-control">
 					<!-- <option value="alaska1964">Alaska </option> -->
 					<option value="valdivia1960" selected="selected">9.6 M - (1960) Valdivia, Bio-Bio, Chile</option>
-					<option value="alaska1964"> 9.3 M - (1964) Sur de Alaska </option>
+					<option value="alaska1964"> 9.3 M - (1964) Alaska Sud </option>
 				</select>
 				</div>
 			</div>
 		</div>
 		<div id="polygonDiv" class="row middle-div">
-			<h5>CONTROLES</h5>
+			<h5>PARAMÈTRES</h5>
 			<div class="row-fluid">
 				<div class="col-xs-12 col-sm-6 col-md-6">
 					<div id="btn-play" class="btn btn-default btn-lg">
@@ -142,7 +143,7 @@
 			</div>
 		</div>
 		<div id="cbwaterDiv" class="row-fluid">
-			<h5> Altura de la ola (en metros) </h5>
+			<h5> Hauteur de la vague (en mètres) </h5>
 			<canvas id="cbwater"></canvas>
 		</div>
 	</div>

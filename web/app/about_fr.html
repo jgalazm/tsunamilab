@@ -25,14 +25,13 @@
 	<link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css">
     <!-- Theme CSS -->
     <link href="css/clean-blog.css" rel="stylesheet">
+    <link href="css/eigencities.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-
+    
 	<!-- endbuild -->
 
-	<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -44,31 +43,30 @@
 
 <body>
 
+
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-custom navbar-fixed-top">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    Menu <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand" href="index_fr.html">Tsunami-<strong>Lab</strong></a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="index_fr.html"><ins>Simulador</ins></a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
+    <div class="navbar navbar-default navbar-fixed-top" data-role="header">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			      <span class="sr-only">Toggle navigation</span>
+			      <span class="icon-bar"></span>
+			      <span class="icon-bar"></span>
+			      <span class="icon-bar"></span>
+			    </button>
+				<div class="navbar-brand">
+					<span><img src='img/marepoto.png' /></span><span class="eigen">TSUNAMI-</span><span class="cities">LAB</span>
+				</div>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index_fr.html">Simulateur</a></li>
+					<li class="active"><a href="#">À propos de Tsunami-Lab</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
     <header class="intro-header" style="background-image: url('img/home-bg.jpg')">
@@ -99,7 +97,7 @@
                     <h2 class="post-title">
                         Historique du projet
                     </h2>
-                    <p>Tsunami-Lab a été initialement pensé par José Galaz, ingénieur en mathématiques et génie civil, alors qu’il travaillait au Centre National de Recherche pour la Gestion Intégrée des Catastrophes Naturelles (Cigiden). L’application est née de la rencontre d’une nécessité - enseigner au public des méthodes plus efficaces pour préserver les vies humaines et diminuer l’impact des tsunamis - et de l’utilisation de nouvelles technologies. C’est ainsi que par la suite une collaboration est née entre le Cigiden, Inria Chile et Inria (équipe LEMON) pour maximiser le développement de ce projet.</p>
+                    <p>Tsunami-Lab a été initialement pensé par José Galaz, ingénieur en mathématiques et génie civil, alors qu’il travaillait au Centre National de Recherche pour la Gestion Intégrée des Catastrophes Naturelles (CIGIDEN). L’application est née de la rencontre d’une nécessité - enseigner au public des méthodes plus efficaces pour préserver les vies humaines et diminuer l’impact des tsunamis - et de l’utilisation de nouvelles technologies. C’est ainsi que par la suite une collaboration est née entre le CIGIDEN, Inria Chile et Inria (équipe LEMON) pour maximiser le développement de ce projet.</p>
                 </div>
                 <hr>
                 <div class="post-preview">
@@ -143,21 +141,21 @@
                 <hr>
                 <div class="post-preview">
                     <h2 class="post-title">
-                        Envíanos tus comentarios
+                        Envoyez-nous vos commentaires
                     </h2>
 
                     <form name="sentMessage" id="contactForm" action="https://formspree.io/jdgalaz@uc.cl" method="post" novalidate>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Nombre</label>
-                                <input name="name" type="text" class="form-control" placeholder="Nombre" id="form_name" required data-validation-required-message="Ingrese su nombre.">
+                                <label>Nom</label>
+                                <input name="name" type="text" class="form-control" placeholder="Nom" id="form_name" required data-validation-required-message="Ingrese su nombre.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Mensaje</label>
-                                <textarea name="message" rows="5" class="form-control" placeholder="Mensaje" id="form_message" required data-validation-required-message="Ingrese un mensaje."></textarea>
+                                <label>Message</label>
+                                <textarea name="message" rows="5" class="form-control" placeholder="Message" id="form_message" required data-validation-required-message="Ingrese un mensaje."></textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
@@ -165,7 +163,7 @@
                         <div id="success"></div>
                         <div class="row">
                             <div class="form-group col-xs-12">
-                                <button type="submit" class="btn btn-default">Enviar</button>
+                                <button type="submit" class="btn btn-default">Envoyer</button>
                             </div>
                         </div>
                     </form>

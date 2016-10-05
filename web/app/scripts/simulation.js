@@ -14,9 +14,9 @@ function simulationControls(){
 
 	this.restart = function(){
 		doFaultModel();
-	    planeScreen.material = screenMaterial;
+	    simulationPlane.material = screenMaterial;
 	    nstep = 0;
-	    renderer.render(calc_scene,view_camera); 
+	    renderer.render(simulationScene,viewCamera); 
 	    //orb_controls.reset();
 	    writeTimeStamp(); 
 	}

@@ -26,6 +26,9 @@
     "jquery": "^2.2.3",
     "stats.js": "*",
     "flexboxgrid": "^6.3.0",
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.6.3",
+    "seiyria-bootstrap-slider": "^9.2.0",
+    "tween.js": "tweenjs#^16.3.5"
   }
 }

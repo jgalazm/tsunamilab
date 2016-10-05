@@ -34,7 +34,7 @@ float I4(float db, float eta, float q, float dip, float nu, float R){
 
 }
 
-float I5(float xi, float eta, float q, float dip, 
+float I5(float xi, float eta, float q, float dip,
 	float nu, float R, float db){
 	float x = sqrt(xi*xi+q*q);
 	float I = 0.0;
@@ -52,8 +52,8 @@ float I5(float xi, float eta, float q, float dip,
 float uz_ss(float xi, float eta, float q, float dip, float nu){
 	float R = sqrt(xi*xi+eta*eta+q*q);
 	float db = eta*sin(dip) - q*cos(dip);
-	float u = db*q/(R*(R+eta)) 
-			+ q*sin(dip)/(R+eta) 
+	float u = db*q/(R*(R+eta))
+			+ q*sin(dip)/(R+eta)
 			+ I4(db,eta,q,dip,nu,R)*sin(dip);
 	return u;
 }
@@ -83,7 +83,7 @@ float uz_tf(float xi, float eta, float q, float dip, float nu){
 }
 
 //finally
-float okada(float n, float e, float depth, float strike, float dip, float L, 
+float okada(float n, float e, float depth, float strike, float dip, float L,
 			float W, float rake, float slip, float U3){
 	float nu = 0.25;
 	float pi = 3.14159265359;
@@ -119,7 +119,7 @@ float okada(float n, float e, float depth, float strike, float dip, float L,
 	float H2 = uz_tf(x  ,p-W,q,dip,nu);
 	float H3 = uz_tf(x-L,p  ,q,dip,nu);
 	float H4 = uz_tf(x-L,p-W,q,dip,nu);
-	float H = H1-H2-H3+H4;	
+	float H = H1-H2-H3+H4;
 
 
 	float uz = -U1/(2.0*pi)*F - U2/(2.0*pi)*G + U3/(2.0*pi)*H;
@@ -128,10 +128,10 @@ float okada(float n, float e, float depth, float strike, float dip, float L,
 
 // Stereographic projection function
 
-vec2 stereographic_projection(float latin, float lonin, 
+vec2 stereographic_projection(float latin, float lonin,
 								float lat0, float lon0){
     /*
-        Gives the stereographic projection of points (lat,lon) 
+        Gives the stereographic projection of points (lat,lon)
         onto the plane tangent to the Earth's ellipsoid in (lat0,lon0)
         Input:
             latin,lonin : coordinates of points in degrees (array)
@@ -140,7 +140,7 @@ vec2 stereographic_projection(float latin, float lonin,
     float pi = 3.141592653589793 ;
     float pole = pi/2.0 - 1e-5;
     float rad_deg = pi/180.0;
-    
+
     float lat = latin*rad_deg;
     float lon = lonin*rad_deg;
     float lt0 = lat0*rad_deg;
@@ -191,19 +191,24 @@ vec2 stereographic_projection(float latin, float lonin,
 
     float BETA = 1.0 + sin(XI)* sin(XI0) + cos(XI)*cos(XI0)*cos(LM-LM0);
 
-    float Y = yf + 2.0*R*K0*(sin(XI)*cos(XI0) 
+    float Y = yf + 2.0*R*K0*(sin(XI)*cos(XI0)
                      - cos(XI)*sin(XI0)*cos(LM-LM0))/BETA;
     float X = xf + 2.0*R*K0*cos(XI)*sin(LM-LM0)/BETA;
 
     vec2 XY = vec2(X,Y);
     return XY;
 }
+
 void main()
 {
 
 	float n = ymin + vUv.y*(ymax-ymin);
 	float e = xmin + vUv.x*(xmax-xmin);
 
+	// if close to e=0, center eastings round 0
+	if (e>300.0){
+		e = e-360.0;
+	}
 	vec2 pos = stereographic_projection(n,e,cn,ce);
 
 	float value = 0.0;
@@ -213,15 +218,8 @@ void main()
 	float bati = texture2D(tBati, vUv).r;
 	float bati_real = zmin + bati*(zmax-zmin);
 
-	value = value*step(0.0,-bati_real);	
-	
-	float emin = -5994054.461894704;
-	float emax = 1598799.322268167;
-	float nmin = -3630159.6254546721;
-	float nmax = 4058429.7991335667;
-	// gl_FragColor = vec4((pos.x-emin)/(emax-emin), 0.0, 0.0, bati); 
-	// gl_FragColor = vec4((pos.y-nmin)/(nmax-nmin), 0.0, 0.0, bati); 
-	// gl_FragColor = vec4((pos.g-nmin)/(nmax-nmin), 0.0, 0.0, bati); 
-	 gl_FragColor = vec4(value,0.0,0.0,bati);
+	value = value*step(0.0,-bati_real);
+
+	gl_FragColor = vec4(value,0.0,0.0,bati);
 
 }

@@ -1,0 +1,82 @@
+{
+  "Iquique":{
+    "lat": -20.230703,
+    "lon": -70.135669,
+    "name": "Iquique"
+  },
+  "Valparaiso":{
+    "lat":-33.047238,
+    "lon":-71.612688,
+    "name": "Valparaiso"
+  },
+  "Constitucion":{
+    "lat":-35.3333,
+    "lon":-72.4167,
+    "name":"Constitucion"
+  },
+  "Hawaii":{
+    "lat":19.896766,
+    "lon":-155.582782,
+    "name": "Hawaii"
+  },
+  "Lima":{
+    "lat":-12.046374,
+    "lon":-77.042793,
+    "name": "Lima"
+  },
+  "Tohoku":{
+    "lat":40.727876,
+    "lon":141.257882,
+    "name":"Tohoku"
+  },
+  "Seattle":{
+    "lat": 47.606209,
+    "lon": -122.332071,
+    "name": "Seattle"
+  },
+  "los angeles":{
+    "lat":34.052234,
+    "lon": -118.243685,
+    "name":"Los Angeles"
+  },
+  "valdivia":{
+    "lat":-39.817379,
+    "lon": -73.242533,
+    "name": "Valdivia"
+  },
+  "new york":{
+    "lat": 40.712784,
+    "lon": -74.005941,
+    "name": "New York"
+  },
+  "Washington DC":{
+    "lat": 38.907192,
+    "lon": -77.036871,
+    "name": "Washington D.C"
+  },
+  "Paris":{
+    "lat": 48.856614,
+    "lon": 2.352222,
+    "name": "Paris"
+  },
+  "London":{
+    "lat": 51.507351,
+    "lon": -0.127758,
+    "name": "London"
+  },
+  "anchorage, alaska":{
+    "lat":61.218056,
+    "lon":-149.900278,
+    "name":"Anchorage"
+  },
+  "fukushima":{
+    "lat":37.760834,
+    "lon":140.474728,
+    "name": "Fukushima"
+  },
+  "Isla de Pascua":{
+    "lat": -27.112990,
+    "lon": -109.349581,
+    "name": "Isla de Pascua"
+  }
+}

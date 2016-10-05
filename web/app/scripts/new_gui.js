@@ -14,11 +14,15 @@ function init_new_gui(){
 
 	if(paused){
 		$("#icon-play").show();
+		$("#text-play").show();
 		$("#icon-pause").hide();
+		$("#text-pause").hide();
 	}
 	else{
 		$("#icon-play").hide();
+		$("#text-play").hide();
 		$("#icon-pause").show();
+		$("#text-pause").show();
 	}
 
 
@@ -28,11 +32,15 @@ function init_new_gui(){
 
 		if(paused){
 			$("#icon-play").show();
+			$("#text-play").show();
 			$("#icon-pause").hide();
+			$("#text-pause").hide();
 		}
 		else{
 			$("#icon-play").hide();
+			$("#text-play").hide();
 			$("#icon-pause").show();
+			$("#text-pause").show();
 		}
 
 	});
@@ -43,6 +51,14 @@ function init_new_gui(){
 
 	$("#btn-snapshot").click(function(){
 		simulationControls.snapshot();
+	});
+
+	$("#btn-info").click(function(){
+		$("#init_modal").modal("show");
+	});
+
+	$("#btn-help").click(function(){
+		$("#init_modal").modal("show");
 	});
 
 	$("#scenarios").change(function(value){
@@ -57,9 +73,13 @@ function init_new_gui(){
 	$("#btn-plus").click(function(){
 		speed = Math.min(speed +1, 20);
 	});
+
+	var speedValues = [1,10,20];
+	var r = $('#slider-speed').slider()
+		.on('change', function(e){
+			speed = speedValues[e.value.newValue]
+		})
+		.data('slider');
 };
-
-
-
 
 

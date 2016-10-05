@@ -205,7 +205,9 @@ function colorbar(cmap3js, canvas){
 
 	var ctx = canvas.getContext('2d');
 
-	//colorbar canvas size
+	//colorbar canvas siz
+	canvas.width = 200;
+	canvas.height = 47;
 	var L = canvas.width;
 	var W = canvas.height;
 
@@ -246,29 +248,30 @@ function colorbar(cmap3js, canvas){
 
 	    //5% offset in both sides
     	ctx.fillRect((i-istart)*0.9+0.05*L,0 , 
-					L*0.95, W/2);
+					L*0.95, W/3);
 	}
 
 
 	//write labels
 
-	ctx.font = "8pt Arial";//better exact px based on % of canvas.height?
-	ctx.fillStyle ="#aaaaaa";
+	var fontSize = L*0.04;
+	var angle = 0.33*Math.PI;
+	ctx.font = "bold " + fontSize + "pt Verdana";//better exact px based on % of canvas.height?
+	ctx.fillStyle ="#635c5c";
 	ctx.textAlign = "right";
-	// for (var i=0; i<labels.length;i++){
+
+	ctx.translate(0,W);
+	ctx.rotate(angle);
 	for (var i=0; i<n;i++){
 		var labelText,labelPosX,labelPosY;
-		// if (i<n){
 		var labelText  = cmap3js[Math.min(2*i,2*n-1)].w.toFixed(2).toString();
 		var labelPosX = (i+1)/n*L*0.9;
-		var labelPosY = W*0.8;
-		// }
-		
-		// ctx.fillText(labels[i][0].toFixed(2),
-		// 		(labels[i][1]-fstart)*canvas.width*0.9+0.05,
-		// 		canvas.height*0.7);
-		ctx.fillText(labelText, labelPosX, labelPosY);	
-
+		var labelPosY = W*1.0;
+	
+		ctx.rotate(-angle);
+		ctx.translate(L/n*0.9, 0)
+		ctx.rotate(angle);
+		ctx.fillText(labelText, 0, 0);	
 		//draw a tick line
 	    ctx.beginPath();
 	    ctx.strokeStyle = "white";
@@ -279,7 +282,18 @@ function colorbar(cmap3js, canvas){
 	}
 
 	//last label
+	var labelText  = '1+ ';
+	ctx.rotate(-angle);
+	ctx.translate(L/n*0.75, 0);
+	ctx.rotate(angle);
+	ctx.fillText(labelText, 0, 0);		
 
+	ctx.beginPath();
+	ctx.strokeStyle = "white";
+	labelPosX = labelPosX - L*0.95/n/2-1;
+	ctx.moveTo(labelPosX,W/2);
+	ctx.lineTo(labelPosX,W/2*1.1);
+	ctx.stroke();
 
 	//draw colorbar border
 	ctx.rect(0.05*L, 0, L*0.95, W/2);
@@ -287,12 +301,12 @@ function colorbar(cmap3js, canvas){
 	ctx.stroke();
 
 
-	canvas.onclick = function(e) {
+	/*canvas.onclick = function(e) {
 	    var x = e.offsetX,
 	        y = e.offsetY,
 	        p = ctx.getImageData(x, y, 1, 1),
 	        rgb = p.data;
 	    
 	    alert('Color: rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')');
-	};
+	};*/
 }

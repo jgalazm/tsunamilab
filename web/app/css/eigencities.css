@@ -71,6 +71,7 @@ h6 {
 
 .navbar-default {
     opacity: 0.7;
+    font-size: 14px;
 }
 
 .navbar-brand {
@@ -371,7 +372,7 @@ div[value="active"] p {
 
 .btn {
     opacity: 0.5;
-    margin: 10px 0px 10px 0px;
+    margin: 0px 0px 15px 0px;
 }
 
 .btn-group-lg>.btn, .btn-lg {

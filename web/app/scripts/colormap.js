@@ -205,7 +205,9 @@ function colorbar(cmap3js, canvas){
 
 	var ctx = canvas.getContext('2d');
 
-	//colorbar canvas size
+	//colorbar canvas siz
+	canvas.width = 200;
+	canvas.height = 47;
 	var L = canvas.width;
 	var W = canvas.height;
 
@@ -299,12 +301,12 @@ function colorbar(cmap3js, canvas){
 	ctx.stroke();
 
 
-	canvas.onclick = function(e) {
+	/*canvas.onclick = function(e) {
 	    var x = e.offsetX,
 	        y = e.offsetY,
 	        p = ctx.getImageData(x, y, 1, 1),
 	        rgb = p.data;
 	    
 	    alert('Color: rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')');
-	};
+	};*/
 }

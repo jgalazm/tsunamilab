@@ -164,3 +164,9 @@ a {
     top: 50%;
     margin-top: -11px;
 }
+
+.timer {
+	background-color: #cbcbcb;
+    border-radius: 6px;
+    margin: 10px;
+}

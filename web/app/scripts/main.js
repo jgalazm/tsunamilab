@@ -17,8 +17,9 @@ $(function(){
 
 	init_new_gui();
 
-
-
+	//model = tsunamiModel(params);
+	//view = tsunamiView(canvas, cesium?);
+	//controller = tsunamiController(model, view);
 
 
 

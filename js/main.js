@@ -25,24 +25,9 @@ function init(){
   csscene = viewer.scene;
 
     c1 = document.getElementById( 'container' );
-                shaders = {
-                    vshader: 'shaders2/vshader.glsl',
-                    iFshader: 'shaders2/initFShader.glsl',
-                    mFshader: 'shaders2/modelFShader.glsl',
-                    sFshader: 'shaders2/screenFShader.glsl'
-                }
-    var calls = Object.keys(shaders).map(function(key){
-        return $.ajax(shaders[key], {async:false}).responseText
-    });
-    loaded = $.when(calls[0], calls[1], calls[2], calls[3]);
-    loaded.done(function(s1,s2,s3,s4){
-            shadersCode = {
-            vshader: s1,
-            iFshader: s2,
-            mFshader: s3,
-            sFshader: s4
-        }
-            params = {
+    
+        shadersCode = shadersCode();
+        params = {
             shaders: shadersCode,
             rendererSize: {
                 width: 255,
@@ -105,8 +90,7 @@ czm_material czm_getMaterial(czm_materialInput materialInput)
       requestAnimationFrame(tick);
     }
     tick();
-  
-});  
+   
 
   // la simulacion
 

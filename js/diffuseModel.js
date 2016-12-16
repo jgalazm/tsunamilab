@@ -6,12 +6,65 @@
 // shaders
 // colormap
 
-
-
 var DiffuseModel = function(params, container) {
     var shaders = params.shaders;
     var rendererSize = params.rendererSize;
     var colormap = params.colormap;
+    var bathymetry = params.bathymetry;
+    var filesProgress = 0;
+    var totalFilesToLoad = 2;
+
+    var loader = new THREE.TextureLoader();
+    loader.load(bathymetry.imgURL, 
+        function(texture){
+            bathymetry.img = texture;
+            if(++filesProgress == totalFilesToLoad){
+                console.log('Files loaded', bathymetry)
+            };
+        }
+    )
+
+    $.ajax({
+        dataType: "text",
+        url: bathymetry.metadataURL,
+        async: true,
+        success: function(data) {
+            bathymetry.metadata = data;
+            if(++filesProgress == totalFilesToLoad){
+                console.log('Files loaded', bathymetry)
+            };
+        }
+	});
+
+
+
+	var loadBathymetry = function(){
+		loader.load(
+			// resource URL
+			"img/"+batiname+".jpg",
+			// Function when resource is loaded
+			function ( texture ) {
+        // texture.wrapS=  THREE.RepeatWrapping;
+				batiTexture = texture;
+        batiTexture.wrapS = THREE.RepeatWrapping;
+        batiTexture.wrapT = THREE.ClampToEdgeWrapping;
+        batiTexture.needsUpdate = true;
+				loadData();
+
+				startSimulation();
+				loadCities()
+			},
+			// Function called when download progresses
+			function ( xhr ) {
+				console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+			},
+			// Function called when download errors
+			function ( xhr ) {
+				console.log( 'An error happened' );
+			}
+		);
+	};
+	loadBathymetry();
 
     var width = rendererSize.width;
     var height = rendererSize.height;

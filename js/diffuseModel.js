@@ -1,5 +1,5 @@
 /*
-* params: 
+* params:
 */
 
 // rendererSize
@@ -225,6 +225,7 @@ var DiffuseModel = function (params, container) {
             simNx = simNx / 5;
             simNy = simNy / 5;
         }
+
         // set simNx and simNy as the nearest power of two
         // this is needed by THREE.RepeatWrapping
         var xpower = Math.floor(Math.log(simNx) / Math.log(2));
@@ -243,6 +244,8 @@ var DiffuseModel = function (params, container) {
         else {
             simNy = Math.pow(2, ypower + 1)
         }
+
+
         simulation.uniforms.xmin.value = 0.0;
         simulation.uniforms.xmax.value = 360 - 360 / simNx / 2.0;
 

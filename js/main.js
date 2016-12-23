@@ -127,9 +127,17 @@ function init() {
                         uniforms: {
                             image: im
                         },
-                        components:{
-                          alpha:'0.5'
-                        }
+                        source:
+                    `
+czm_material czm_getMaterial(czm_materialInput materialInput)
+{
+    vec2 vUv = materialInput.st;
+    vec4 color =  texture2D(image, vUv);
+
+
+    return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), color.a);
+}
+`
                     }
                 })
             })
@@ -142,7 +150,7 @@ function init() {
         function tick() {
             d1.renderSimulation();
             rectangle.appearance.material.uniforms.image = d1.renderScreen();
-
+            // console.log(rectangle.appearance.material.uniforms.image)
             number += 1;
             if (number == 100) {
                 console.timeEnd("tick");

@@ -165,7 +165,7 @@ var DiffuseModel = function (params, container) {
     var renderSimulation = function () {
         objects.planeScreen.material = materials.modelMaterial;
 
-        for (var i = 0; i < Math.floor(simulation.speed * 10); i++) {
+        for (var i = 0; i < Math.floor(simulation.speed * 1); i++) {
             if (!simulation.toggleBuffer1) {
                 simulation.uniforms.tSource.value =
                     simulation.mTextureBuffer1;
@@ -201,7 +201,7 @@ var DiffuseModel = function (params, container) {
             camera
         );
         // return bufferTexture;
-        return renderer.domElement.toDataURL();
+        return renderer.domElement.toDataURL("image/png", 0.98);
     };
 
     var setSimulation = function () {

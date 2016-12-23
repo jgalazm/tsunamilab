@@ -106,10 +106,16 @@ function init() {
 
         im = d1.renderScreen();
 
+        var bbox = d1.simulationData.bbox;
+
+
         rectangle = csscene.primitives.add(new Cesium.Primitive({
             geometryInstances: new Cesium.GeometryInstance({
                 geometry: new Cesium.RectangleGeometry({
-                    rectangle: Cesium.Rectangle.fromDegrees(0, -85, 360, 85),
+                    rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0], 
+                                                            bbox[0][1],
+                                                            bbox[1][0],
+                                                            bbox[1][1]),
                     vertexFormat: Cesium.EllipsoidSurfaceAppearance.VERTEX_FORMAT
                 })
             }),
@@ -143,7 +149,7 @@ function init() {
             }
             requestAnimationFrame(tick);
         }
-        // tick();
+        tick();
     }
 
 }

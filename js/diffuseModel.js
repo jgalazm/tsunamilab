@@ -219,8 +219,8 @@ var DiffuseModel = function (params, container) {
             throw e;
         }
 
-        simNx = parseInt(bathymetry.metadata[0].split(':')[1]);//parseInt(batidata.nx);
-        simNy = parseInt(bathymetry.metadata[1].split(':')[1]);//parseInt(batidata.nx);
+        simNx = parseInt(bathymetry.metadata[1].split(':')[1]);//parseInt(batidata.nx);
+        simNy = parseInt(bathymetry.metadata[0].split(':')[1]);//parseInt(batidata.nx);
         if (simNx > 1000) {
             simNx = simNx / 5;
             simNy = simNy / 5;
@@ -263,7 +263,7 @@ var DiffuseModel = function (params, container) {
         var dx_real = R_earth * Math.cos(lat_max * rad_deg) * dx * rad_min;
         var dy_real = R_earth * dy * rad_min;
 
-        dt = 0.5 * Math.min(dx_real, dy_real) / Math.sqrt(-9.81 * simulation.uniforms.zmin.value);
+        var dt = 0.5 * Math.min(dx_real, dy_real) / Math.sqrt(-9.81 * simulation.uniforms.zmin.value);
 
         simulation.uniforms.RR.value = dt / R_earth;
         simulation.uniforms.RS.value = 9.81 * simulation.uniforms.RR.value;
@@ -280,13 +280,22 @@ var DiffuseModel = function (params, container) {
         );
         simulation.uniforms.tSource.value = simulation.mTextureBuffer1;
 
+        simulationData.timeStep = dt;
+        simulationData.gridSize = [simNx, simNy];
+        simulationData.bbox = [[simulation.uniforms.xmin.value, 
+                                simulation.uniforms.ymin.value],
+                                [simulation.uniforms.xmax.value, 
+                                simulation.uniforms.ymax.value]];
     }
+
+    var simulationData = {};
 
     setSimulation();
 
     return {
         renderSimulation: renderSimulation,
         renderScreen: renderScreen,
-        simulation: simulation
+        simulation: simulation,
+        simulationData: simulationData
     };
 };

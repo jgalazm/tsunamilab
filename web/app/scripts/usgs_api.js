@@ -4,8 +4,8 @@ function makeUSGSQuery(){
 
   var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
   var startTime = "&starttime=1990-01-01"
-  var endTime = "&endtime=2016-01-02"
-  var minMagnitudeString = "&minmagnitude=8.0"
+  var endTime = "&endtime=2016-12-31"
+  var minMagnitudeString = "&minmagnitude=7.0&maxmagnitude=8.0"
   var productType = "&producttype=moment-tensor"
   qString = baseQueryString + startTime + endTime + minMagnitudeString
   $.ajax({
@@ -37,6 +37,10 @@ function loadUSGSScenario(data){
 
     var LWslip = getLengthWidthSlip(mag);
 
+    if(historicalData[place]==undefined){
+      historicalData[place] = {};
+      historicalData[place]["name"] = place;
+    }
     historicalData[place]["cn"]= coords[1],
     historicalData[place]["ce"]= coords[0],
     historicalData[place]["depth"]= coords[2],

@@ -37,7 +37,7 @@ var R_earth = 6378000.0,
 
 var info
 var time=0, dt;
-var speed = 1, paused = 1;
+var speed = 10, paused = 1;
 var nstep = 0;
 var colors;
 
@@ -172,7 +172,7 @@ function startSimulation(){
 
   //add GUI controls
   makeUSGSQuery();
-  
+
 	//render to screen
 
 	mUniforms.tSource.value = mTextureBuffer1;
@@ -211,7 +211,7 @@ function setCities(data){
 		var alpha = Math.PI/180*city.lon;
 		var beta = Math.PI/180*city.lat;
 		var r = 0.5;
-		
+
 		city.name = "  " + city.name + "  "
 
 		var geometry = new THREE.SphereBufferGeometry( 0.0025, 32, 32 );
@@ -226,13 +226,13 @@ function setCities(data){
 		object.position.x = x;
 		object.position.y = y;
 		object.position.z = z;
-		viewScene.add( object );
+		// viewScene.add( object );
 
 		objectBorder.position.x = x;
 		objectBorder.position.y = y;
 		objectBorder.position.z = z;
 
-		viewScene.add( objectBorder );
+		// viewScene.add( objectBorder );
 		objectBorder.up = new THREE.Vector3(0,0,-1)
 		objectBorder.lookAt(new THREE.Vector3(0,0,0));
 		objectBorder.rotateX(-Math.PI / 2)
@@ -245,26 +245,26 @@ function setCities(data){
 		context1.fillStyle = 'rgba(226,226,226,0.6)';
 		// context1.fillStyle = 'rgba('+Math.round(Math.random()*255)+','+Math.round(Math.random()*226)+','+Math.round(Math.random()*226)+',0.6)';
 		// console.log('rgba('+Math.random()*255+','+Math.random()*226+','+Math.random()*226+',0.6)')
-	    
+
 		var width = context1.measureText(city.name).width;
 		var height = 60;
 		context1.fillRect(0, 0, width, height);
-	    
+
 		context1.fillStyle = "rgba(29,22,22,1)";
 		context1.fillText(city.name, 0, height/2 + 15);
 		// canvas contents will be used for a texture
-		var texture1 = new THREE.Texture(canvas1) 
+		var texture1 = new THREE.Texture(canvas1)
 		texture1.needsUpdate = true;
-	      
+
 	    var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
 	    material1.transparent = true;
 	    material1.alphaTest = 0.5;
-	
+
 		var mesh1Geometry = new THREE.SphereGeometry(0.5*1.005, 16, 16,	 alpha, phiLength, Math.PI/2 - beta, thetaLength)
-	
+
 		mesh1 = new THREE.Mesh(mesh1Geometry, material1);
 		mesh1.position.set(0,0,0);
-		viewScene.add( mesh1 );
+		// viewScene.add( mesh1 );
 	};
 }
 
@@ -371,27 +371,27 @@ function setSimulation(){
 	simNx  = batidata.nx;//parseInt(batidata.nx);
 	simNy =  batidata.ny;//parseInt(batidata.ny);
 	if (simNx>1000){
-		simNx = simNx/5;
-		simNy = simNy/5;
+		simNx = simNx/3;
+		simNy = simNy/3;
   }
   // set simNx and simNy as the nearest power of two
   // this is needed by THREE.RepeatWrapping
-  var xpower=  Math.floor(Math.log(simNx)/Math.log(2));
-  var ypower=  Math.floor(Math.log(simNy)/Math.log(2));
-
-  if (simNx-Math.pow(2,xpower)<Math.pow(2,xpower+1)-simNx){
-    simNx = Math.pow(2,xpower);
-  }
-  else{
-    simNx = Math.pow(2,xpower+1)
-  }
-
-  if (simNy-Math.pow(2,ypower)<Math.pow(2,ypower+1)-simNy){
-    simNy = Math.pow(2,ypower);
-  }
-  else{
-    simNy = Math.pow(2,ypower+1)
-  }
+  // var xpower=  Math.floor(Math.log(simNx)/Math.log(2));
+  // var ypower=  Math.floor(Math.log(simNy)/Math.log(2));
+  //
+  // if (simNx-Math.pow(2,xpower)<Math.pow(2,xpower+1)-simNx){
+  //   simNx = Math.pow(2,xpower);
+  // }
+  // else{
+  //   simNx = Math.pow(2,xpower+1)
+  // }
+  //
+  // if (simNy-Math.pow(2,ypower)<Math.pow(2,ypower+1)-simNy){
+  //   simNy = Math.pow(2,ypower);
+  // }
+  // else{
+  //   simNy = Math.pow(2,ypower+1)
+  // }
   mUniforms.xmin.value = 0.0;
   mUniforms.xmax.value = 360-360/simNx/2.0;
 
@@ -519,8 +519,8 @@ function setEpicenter(alpha, beta, r, scenario){
 	    //     $('.popover').hide();
 	    // }, 4000);
 	}
-	viewScene.add( object );
-	viewScene.add( objectBorder );
+	// viewScene.add( object );
+	// viewScene.add( objectBorder );
 }
 
 var raycaster = new THREE.Raycaster();
@@ -534,7 +534,7 @@ function onDocumentMouseDown( event ) {
 
     raycaster.setFromCamera( mouse, viewCamera );
     var objects = [viewScene.getObjectByName('epicenter')];
-    var intersects = raycaster.intersectObjects( objects ); 
+    var intersects = raycaster.intersectObjects( objects );
 
     if ( intersects.length > 0 ) {
         intersects[0].object.callback(event);
@@ -566,8 +566,8 @@ function setView(cn,ce, scenario){
 
 	var light = viewScene.getObjectByName("directional Light");
  	var tween = new TWEEN.Tween({r: currentR, theta: currentTheta, phi:currentPhi}).to({
-	    r: r, 
-	    theta: alpha, 
+	    r: r,
+	    theta: alpha,
 	    phi: beta
 	}, 2000).easing(TWEEN.Easing.Quintic.InOut).onUpdate(function() {
 	    var targetX = -this.r*Math.cos(this.phi)*Math.cos(this.theta);

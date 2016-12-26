@@ -81,9 +81,9 @@ function makeMomentTensorQuery(place,eventid){
       loadMomentTensorData(place,data);
       console.log( "success" );
 
-      if(place=="48km W of Illapel, Chile"){
+      if(place=="39km SSW of Puerto Quellon, Chile"){
         document.getElementById("scenarios").selectedIndex = "2";
-        changeScenario("48km W of Illapel, Chile");
+        changeScenario("39km SSW of Puerto Quellon, Chile");
       }
     }
   });

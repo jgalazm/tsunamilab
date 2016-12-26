@@ -162,7 +162,7 @@ function startSimulation(){
  	// initControls();
 
 	//set default colors
-	setColorMapBar('batitopo','wave');
+	setColorMapBar('batitopo','wave2');
 
   //set initial condition
   // render initial condition and bathymetry to both buffers

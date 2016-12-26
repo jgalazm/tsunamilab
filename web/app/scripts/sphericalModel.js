@@ -226,13 +226,13 @@ function setCities(data){
 		object.position.x = x;
 		object.position.y = y;
 		object.position.z = z;
-		// viewScene.add( object );
+		viewScene.add( object );
 
 		objectBorder.position.x = x;
 		objectBorder.position.y = y;
 		objectBorder.position.z = z;
 
-		// viewScene.add( objectBorder );
+		viewScene.add( objectBorder );
 		objectBorder.up = new THREE.Vector3(0,0,-1)
 		objectBorder.lookAt(new THREE.Vector3(0,0,0));
 		objectBorder.rotateX(-Math.PI / 2)

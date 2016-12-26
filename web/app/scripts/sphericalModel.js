@@ -264,7 +264,7 @@ function setCities(data){
 
 		mesh1 = new THREE.Mesh(mesh1Geometry, material1);
 		mesh1.position.set(0,0,0);
-		// viewScene.add( mesh1 );
+		viewScene.add( mesh1 );
 	};
 }
 

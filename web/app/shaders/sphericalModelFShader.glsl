@@ -136,6 +136,10 @@ float massEquation(vec2 vUv, float h_ij, vec4 u_ij, vec4 u_imj, vec4 u_ijm){
 	return eta2_ij;
 }
 
+vec2 mod1x(vec2 xy){
+	return vec2(mod(xy.x,1.0),xy.y);
+}
+
 void main()
 {
 	// u = (eta, p, q, h)
@@ -148,13 +152,13 @@ void main()
 	vec4 u_ij = texture2D(tSource,vUv);
 
 	//neighbors old vals
-	vec4 u_imj = texture2D(tSource, vUv + vec2(-delta.x, 0.0));
-	vec4 u_ipj = texture2D(tSource, vUv + vec2(delta.x, 0.0));
-	vec4 u_ijm = texture2D(tSource, vUv + vec2(0.0, -delta.y));
-	vec4 u_ijp = texture2D(tSource, vUv + vec2(0.0, delta.y));
+	vec4 u_imj = texture2D(tSource, mod1x(vUv + vec2(-delta.x, 0.0)));
+	vec4 u_ipj = texture2D(tSource, mod1x(vUv + vec2(delta.x, 0.0)));
+	vec4 u_ijm = texture2D(tSource, mod1x(vUv + vec2(0.0, -delta.y)));
+	vec4 u_ijp = texture2D(tSource, mod1x(vUv + vec2(0.0, delta.y)));
 
-	vec4 u_ipjm = texture2D(tSource, vUv + vec2(delta.x, -delta.y));
-	vec4 u_imjp = texture2D(tSource, vUv + vec2(-delta.x, delta.y));
+	vec4 u_ipjm = texture2D(tSource, mod1x(vUv + vec2(delta.x, -delta.y)));
+	vec4 u_imjp = texture2D(tSource, mod1x(vUv + vec2(-delta.x, delta.y)));
 
 
 	//new vals

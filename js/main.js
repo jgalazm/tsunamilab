@@ -25,6 +25,7 @@ function init() {
 
     viewer.scene.debugShowFramesPerSecond = true;
 
+document.getElementsByClassName('cesium-widget-credits')[0].remove()
     // capa con el mapa
     var layers = viewer.scene.imageryLayers;
 
@@ -160,7 +161,6 @@ czm_material czm_getMaterial(czm_materialInput materialInput)
         console.time("tick");
         console.log('tick')
         function tick() {
-            console.log('renderSimulation')
             d1.renderSimulation();
             rectangle.appearance.material.uniforms.image = d1.renderScreen();
             // console.log(rectangle.appearance.material.uniforms.image)

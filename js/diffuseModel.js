@@ -165,7 +165,6 @@ var DiffuseModel = function (params, container) {
     var renderSimulation = function () {
         objects.planeScreen.material = materials.modelMaterial;
         for (var i = 0; i < Math.floor(simulation.speed * 1); i++) {
-            console.log(simulation.toggleBuffer1)
             if (simulation.toggleBuffer1) {
                 simulation.uniforms.tSource.value =
                     simulation.mTextureBuffer1;

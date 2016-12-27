@@ -527,7 +527,7 @@ void main()
         corrected_color = 0.0;
     }
     else{
-        float t = 0.4;
+        float t = 1.0;
         corrected_color = t*corrected_color+1.0-t;
     }
     gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b,corrected_color);

@@ -27,8 +27,10 @@ var DiffuseModel = function (params, container) {
 
     var renderer = new THREE.WebGLRenderer({
         canvas: container,
+        alpha: true,
         preserveDrawingBuffer: true
     });
+    renderer.setClearColor( 0xffffff, 0.0 );
     renderer.setSize(width, height);
 
     var scene = new THREE.Scene();
@@ -38,7 +40,7 @@ var DiffuseModel = function (params, container) {
 
     var simulation = {
         toggleBuffer1: false,
-        speed: 1,
+        speed: 10,
         paused: true,
 
         uniforms: {

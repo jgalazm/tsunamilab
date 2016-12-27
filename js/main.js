@@ -134,21 +134,18 @@ document.getElementsByClassName('cesium-widget-credits')[0].remove()
             appearance: new Cesium.EllipsoidSurfaceAppearance({
                 aboveGround: false,
                 material: new Cesium.Material({
-                    fabric: {
-                        type: 'Image',
-                        uniforms: {
-                            image: im
-                        },
+                    fabric : {
+                        uniforms: {image: im},
                         source:
-                    `
+`
 czm_material czm_getMaterial(czm_materialInput materialInput)
 {
     vec2 vUv = materialInput.st;
     vec4 color =  texture2D(image, vUv);
 
 
-    // return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), color.a);
-    return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), 0.5);
+    return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), color.a);
+    // return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), 0.5);
 }
 `
                     }
@@ -165,9 +162,9 @@ czm_material czm_getMaterial(czm_materialInput materialInput)
             rectangle.appearance.material.uniforms.image = d1.renderScreen();
             // console.log(rectangle.appearance.material.uniforms.image)
             number += 1;
-            if (number < 3) {
-                // requestAnimationFrame(tick);
-            }
+            // if (number < 3) {
+            //     requestAnimationFrame(tick);
+            // }
             requestAnimationFrame(tick);
         }
         tick();

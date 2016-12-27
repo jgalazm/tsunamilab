@@ -237,6 +237,12 @@ div[value="active"] p {
   border-bottom: 3px solid #0596c7;
   padding-bottom: 5px !important;
 }
+.bottom-div{
+  /*background-color:#2c323d;*/
+  background-color:rgba(240, 240, 240, 0.94);
+  border-top: 3px solid #0596c7;
+  padding-bottom: 5px !important;
+}
 
 #sliderDiv h5{
     margin-bottom: 0px !important;

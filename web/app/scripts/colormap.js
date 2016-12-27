@@ -65,7 +65,7 @@ function getColormapArray(cmap,k,d){
 				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
 				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
 				new THREE.Vector4(0.8, 0.8, 0.8, 1.0),  //blanco
-				new THREE.Vector4(0.8, 0.8, 0.8, 1.0)],  //blanco,				
+				new THREE.Vector4(0.8, 0.8, 0.8, 1.0)],  //blanco,
 	      // Add getColormapArrays
 	     'wave': [ new THREE.Vector4(4, 29, 59,  (0.006-d)*k),
 				new THREE.Vector4(8, 59, 118,  (0.120-d)*k),
@@ -98,7 +98,7 @@ function getColormapArray(cmap,k,d){
 				new THREE.Vector4(159, 19, 0,  (0.751-d)*k),
 				new THREE.Vector4(249, 26, 0,  (1.000-d)*k),
 				new THREE.Vector4(255, 255, 255,  (1.001-d)*k),
-				new THREE.Vector4(255, 64, 196,  (2.25-d)*k)],				
+				new THREE.Vector4(255, 64, 196,  (2.25-d)*k)],
 		'seismic': [ new THREE.Vector4(0, 0, 0.4, (-1.0-d)*k),
 				new THREE.Vector4(1.0, 1.0, 1.0, (0.0-d)*k),
 				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
@@ -131,7 +131,7 @@ function getColormapArray(cmap,k,d){
 function getColormapLabels(cmap,k,d){
 	var label_colors = {
 		'batitopo': [[mUniforms.zmin.value,0.0],
-					[0.0, d], 
+					[0.0, d],
 					[ mUniforms.zmax.value, 1.0]],
 		'wave':  [[(0.006-d)*k,(0.006-d)*k],
 				 [(0.250-d)*k,(0.250-d)*k],
@@ -142,7 +142,7 @@ function getColormapLabels(cmap,k,d){
 				 [(0.250-d)*k,(0.250-d)*k],
 				 [(0.500-d)*k,(0.500-d)*k],
 				 [(0.750-d)*k,(0.750-d)*k],
-				 [(1.000-d)*k,(1.000-d)*k]]				 
+				 [(1.000-d)*k,(1.000-d)*k]]
 	};
 
 	return label_colors[cmap];
@@ -168,7 +168,7 @@ function getpcolor(value, colors, ncolors){
 	//returns 1x3 array with values in [0,1]
 
     var pseudoColor;
-    // 
+    //
     if(value <= colors[0].w){
         pseudoColor = [colors[0].x, colors[0].y, colors[0].z];
     }
@@ -185,18 +185,18 @@ function getpcolor(value, colors, ncolors){
                 pseudoColor = mix(cleft, cright, t);
                 break;
             }
-        }           
+        }
     }
     return pseudoColor;
 }
 
 function colorbar(cmap3js, canvas){
-	/*cmap3js: list of THREE.Vector4 containing rgb colors 
+	/*cmap3js: list of THREE.Vector4 containing rgb colors
 			and cuts in  the alpha channel
 	  canvas: where to plot the colorbar, now horizontal only
 	  fstart: fraction (in (0,1]) from where to start in the colorbar range
 	  labels: list of labels and cuts to put on the colorbar
-	
+
 	*/
 	var istart = 0;
 	//number of color segments
@@ -212,7 +212,7 @@ function colorbar(cmap3js, canvas){
 	var W = canvas.height;
 
 	//cmap3js
-	for(var i = istart; i < L; i++) {	
+	for(var i = istart; i < L; i++) {
  		// curent fraction in the canvas
 
 		var t = i/L;
@@ -220,7 +220,7 @@ function colorbar(cmap3js, canvas){
 		//color segment index for this t
 
 		var k = parseInt(t*n);
-		
+
 		//re-scale to color range
 
 		var vk0 = cmap3js[2*k].w;
@@ -235,19 +235,19 @@ function colorbar(cmap3js, canvas){
 
 		//build color string
 
-		var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';	
+		var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';
 		// console.log(t,s);
 		// console.log(v,pcolor,getpcolor(vk0,cmap3js,2*n),getpcolor(vkf,cmap3js,2*n));
 		// console.log('');
 
 		// set color
-		ctx.fillStyle = color;    
+		ctx.fillStyle = color;
 
  		//draw a rectangle for this color
 	    ctx.beginPath();
 
 	    //5% offset in both sides
-    	ctx.fillRect((i-istart)*0.9+0.05*L,0 , 
+    	ctx.fillRect((i-istart)*0.9+0.05*L,0 ,
 					L*0.95, W/3);
 	}
 
@@ -267,11 +267,11 @@ function colorbar(cmap3js, canvas){
 		var labelText  = cmap3js[Math.min(2*i,2*n-1)].w.toFixed(2).toString();
 		var labelPosX = (i+1)/n*L*0.9;
 		var labelPosY = W*1.0;
-	
+
 		ctx.rotate(-angle);
 		ctx.translate(L/n*0.9, 0)
 		ctx.rotate(angle);
-		ctx.fillText(labelText, 0, 0);	
+		ctx.fillText(labelText, 0, 0);
 		//draw a tick line
 	    ctx.beginPath();
 	    ctx.strokeStyle = "white";
@@ -282,11 +282,11 @@ function colorbar(cmap3js, canvas){
 	}
 
 	//last label
-	var labelText  = '1+ ';
+	var labelText  = parseInt(cmap3js[cmap3js.length-1].w).toString()+"+  ";
 	ctx.rotate(-angle);
 	ctx.translate(L/n*0.75, 0);
 	ctx.rotate(angle);
-	ctx.fillText(labelText, 0, 0);		
+	ctx.fillText(labelText, 0, 0);
 
 	ctx.beginPath();
 	ctx.strokeStyle = "white";
@@ -306,7 +306,7 @@ function colorbar(cmap3js, canvas){
 	        y = e.offsetY,
 	        p = ctx.getImageData(x, y, 1, 1),
 	        rgb = p.data;
-	    
+
 	    alert('Color: rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')');
 	};*/
 }

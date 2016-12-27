@@ -17,7 +17,7 @@ a {
 }
 
 #cbwater{
-	width:	100%;	
+	width:	100%;
 }
 
 .movable{
@@ -39,7 +39,7 @@ a {
 
 .mipanel{
 	position: absolute;
-	
+
 	/*background-color: rgba(10, 10, 10, 0.5);
 
 	border: 1px solid rgba(255, 255, 255, 0.3);
@@ -169,4 +169,10 @@ a {
 	background-color: #cbcbcb;
     border-radius: 6px;
     margin: 10px;
+}
+
+.logos {
+	max-width: 48%;
+	padding: 17px 10px 10px;
+	float: left;
 }

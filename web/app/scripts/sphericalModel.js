@@ -741,7 +741,7 @@ function writeTimeStamp(){
 function setColorMapBar(cmap_bati, cmap_water){
 	//requires colormap.js
 
-	var watermap = getColormapArray(cmap_water,1,0);
+	var watermap = getColormapArray(cmap_water,2.0,0);
 	mUniforms.colors.value = watermap;
 
 	//setup colorbar

@@ -8,7 +8,7 @@ uniform float zmax;
 
 vec3 getpcolor(float value){
     vec3 pseudoColor;
-    // 
+    //
     if(value <= colors[0].a){
         pseudoColor = colors[0].rgb;
     }
@@ -25,7 +25,7 @@ vec3 getpcolor(float value){
                 pseudoColor = mix(cleft.rgb, cright.rgb, t);
                 break;
             }
-        }           
+        }
     }
     return pseudoColor;
 }
@@ -38,7 +38,7 @@ void main()
     float value = texval.r;
     vec3 pseudoColor = getpcolor(value);
 
-    // gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b, value*0.7+0.3); 
+    // gl_FragColor = vec4(pseudoColor.r, pseudoColor.g,pseudoColor.b, value*0.7+0.3);
 
     float bati = texval.a;
     float bati_real = zmin + (zmax-zmin)*bati;

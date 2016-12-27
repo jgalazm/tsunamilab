@@ -57,38 +57,38 @@ float openBoundaries(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 
 	float eta = 0.0;
 
-	//j=0
-	if (vUv.y <=delta.y){
-			if (h_ij>gx){
-				float cc = sqrt(g*h_ij);
-				float uh = 0.5*(u_ij.g+u_imj.g);
-				float uu = sqrt(uh*uh+ u_ij.b*u_ij.b);
-				float zz = uu/cc;
-				if (u_ij.b>0.0){
-					zz = -zz;
-				}
-				eta = zz;
-			}
-			else {
-				eta = 0.0;
-			}
-	}
-		//j=ny
-	else if (vUv.y>=1.0-delta.y) {
-			if (h_ij>gx){
-				float cc = sqrt(g*h_ij);
-				float uh = 0.5*(u_ij.g+u_imj.g);
-				float uu = sqrt(uh*uh + u_ijm.b*u_ijm.b);
-				float zz = uu/cc;
-				if (u_ijm.b<0.0){
-					zz = -zz;
-				}
-				eta = zz;
-			}
-			else {
-				eta = 0.0;
-			}
-	}
+	// //j=0
+	// if (vUv.y <=delta.y){
+	// 		if (h_ij>gx){
+	// 			float cc = sqrt(g*h_ij);
+	// 			float uh = 0.5*(u_ij.g+u_imj.g);
+	// 			float uu = sqrt(uh*uh+ u_ij.b*u_ij.b);
+	// 			float zz = uu/cc;
+	// 			if (u_ij.b>0.0){
+	// 				zz = -zz;
+	// 			}
+	// 			eta = zz;
+	// 		}
+	// 		else {
+	// 			eta = 0.0;
+	// 		}
+	// }
+	// 	//j=ny
+	// else if (vUv.y>=1.0-delta.y) {
+	// 		if (h_ij>gx){
+	// 			float cc = sqrt(g*h_ij);
+	// 			float uh = 0.5*(u_ij.g+u_imj.g);
+	// 			float uu = sqrt(uh*uh + u_ijm.b*u_ijm.b);
+	// 			float zz = uu/cc;
+	// 			if (u_ijm.b<0.0){
+	// 				zz = -zz;
+	// 			}
+	// 			eta = zz;
+	// 		}
+	// 		else {
+	// 			eta = 0.0;
+	// 		}
+	// }
 	return eta;
 }
 
@@ -136,8 +136,12 @@ float massEquation(vec2 vUv, float h_ij, vec4 u_ij, vec4 u_imj, vec4 u_ijm){
 	return eta2_ij;
 }
 
-vec2 mod1x(vec2 xy){
-	return vec2(mod(xy.x,1.0),xy.y);
+float myMod(float x){
+	return x - floor(x);
+}
+
+vec2 mod1x(float x, float y){
+	return vec2(mod(x,1.0), y);
 }
 
 void main()
@@ -152,14 +156,13 @@ void main()
 	vec4 u_ij = texture2D(tSource,vUv);
 
 	//neighbors old vals
-	vec4 u_imj = texture2D(tSource, mod1x(vUv + vec2(-delta.x, 0.0)));
-	vec4 u_ipj = texture2D(tSource, mod1x(vUv + vec2(delta.x, 0.0)));
-	vec4 u_ijm = texture2D(tSource, mod1x(vUv + vec2(0.0, -delta.y)));
-	vec4 u_ijp = texture2D(tSource, mod1x(vUv + vec2(0.0, delta.y)));
+	vec4 u_imj = texture2D(tSource, mod1x(vUv.x - delta.x, vUv.y));
+	vec4 u_ipj = texture2D(tSource, mod1x(vUv.x + delta.x, vUv.y));
+	vec4 u_ijm = texture2D(tSource, mod1x(vUv.x + 0.0, vUv.y -delta.y));
+	vec4 u_ijp = texture2D(tSource, mod1x(vUv.x + 0.0, vUv.y + delta.y));
 
-	vec4 u_ipjm = texture2D(tSource, mod1x(vUv + vec2(delta.x, -delta.y)));
-	vec4 u_imjp = texture2D(tSource, mod1x(vUv + vec2(-delta.x, delta.y)));
-
+	vec4 u_ipjm = texture2D(tSource, mod1x(vUv.x + delta.x,  vUv.y - delta.y));
+	vec4 u_imjp = texture2D(tSource, mod1x(vUv.x + -delta.x, vUv.y + delta.y));
 
 	//new vals
 	vec4 u2_ij, u2_ipj, u2_ijp;

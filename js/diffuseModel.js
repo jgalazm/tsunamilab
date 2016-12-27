@@ -102,7 +102,7 @@ var DiffuseModel = function (params, container) {
             magFilter: THREE.LinearFilter,
             format: THREE.RGBAFormat,
             type: THREE.FloatType,
-            wrapS: THREE.ClampToEdgeWrapping,
+            wrapS: THREE.RepeatWrapping,
             wrapT: THREE.ClampToEdgeWrapping,
             needsUpdate: true
         });
@@ -114,7 +114,7 @@ var DiffuseModel = function (params, container) {
             magFilter: THREE.LinearFilter,
             format: THREE.RGBAFormat,
             type: THREE.FloatType,
-            wrapS: THREE.ClampToEdgeWrapping,
+            wrapS: THREE.RepeatWrapping,
             wrapT: THREE.ClampToEdgeWrapping,
             needsUpdate: true
         });
@@ -164,9 +164,9 @@ var DiffuseModel = function (params, container) {
 
     var renderSimulation = function () {
         objects.planeScreen.material = materials.modelMaterial;
-
         for (var i = 0; i < Math.floor(simulation.speed * 1); i++) {
-            if (!simulation.toggleBuffer1) {
+            console.log(simulation.toggleBuffer1)
+            if (simulation.toggleBuffer1) {
                 simulation.uniforms.tSource.value =
                     simulation.mTextureBuffer1;
 
@@ -228,22 +228,22 @@ var DiffuseModel = function (params, container) {
 
         // set simNx and simNy as the nearest power of two
         // this is needed by THREE.RepeatWrapping
-        var xpower = Math.floor(Math.log(simNx) / Math.log(2));
-        var ypower = Math.floor(Math.log(simNy) / Math.log(2));
+        // var xpower = Math.floor(Math.log(simNx) / Math.log(2));
+        // var ypower = Math.floor(Math.log(simNy) / Math.log(2));
 
-        if (simNx - Math.pow(2, xpower) < Math.pow(2, xpower + 1) - simNx) {
-            simNx = Math.pow(2, xpower);
-        }
-        else {
-            simNx = Math.pow(2, xpower + 1)
-        }
+        // if (simNx - Math.pow(2, xpower) < Math.pow(2, xpower + 1) - simNx) {
+        //     simNx = Math.pow(2, xpower);
+        // }
+        // else {
+        //     simNx = Math.pow(2, xpower + 1)
+        // }
 
-        if (simNy - Math.pow(2, ypower) < Math.pow(2, ypower + 1) - simNy) {
-            simNy = Math.pow(2, ypower);
-        }
-        else {
-            simNy = Math.pow(2, ypower + 1)
-        }
+        // if (simNy - Math.pow(2, ypower) < Math.pow(2, ypower + 1) - simNy) {
+        //     simNy = Math.pow(2, ypower);
+        // }
+        // else {
+        //     simNy = Math.pow(2, ypower + 1)
+        // }
 
 
         simulation.uniforms.xmin.value = 0.0;
@@ -276,6 +276,12 @@ var DiffuseModel = function (params, container) {
             scene,
             camera,
             simulation.mTextureBuffer1,
+            true
+        );
+        renderer.render(
+            scene,
+            camera,
+            simulation.mTextureBuffer2,
             true
         );
         simulation.uniforms.tSource.value = simulation.mTextureBuffer1;

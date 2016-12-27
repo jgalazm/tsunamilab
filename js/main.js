@@ -9,7 +9,18 @@ function init() {
             url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
         }),
         baseLayerPicker: false,
-        sceneMode: Cesium.SceneMode.SCENE2D
+        sceneMode: Cesium.SceneMode.SCENE2D,
+        animation: false,
+        baseLayerPicker: false,
+        fullscreenButton: false,
+        geocoder: false,
+        homeButton: false,
+        infoBox: false,
+        sceneModePicker: false,
+        selectionIndicator: false,
+        timeline: false,
+        navigationHelpButton: false,
+        navigationInstructionsInitiallyVisible: false
     });
 
     viewer.scene.debugShowFramesPerSecond = true;
@@ -135,7 +146,8 @@ czm_material czm_getMaterial(czm_materialInput materialInput)
     vec4 color =  texture2D(image, vUv);
 
 
-    return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), color.a);
+    // return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), color.a);
+    return czm_material(color.rgb, 1.0, 100.0, materialInput.normalEC, vec3(0.0), 0.5);
 }
 `
                     }
@@ -148,12 +160,13 @@ czm_material czm_getMaterial(czm_materialInput materialInput)
         console.time("tick");
         console.log('tick')
         function tick() {
+            console.log('renderSimulation')
             d1.renderSimulation();
             rectangle.appearance.material.uniforms.image = d1.renderScreen();
             // console.log(rectangle.appearance.material.uniforms.image)
             number += 1;
-            if (number == 100) {
-                console.timeEnd("tick");
+            if (number < 3) {
+                // requestAnimationFrame(tick);
             }
             requestAnimationFrame(tick);
         }

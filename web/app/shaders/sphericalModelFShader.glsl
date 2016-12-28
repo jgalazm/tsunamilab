@@ -57,38 +57,38 @@ float openBoundaries(vec4 u_ij, vec4 u_ijm, vec4 u_imj,
 
 	float eta = 0.0;
 
-	// //j=0
-	// if (vUv.y <=delta.y){
-	// 		if (h_ij>gx){
-	// 			float cc = sqrt(g*h_ij);
-	// 			float uh = 0.5*(u_ij.g+u_imj.g);
-	// 			float uu = sqrt(uh*uh+ u_ij.b*u_ij.b);
-	// 			float zz = uu/cc;
-	// 			if (u_ij.b>0.0){
-	// 				zz = -zz;
-	// 			}
-	// 			eta = zz;
-	// 		}
-	// 		else {
-	// 			eta = 0.0;
-	// 		}
-	// }
-	// 	//j=ny
-	// else if (vUv.y>=1.0-delta.y) {
-	// 		if (h_ij>gx){
-	// 			float cc = sqrt(g*h_ij);
-	// 			float uh = 0.5*(u_ij.g+u_imj.g);
-	// 			float uu = sqrt(uh*uh + u_ijm.b*u_ijm.b);
-	// 			float zz = uu/cc;
-	// 			if (u_ijm.b<0.0){
-	// 				zz = -zz;
-	// 			}
-	// 			eta = zz;
-	// 		}
-	// 		else {
-	// 			eta = 0.0;
-	// 		}
-	// }
+	//j=0
+	if (vUv.y <=delta.y){
+			if (h_ij>gx){
+				float cc = sqrt(g*h_ij);
+				float uh = 0.5*(u_ij.g+u_imj.g);
+				float uu = sqrt(uh*uh+ u_ij.b*u_ij.b);
+				float zz = uu/cc;
+				if (u_ij.b>0.0){
+					zz = -zz;
+				}
+				eta = zz;
+			}
+			else {
+				eta = 0.0;
+			}
+	}
+		//j=ny
+	else if (vUv.y>=1.0-delta.y) {
+			if (h_ij>gx){
+				float cc = sqrt(g*h_ij);
+				float uh = 0.5*(u_ij.g+u_imj.g);
+				float uu = sqrt(uh*uh + u_ijm.b*u_ijm.b);
+				float zz = uu/cc;
+				if (u_ijm.b<0.0){
+					zz = -zz;
+				}
+				eta = zz;
+			}
+			else {
+				eta = 0.0;
+			}
+	}
 	return eta;
 }
 
@@ -141,7 +141,7 @@ float myMod(float x){
 }
 
 vec2 mod1x(float x, float y){
-	return vec2(mod(x,1.0), y);
+	return vec2(myMod(x), y);
 }
 
 void main()
@@ -163,6 +163,7 @@ void main()
 
 	vec4 u_ipjm = texture2D(tSource, mod1x(vUv.x + delta.x,  vUv.y - delta.y));
 	vec4 u_imjp = texture2D(tSource, mod1x(vUv.x + -delta.x, vUv.y + delta.y));
+
 
 	//new vals
 	vec4 u2_ij, u2_ipj, u2_ijp;

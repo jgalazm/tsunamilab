@@ -196,6 +196,54 @@ function loadCities(){
 		}
 	});
 }
+function setPin(lat,lon){
+  var phiLength = 0.027*Math.PI,
+	thetaLength = 0.01*Math.PI
+	//ce == lon == phi == alpha, cn == lat == theta == beta
+
+	var materialSphere = new THREE.MeshLambertMaterial( { color: "rgba(0,255,255,1)", side : THREE.DoubleSide} );
+	var materialSphereBorder = new THREE.MeshLambertMaterial( { color: "rgba(0,0,0,1)", side : THREE.DoubleSide} );
+
+	var alpha = Math.PI/180*lon;
+	var beta = Math.PI/180*lat;
+	var r = 0.5;
+
+	// city.name = "  " + city.name + "  "
+
+	var geometry = new THREE.SphereBufferGeometry( 0.0025, 32, 32 );
+	var object = new THREE.Mesh( geometry, materialSphere);
+
+	var geometryBorder = new THREE.SphereBufferGeometry( 0.0026, 32, 32, 0, Math.PI * 2, Math.PI / 5, Math.PI - Math.PI / 5 );
+	var objectBorder = new THREE.Mesh( geometryBorder, materialSphereBorder);
+
+	var x = -r*Math.cos(beta)*Math.cos(alpha);
+	var y = r*Math.sin(beta);
+	var z = r*Math.cos(beta)*Math.sin(alpha);
+	object.position.x = x;
+	object.position.y = y;
+	object.position.z = z;
+	viewScene.add( object );
+
+	objectBorder.position.x = x;
+	objectBorder.position.y = y;
+	objectBorder.position.z = z;
+
+	viewScene.add( objectBorder );
+  objectBorder.up = new THREE.Vector3(0,0,-1)
+  objectBorder.lookAt(new THREE.Vector3(0,0,0));
+  objectBorder.rotateX(-Math.PI / 2);
+
+  var gl = renderer.domElement.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+  var left = 100;
+  var right = 100;
+  var width = 1;
+  var height = 1;
+  var pixelData = new Uint8Array(width * height * 4);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.readPixels(left, top, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
+
+}
+
 
 function setCities(data){
 	var phiLength = 0.027*Math.PI,

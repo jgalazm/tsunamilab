@@ -61,6 +61,8 @@ function loadUSGSScenario(data){
       value: place
     }));
 
+    setPin(coords[1],coords[0]);
+
     makeMomentTensorQuery(place, f["id"]);
   }
 }

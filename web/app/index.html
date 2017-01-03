@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/eigencities.css">
+	<link rel="stylesheet" type="text/css" href="css/tsunami.css">
 	<!-- endbuild -->
 
 	<!-- build:js scripts/main.js -->
@@ -41,7 +42,7 @@
 	<script src="scripts/main.js"></script>
 
 	<!-- endbuild -->
-	
+
 	<script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -55,8 +56,27 @@
 </head>
 
 <body>
-
-	<div class="navbar navbar-default navbar-fixed-top" data-role="header">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index-01.htm" title="Tsunami Labs"><img src="img/tsunami_labs-logo.png" width="140px"/></a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="about.html">TsunamiLab</a></li>
+					<li class="active"><a href="#">Simulador</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</nav>
+<!--
+	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -66,7 +86,7 @@
 					<span class="icon-bar"></span>
 				</button>
 				<div class="navbar-brand">
-					<span><img src='img/marepoto.png' /></span><span class="eigen">TSUNAMI-</span><span class="cities">LAB</span>
+					<span><img  src="img/tsunami_labs-logo.png" />
 				</div>
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
@@ -75,9 +95,9 @@
 					<li><a target="_blank" href="about.html">Sobre Tsunami-Lab</a></li>
 				</ul>
 			</div>
-			<!--/.nav-collapse -->
+
 		</div>
-	</div>
+	</nav> -->
 
 	<div id="simulation" style='display:inline-block;'>
 		<canvas id="container"> Esta aplicación requiere el uso de un navegador moderno</canvas>

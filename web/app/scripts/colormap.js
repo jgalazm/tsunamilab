@@ -257,7 +257,7 @@ function colorbar(cmap3js, canvas){
 	var fontSize = L*0.04;
 	var angle = 0.33*Math.PI;
 	ctx.font = "bold " + fontSize + "pt Verdana";//better exact px based on % of canvas.height?
-	ctx.fillStyle ="#635c5c";
+	ctx.fillStyle ="#fff";
 	ctx.textAlign = "right";
 
 	ctx.translate(0,W);

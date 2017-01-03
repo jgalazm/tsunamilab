@@ -72,6 +72,7 @@ a {
 }
 
 
+
 .modal-content {
 	background: #3a3a3a;
 	-moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px;
@@ -81,10 +82,8 @@ a {
 
 .modal-header {
 	padding: 25px 25px 15px 25px;
-	background: rgba(232, 232, 232, 0.94);
 	border: 0;
 	-moz-border-radius: 8px 8px 0 0; -webkit-border-radius: 8px 8px 0 0; border-radius: 8px 8px 0 0;
-	color: #635c5c;
 }
 
 .modal-footer {
@@ -175,4 +174,18 @@ a {
 	max-width: 48%;
 	padding: 17px 10px 10px;
 	float: left;
+}
+
+.tsunami-color-default{
+	background: #101010 !important;
+}
+
+.tsunami-color-highlight{
+	background: #484c54 !important;
+}
+.tsunami-font-main{
+	color: #fff  !important;
+}
+.tsunami-font-second{
+	color: #9d9d9d  !important;
 }

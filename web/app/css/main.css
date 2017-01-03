@@ -9,7 +9,10 @@ body{
 }
 
 a {
-	color: #0080ff;
+	color: #00b6dd;
+}
+a:hover{
+	color: #00b6dd;
 }
 #controls{
 	position: absolute;
@@ -177,7 +180,8 @@ a {
 }
 
 .tsunami-color-default{
-	background: #101010 !important;
+	/*background: #101010 !important;*/
+	background: #2d3037 !important;
 }
 
 .tsunami-color-highlight{
@@ -188,4 +192,7 @@ a {
 }
 .tsunami-font-second{
 	color: #9d9d9d  !important;
+}
+.tsunami-font-third{
+	color: #d4d4d4 !important;
 }

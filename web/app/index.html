@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/eigencities.css">
+	<link rel="stylesheet" type="text/css" href="css/tsunami.css">
 	<!-- endbuild -->
 
 	<!-- build:js scripts/main.js -->
@@ -41,7 +42,7 @@
 	<script src="scripts/main.js"></script>
 
 	<!-- endbuild -->
-	
+
 	<script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -55,8 +56,27 @@
 </head>
 
 <body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index-01.htm" title="Tsunami Labs"><img src="img/tsunami_labs-logo.png" width="140px"/></a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="about.html">TsunamiLab</a></li>
+					<li class="active"><a href="#">Simulador</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</nav>
 
-	<div class="navbar navbar-default navbar-fixed-top" data-role="header">
+	<!-- <nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -66,7 +86,7 @@
 					<span class="icon-bar"></span>
 				</button>
 				<div class="navbar-brand">
-					<span><img src='img/marepoto.png' /></span><span class="eigen">TSUNAMI-</span><span class="cities">LAB</span>
+					<span><img  src="img/tsunami_labs-logo.png" />
 				</div>
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
@@ -75,9 +95,9 @@
 					<li><a target="_blank" href="about.html">Sobre Tsunami-Lab</a></li>
 				</ul>
 			</div>
-			<!--/.nav-collapse -->
+
 		</div>
-	</div>
+	</nav> -->
 
 	<div id="simulation" style='display:inline-block;'>
 		<canvas id="container"> Esta aplicación requiere el uso de un navegador moderno</canvas>
@@ -87,20 +107,20 @@
 	<div id="init_modal" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header tsunami-color-default">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Tsunami-Lab</h4>
+					<h4 class="modal-title tsunami-font-main">Tsunami-Lab</h4>
 				</div>
-				<div class="modal-body">
-					<h3>¿Qué estoy viendo?</h3>
-					<p><strong>Tsunami-Lab</strong> es una plataforma educativa que permite simular y visualizar el efecto de los tsunamis en tiempo real, a través de la interacción y de la configuración de distintos escenarios, tanto históricos como ficticios.</p>
-					<p>La motivación detrás del proyecto es convertirse en una herramienta educativa, destinada tanto a estudiantes como a público general, que permita prevenir la pérdida de vidas humanas y disminuir el impacto de los tsunamis en Chile.</p>
-					<p>La plataforma se encuentra en desarrollo.</p>
+				<div class="modal-body tsunami-color-highlight">
+					<h3 class="tsunami-font-main">¿Qué estoy viendo?</h3>
+					<p class="tsunami-font-third"><strong>Tsunami-Lab</strong> es una plataforma educativa que permite simular y visualizar el efecto de los tsunamis en tiempo real, a través de la interacción y de la configuración de distintos escenarios, tanto históricos como ficticios.</p>
+					<p  class="tsunami-font-third">La motivación detrás del proyecto es convertirse en una herramienta educativa, destinada tanto a estudiantes como a público general, que permita prevenir la pérdida de vidas humanas y disminuir el impacto de los tsunamis en Chile.</p>
+					<p  class="tsunami-font-third">La plataforma se encuentra en desarrollo.</p>
 
-					<h3>Más información</h3>
-					<p>Puedes encontrar información adicional sobre el proyecto, el equipo, las tecnologías utilizadas y más en el <a target="_blank" href="about.html">siguiente enlace</a>.</p>
+					<h3 class="tsunami-font-main">Más información</h3>
+					<p class="tsunami-font-third">Puedes encontrar información adicional sobre el proyecto, el equipo, las tecnologías utilizadas y más en el <a target="_blank" href="about.html">siguiente enlace</a>.</p>
 				</div>
-				<div class="modal-footer">
+				<div class="modal-footer tsunami-color-default">
 					<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
 				</div>
 			</div>
@@ -114,7 +134,7 @@
 
 
 	<!-- SIDEBAR -->
-	<div id="widget" class="col-xs-3 col-sm-3 col-md-2 col-lg-2 text-center">
+	<div id="widget" class="col-xs-3 col-sm-3 col-md-2 col-lg-2 text-center tsunami-color-default tsunami-font-main">
 		<div id="radioDiv" class="row">
 			<h5>TSUNAMIS HISTÓRICOS</h5>
 			<div class="row">
@@ -127,7 +147,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="polygonDiv" class="row middle-div">
+		<div id="polygonDiv" class="row middle-div tsunami-color-highlight">
 			<h5>CONTROLES</h5>
 			<div class="row-fluid">
 				<div class="col-xs-12 col-sm-6 col-md-6">
@@ -144,7 +164,7 @@
 				<div class="row-fluid">
 					<input id="slider-speed" type="text" data-slider-id="slider-element" data-provide="slider" data-slider-ticks="[0, 1, 2]" data-slider-ticks-labels='[">", ">>", ">>>"]' data-slider-min="0" data-slider-max="2" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide" />
 				</div>
-				<div id="sliderDiv" class="row-fluid timer" style="border-radius=30px">
+				<div id="sliderDiv" class="row-fluid timer tsunami-color-default" style="border-radius=30px">
 					<span class=time-number id=time-hours>00</span>
 					<span class=time-label id=time-hours-label>h </span>
 					<span class=time-number id=time-minutes>00</span>
@@ -159,10 +179,10 @@
 			<h5> Altura de la ola (en metros) </h5>
 			<canvas id="cbwater"></canvas>
 		</div>
-		<div class="row bottom-div">
-			<span> <img class="logos" src="img/logo-cigiden.png"></img></span>
+		<div class="row bottom-div tsunami-color-default">
+			<span> <img class="logos" src="img/CIGIDEN_blanco_ESP_hor.png"></img></span>
 
-			<span> <img class="logos" src="img/Inria-Chile2.png"></img></span>
+			<span> <img class="logos" src="img/inria_chile_logo_white.png"></img></span>
 		</div>
 	</div>
 

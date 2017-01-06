@@ -1,0 +1,67 @@
+.navbar-brand {
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    display: block;
+    left: 47%;
+    margin-left: 0px;
+    top: -5px;
+    text-align: center;
+    z-index: 2;
+}
+
+.navbar {
+    min-height: 40px;
+}
+
+.navbar-inverse {
+    background-color: #2d3037;
+    border: none;
+}
+
+.navbar-nav>li>a {
+    padding-top: 12px;
+    padding-bottom: 10px;
+
+}
+
+.navbar-inverse .navbar-nav>.active>a {
+    background-color: transparent;
+    border-bottom: solid 3px #00b6dd;
+}
+
+.navbar-brand img {
+  padding-top: 8px;
+}
+
+/* --- accordion --- */
+#accordion {
+    background-color: #09283a;
+    color: #e5e6e6;
+    position:absolute;
+    width:300px;
+    bottom:0px;
+    right:25%;
+    left:50%;
+    margin-left:-150px;
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.accordion-toggle {
+    cursor: pointer;
+}
+
+.accordion-content {
+    display: none;
+}
+
+.accordion-content.default {
+    display: block;
+}
+
+/* --- test --- */

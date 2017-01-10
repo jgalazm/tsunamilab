@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title> Tsunami-Lab </title>
+
+  <!-- build:js scripts/main.js -->
+	<!-- Bower components -->
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../bower_components/three.js/three.min.js"></script>
+
+	<!-- packages that must be downloaded manually-->
+	<script src="scripts/TrackballControls.js"></script>
+	<script src="scripts/orbitcontrols.js"></script>
+  <script>
+  var scene, camera, renderer, canvas, gl;
+  var geometry, material, mesh, renderTargetTexture;
+
+	var meshes = [];
+  function init() {
+
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera( 75, 512 / 512, 1, 10000 );
+      camera.position.z = 1000;
+
+			for(var i = 0; i<500; i++){
+
+				geometry = new THREE.BoxGeometry( 100, 100, 100 );
+				color = parseInt(Math.random()*256*256*256)
+				// color = color.toString(16);
+				material = new THREE.MeshLambertMaterial( {  color:color, wireframe: false } );
+				mesh = new THREE.Mesh( geometry, material );
+				mesh.position.x = (Math.random()*2-1)*800;
+				mesh.position.y = (Math.random()*2-1)*800;
+				mesh.position.z = (Math.random()*2-1)*800;
+				mesh.rotation.x += (Math.random()*2-1)*6;
+	      mesh.rotation.y += (Math.random()*2-1)*6;
+				meshes.push(mesh);
+				scene.add( mesh );
+			}
+			var light = new THREE.PointLight( 0xffffff );
+			light.position.set( 5000, 5000, 50 );
+			scene.add( light );
+
+			var amblight = new THREE.AmbientLight( 0x404040 ); // soft white light
+			scene.add( amblight );
+
+      renderTargetTexture = new THREE.WebGLRenderTarget( 1024, 1024,
+    		 					{minFilter: THREE.LinearFilter,
+    	                          magFilter: THREE.LinearFilter,
+    	                          format: THREE.RGBAFormat,
+    	                          type: THREE.UnsignedByteType,
+                                wrapS: THREE.RepeatWrapping,
+                                wrapT: THREE.ClampToEdgeWrapping,
+                                needsUpdate: true});
+
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize( 512*2, 512*2 );
+      renderer.setClearColor(0xaaaaaa);
+      canvas = renderer.domElement;
+      gl = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+
+      document.body.appendChild( canvas );
+
+
+  }
+
+
+  function duplicate(){
+		renderer.render(scene, camera, renderTargetTexture, true );
+    var framebuffer = renderer.properties.get(renderTargetTexture);
+    framebuffer = framebuffer.__webglFramebuffer;
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+    var pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+    // var pixels = new Float32Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+
+    // gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.FLOAT, pixels);
+    gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+		renderer.domElement.toDataURL("image/png", 0.98);
+
+    // var canvas2 = document.createElement("canvas");
+    // canvas2.width = canvas2.height = 512;
+    // var ctx2 = canvas2.getContext("2d");
+		// var imageData = ctx2.getImageData(0, 0, 512, 512);
+		// imageData.data.forEach(function(item, index, arr){
+    //   arr[index] =  Math.floor(pixels[index]*255);
+    // })
+		// ctx2.putImageData(imageData,0,0);
+		// document.body.appendChild(canvas2);
+
+  }
+  function animate() {
+
+      requestAnimationFrame( animate );
+
+      mesh.rotation.x += 0.01;
+      mesh.rotation.y += 0.02;
+			duplicate();
+	
+      renderer.render( scene, camera );
+
+  }
+  $(function(){
+    init();
+    animate();
+  }
+  );
+  </script>
+
+	<!-- endbuild -->
+</head>
+  <body>
+
+  </body>
+</html>

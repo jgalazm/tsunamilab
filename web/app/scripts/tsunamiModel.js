@@ -6,7 +6,9 @@
 // shaders
 // colormap
 
-var DiffuseModel = function (params, container) {
+
+
+var TsunamiModel = function (params, container) {
     var R_earth = 6378000.0,
         rad_deg = 0.01745329252,
         rad_min = 0.000290888208665721,
@@ -25,11 +27,17 @@ var DiffuseModel = function (params, container) {
     var width = rendererSize.width;
     var height = rendererSize.height;
 
-    var renderer = new THREE.WebGLRenderer({
-        canvas: container,
+    var rendererArguments = {
         alpha: true,
         preserveDrawingBuffer: true
-    });
+    }
+
+    if(container){
+      rendererArguments.canvas = container
+    }
+
+    var renderer = new THREE.WebGLRenderer(rendererArguments);
+
     renderer.setClearColor( 0xffffff, 0.0 );
     renderer.setSize(width*2, height*2);
 

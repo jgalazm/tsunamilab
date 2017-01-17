@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ESRI_ItemInformation Culture='en-US'>
+<name>plate_lines_and_polygons</name>
+<guid>2937C99C-37B4-4014-9C35-6B016063F5BF</guid>
+<title>Plate Lines and Polygons</title>
+<catalogpath></catalogpath>
+<snippet></snippet>
+<description></description>
+<type>Layer Package</type>
+<typekeywords>
+<typekeyword>Shapefile Feature Class</typekeyword>
+<typekeyword>Shapefile Feature Class</typekeyword>
+<typekeyword>Shapefile Feature Class</typekeyword>
+<typekeyword>Layer Package</typekeyword>
+<typekeyword>Data</typekeyword>
+<typekeyword>ArcMap</typekeyword>
+<typekeyword>ArcGlobe</typekeyword>
+<typekeyword>ArcGIS Explorer</typekeyword>
+<typekeyword>.lpk</typekeyword>
+</typekeywords>
+<thumbnail>thumbnail/thumbnail.png</thumbnail>
+<documentation></documentation>
+<url></url>
+<datalastmodifiedtime></datalastmodifiedtime>
+<extent>
+<xmin>-180</xmin>
+<ymin>-90</ymin>
+<xmax>180</xmax>
+<ymax>90</ymax>
+</extent>
+<spatialreference>GCS_WGS_1984</spatialreference>
+<accessinformation></accessinformation>
+</ESRI_ItemInformation>

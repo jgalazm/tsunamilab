@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="http://www.arcgisonline.com/home/pkinfostylesheet.xsl"?>
+<pkinfo Culture='en-US'>
+<ID>2937C99C-37B4-4014-9C35-6B016063F5BF</ID>
+<name>plate_lines_and_polygons</name>
+<size>-1</size>
+<created></created>
+<type></type>
+<packagelocation></packagelocation>
+<pkinfolocation></pkinfolocation>
+<lpkinfo>
+<Layer Name='Plate Lines and Polygons'>
+<Layer Name='plates_4_types_proj' Workspace='{A06ADB96-D95C-11D1-AA81-00C04FA33A15}'>
+</Layer>
+<Layer Name='plat_lin_proj' Workspace='{A06ADB96-D95C-11D1-AA81-00C04FA33A15}'>
+</Layer>
+<Layer Name='plat_pol_proj' Workspace='{A06ADB96-D95C-11D1-AA81-00C04FA33A15}'>
+</Layer>
+</Layer>
+</lpkinfo>
+</pkinfo>

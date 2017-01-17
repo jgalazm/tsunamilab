@@ -83,3 +83,10 @@ data/bathymetry/batiWorld.jpg
 # Created folders in web
 web/.tmp/
 web/dist/
+
+#python compiled files
+*.pyc
+
+data/bathymetry/GEBCO's_gridded_bathymetric_data_sets.html
+data/bathymetry/GRIDONE.html
+data/bathymetry/GRIDONE_1D.nc

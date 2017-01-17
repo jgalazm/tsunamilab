@@ -381,7 +381,7 @@ float myMod(float x){
 }
 
 vec2 mod1x(float x, float y){
-	return vec2(myMod(x), y);	
+	return vec2(myMod(x), y);
 }
 
 void main()
@@ -523,7 +523,7 @@ void main()
     float bati_real = zmin + (zmax-zmin)*bati;
 
     float corrected_color =  pow(value,0.2);
-    if (bati_real>-500.0){
+    if (bati_real>-0.0){
         corrected_color = 0.0;
     }
     else{

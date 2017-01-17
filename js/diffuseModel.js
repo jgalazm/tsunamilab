@@ -31,7 +31,7 @@ var DiffuseModel = function (params, container) {
         preserveDrawingBuffer: true
     });
     renderer.setClearColor( 0xffffff, 0.0 );
-    renderer.setSize(width, height);
+    renderer.setSize(width*2, height*2);
 
     var scene = new THREE.Scene();
 
@@ -220,12 +220,14 @@ var DiffuseModel = function (params, container) {
             throw e;
         }
 
-        simNx = parseInt(bathymetry.metadata[1].split(':')[1]);//parseInt(batidata.nx);
-        simNy = parseInt(bathymetry.metadata[0].split(':')[1]);//parseInt(batidata.nx);
-        if (simNx > 1000) {
-            simNx = simNx / 5;
-            simNy = simNy / 5;
-        }
+        // simNx = parseInt(bathymetry.metadata[1].split(':')[1]);//parseInt(batidata.nx);
+        // simNy = parseInt(bathymetry.metadata[0].split(':')[1]);//parseInt(batidata.nx);
+        // if (simNx > 1000) {
+        //     simNx = simNx / 3;
+        //     simNy = simNy / 3;
+        // }
+        simNx = width;
+        simNy = height;
 
         // set simNx and simNy as the nearest power of two
         // this is needed by THREE.RepeatWrapping
@@ -289,9 +291,9 @@ var DiffuseModel = function (params, container) {
 
         simulationData.timeStep = dt;
         simulationData.gridSize = [simNx, simNy];
-        simulationData.bbox = [[simulation.uniforms.xmin.value, 
+        simulationData.bbox = [[simulation.uniforms.xmin.value,
                                 simulation.uniforms.ymin.value],
-                                [simulation.uniforms.xmax.value, 
+                                [simulation.uniforms.xmax.value,
                                 simulation.uniforms.ymax.value]];
     }
 
@@ -303,6 +305,7 @@ var DiffuseModel = function (params, container) {
         renderSimulation: renderSimulation,
         renderScreen: renderScreen,
         simulation: simulation,
-        simulationData: simulationData
+        simulationData: simulationData,
+        renderer : renderer
     };
 };

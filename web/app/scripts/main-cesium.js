@@ -3,6 +3,7 @@ var container;
 // function that initializes the cesium display
 
 function init() {
+    $("#init_modal").modal();
 
     viewer = new Cesium.Viewer('cesiumContainer', {
         imageryProvider: new Cesium.ArcGisMapServerImageryProvider({

@@ -14,9 +14,9 @@
   <link rel="stylesheet" type="text/css" href="css/eigencities.css">
   <link rel="stylesheet" type="text/css" href="css/tsunami.css">
 
+  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
   <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="../bower_components/three.js/three.min.js"></script>
-  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
   <script src="../bower_components/cesium/Cesium/Cesium.js"></script>
   <script src="scripts/shadersLib.js"></script>
   <script src="scripts/tsunamiModel.js"></script>
@@ -52,7 +52,34 @@
   <div id="cesiumContainer"></div>
   <div id="simulation">
     <canvas id="container"></canvas>
-    <canvas id="container2"></canvas>
   </div>
+
+
+  <!--Modal-->
+  <div id="init_modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header tsunami-color-default">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title tsunami-font-main">Tsunami-Lab</h4>
+        </div>
+        <div class="modal-body tsunami-color-highlight">
+          <h3 class="tsunami-font-main">¿Qué estoy viendo?</h3>
+          <p class="tsunami-font-third"><strong>Tsunami-Lab</strong> es una plataforma educativa que permite simular y visualizar el efecto de los tsunamis en tiempo real, a través de la interacción y de la configuración de distintos escenarios, tanto históricos como ficticios.</p>
+          <p  class="tsunami-font-third">La motivación detrás del proyecto es convertirse en una herramienta educativa, destinada tanto a estudiantes como a público general, que permita prevenir la pérdida de vidas humanas y disminuir el impacto de los tsunamis en Chile.</p>
+          <p  class="tsunami-font-third">La plataforma se encuentra en desarrollo.</p>
+
+          <h3 class="tsunami-font-main">Más información</h3>
+          <p class="tsunami-font-third">Puedes encontrar información adicional sobre el proyecto, el equipo, las tecnologías utilizadas y más en el <a target="_blank" href="about.html">siguiente enlace</a>.</p>
+        </div>
+        <div class="modal-footer tsunami-color-default">
+          <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
 </body>
 </html>

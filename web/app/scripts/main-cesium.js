@@ -3,7 +3,7 @@ $('#init_modal').modal();
 
 var init = function() {
 
-  var shadersCode = shadersCode('tsunami');
+  var tsunamiShaders = shadersCode('tsunami');
 
   var bathymetry = {
     imgURL: 'img/batiWorld.jpg',
@@ -53,7 +53,7 @@ var init = function() {
     var k = 1;
 
     modelParams = {
-      shaders: shadersCode,
+      shaders: tsunamiShaders,
       rendererSize: {
         width: 1024,
         height: 512

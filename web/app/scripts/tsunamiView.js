@@ -7,7 +7,6 @@ var TsunamiView = function(params){
     imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
       url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
     }),
-    baseLayerPicker: false,
     // sceneMode: Cesium.SceneMode.SCENE2D,
     animation: false,
     baseLayerPicker: false,
@@ -65,7 +64,7 @@ var TsunamiView = function(params){
             vec3 normalEC = materialInput.tangentToEyeMatrix * normalTangentSpace;
 
 
-            return czm_material(color.rgb, 1.0, 100.0, normalEC, vec3(0.0), color.a);
+            return czm_material(color.rgb, 1.0, 10000.0, normalEC, vec3(0.0), color.a);
           }
           `
         }
@@ -74,5 +73,5 @@ var TsunamiView = function(params){
   }));
 
 
-  return {init: init}
+  return
 }

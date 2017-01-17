@@ -7,7 +7,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-  <title>Hello World!</title>
+  <title>TsunamiLab</title>
+
+  <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/eigencities.css">
+  <link rel="stylesheet" type="text/css" href="css/tsunami.css">
+
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="../bower_components/three.js/three.min.js"></script>
   <script src="../bower_components/jquery/dist/jquery.min.js"></script>
   <script src="../bower_components/cesium/Cesium/Cesium.js"></script>
@@ -22,6 +29,25 @@
   </style>
 </head>
 <body onload="init()">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" title="Tsunami Labs"><img src="img/tsunami_labs-logo.png" width="140px"/></a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="about.html">TsunamiLab</a></li>
+					<li class="active"><a href="#">Simulador</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</nav>
 
   <div id="cesiumContainer"></div>
   <div id="simulation">

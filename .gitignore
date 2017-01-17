@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/linux,bower,node
 
 ### Linux ###
@@ -90,3 +89,5 @@ web/dist/
 data/bathymetry/GEBCO's_gridded_bathymetric_data_sets.html
 data/bathymetry/GRIDONE.html
 data/bathymetry/GRIDONE_1D.nc
+
+node_modules*

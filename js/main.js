@@ -35,7 +35,7 @@ document.getElementsByClassName('cesium-widget-credits')[0].remove()
     var layers = viewer.scene.imageryLayers;
 
     var imagen = layers.addImageryProvider(new Cesium.SingleTileImageryProvider({
-        url: 'img.png',
+        url: 'img/img.png',
         rectangle: Cesium.Rectangle.fromDegrees(0, 0, 15, 15)
     }));
 

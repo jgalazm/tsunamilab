@@ -34,10 +34,10 @@ document.getElementsByClassName('cesium-widget-credits')[0].remove()
     // capa con el mapa
     var layers = viewer.scene.imageryLayers;
 
-    var imagen = layers.addImageryProvider(new Cesium.SingleTileImageryProvider({
-        url: 'img/img.png',
-        rectangle: Cesium.Rectangle.fromDegrees(0, 0, 15, 15)
-    }));
+    // var imagen = layers.addImageryProvider(new Cesium.SingleTileImageryProvider({
+    //     url: 'img/img.png',
+    //     rectangle: Cesium.Rectangle.fromDegrees(0, 0, 15, 15)
+    // }));
 
     csscene = viewer.scene;
 
@@ -56,7 +56,7 @@ document.getElementsByClassName('cesium-widget-credits')[0].remove()
     var filesProgress = 0;
      imgPreload = new Image();
     $(imgPreload).attr({
-        src: 'img/batiWorld.jpg'
+        src: bathymetry.imgURL
     })
 
     imgPreload.onload = function(){
@@ -129,10 +129,12 @@ document.getElementsByClassName('cesium-widget-credits')[0].remove()
         rectangle = csscene.primitives.add(new Cesium.Primitive({
             geometryInstances: new Cesium.GeometryInstance({
                 geometry: new Cesium.RectangleGeometry({
-                    rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],
-                                                            bbox[0][1],
-                                                            bbox[1][0],
-                                                            bbox[1][1]),
+                    // rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],
+                    //                                         bbox[0][1],
+                    //                                         bbox[1][0],
+                    //                                         bbox[1][1]),
+                    rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89),
+                                                            bbox[1][0],Math.min(bbox[1][1],89)),
                     vertexFormat: Cesium.EllipsoidSurfaceAppearance.VERTEX_FORMAT
                 })
             }),

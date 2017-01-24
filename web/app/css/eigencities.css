@@ -443,3 +443,53 @@ div[value="active"] p {
 .slider.slider-horizontal .slider-tick-label-container .slider-tick-label {
     padding-top: 0px;
 }
+
+#timeline-slider {
+  width: 100% !important;
+}
+
+#controls {
+  border-radius: 5px;
+  position: absolute;
+  bottom: 30px;
+  width: 400px !important;
+  left: 50%;
+  margin-left: -200px;
+  height: 105px;
+  background: #09283a;;
+  padding: 15px 30px;
+  color: #536975;
+}
+
+#timeline-slider .slider-selection {
+	background: #00b6dd;
+}
+
+#timeline-slider .slider-track-high {
+	background: #536975;
+}
+
+#timeline-slider .slider-handle {
+	background: #00b6dd;
+}
+
+#controls .fa {
+    font-size: 30px;
+    padding: 5px 15px;
+}
+
+#controls img {
+    height: 45px;
+    padding: 6px 5px;
+    fill: red;
+}
+
+.center {
+    margin: 0 auto;
+    text-align:center;
+}
+
+.timeline-text{
+    text-align:center;
+    color: white;
+}

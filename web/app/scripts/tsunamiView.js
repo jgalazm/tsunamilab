@@ -73,5 +73,8 @@ var TsunamiView = function(params){
   }));
 
 
-  return
+  return {
+    viewer: viewer,
+    rectangle: rectangle
+  };
 }

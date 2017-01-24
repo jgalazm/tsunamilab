@@ -10,7 +10,9 @@ var init = function() {
     metadataURL: 'img/batiWorld.txt'
   }
 
-  var totalFilesToLoad = 2;
+  var historicalData;
+
+  var totalFilesToLoad = 3;
   var filesProgress = 0;
   imgPreload = new Image();
   $(imgPreload).attr({
@@ -27,8 +29,8 @@ var init = function() {
     document.body.appendChild(canvas);
 
     bathymetry.img = canvas;
+    console.log('Files loaded', bathymetry)
     if (++filesProgress == totalFilesToLoad) {
-      console.log('Files loaded', bathymetry)
       startMVC();
     };
   }
@@ -42,9 +44,28 @@ var init = function() {
       console.log('metadaata loaded')
       bathymetry.metadata = data.split('\n');
       if (++filesProgress == totalFilesToLoad) {
-        console.log('Files loaded', bathymetry)
         startMVC();
       };
+    }
+  });
+
+  var usgsapi;
+
+  $.ajax({
+    dataType: "json",
+    url: "data/historicalData.json",
+    async: false,
+    success: function(data) {
+      data;
+      usgsapi = USGSAPI(data);
+
+      var finished =  usgsapi.makeUSGSQuery();
+
+      $.when(finished).done(function(){
+        if (++filesProgress == totalFilesToLoad) {
+          startMVC();
+        }
+      });
     }
   });
 
@@ -93,9 +114,24 @@ var init = function() {
         bbox: bbox
       };
 
-      var view = TsunamiView(viewParams);
+      view = TsunamiView(viewParams);
+
+      // initialize Controller
+
+      var controllerParams = {
+        historicalData: usgsapi.historicalData
+      }
+
+      var controller = TsunamiController(model, view, controllerParams);
+
+
+
+      // var historicalData;
+
 
       document.getElementsByClassName('cesium-widget-credits')[0].remove()
+
+
     }
 
   }

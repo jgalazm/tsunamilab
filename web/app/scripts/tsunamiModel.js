@@ -13,7 +13,7 @@ var TsunamiModel = function (params, container) {
         rad_deg = 0.01745329252,
         rad_min = 0.000290888208665721,
         cori_w = 7.2722e-5;
-
+    var nstep = 0;
     var shaders = params.shaders;
     var rendererSize = params.rendererSize;
     var colormap = params.colormap;
@@ -175,6 +175,7 @@ var TsunamiModel = function (params, container) {
     var renderSimulation = function () {
         objects.planeScreen.material = materials.modelMaterial;
         for (var i = 0; i < Math.floor(simulation.speed * 1); i++) {
+            nstep++;
             if (simulation.toggleBuffer1) {
                 simulation.uniforms.tSource.value =
                     simulation.mTextureBuffer1;
@@ -214,6 +215,7 @@ var TsunamiModel = function (params, container) {
     };
 
     var setSimulation = function () {
+        nstep = 0;
         simulation.uniforms.xmin.value = parseFloat(bathymetry.metadata[2].split(':')[1]);
         simulation.uniforms.xmax.value = parseFloat(bathymetry.metadata[3].split(':')[1]);
         simulation.uniforms.ymin.value = parseFloat(bathymetry.metadata[4].split(':')[1]);
@@ -305,15 +307,21 @@ var TsunamiModel = function (params, container) {
                                 simulation.uniforms.ymax.value]];
     }
 
+    var getTime = function() {
+        return nstep*simulationData.timeStep;
+    }
+
     var simulationData = {};
 
     setSimulation();
 
     return {
         renderSimulation: renderSimulation,
+        setSimulation: setSimulation,
         renderScreen: renderScreen,
         simulation: simulation,
         simulationData: simulationData,
-        renderer : renderer
+        renderer : renderer,
+        getTime: getTime
     };
 };

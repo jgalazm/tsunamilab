@@ -1,1 +1,16 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.03 16.62"><defs><style>.cls-1{fill:#fff;opacity:0.9;}</style></defs><title>step-backward</title><path class="cls-1" d="M9.09,2.9H9a2.42,2.42,0,0,0-1.71.69,2.59,2.59,0,0,0-.69,1.71V17.11a2.58,2.58,0,0,0,.69,1.71,2.41,2.41,0,0,0,1.71.7h0a2.37,2.37,0,0,0,1.67-.7,2.42,2.42,0,0,0,.74-1.71V5.31a2.43,2.43,0,0,0-.74-1.71A2.38,2.38,0,0,0,9.09,2.9h0Z" transform="translate(-6.64 -2.9)"/><path class="cls-1" d="M24.6,3l-6.3,3.61h0L12,10.31a0.73,0.73,0,0,0-.28,1,1.19,1.19,0,0,0,.28.23l6.34,3.66,0,0,6.3,3.61a0.68,0.68,0,0,0,.93-0.23,0.44,0.44,0,0,0,.09-0.33h0V3.59A0.67,0.67,0,0,0,25,2.9,0.56,0.56,0,0,0,24.6,3h0Z" transform="translate(-6.64 -2.9)"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 31.3 21.7" style="enable-background:new 0 0 31.3 21.7;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.9;}
+	.st1{opacity:0.9;fill:#FFFFFF;}
+</style>
+<g class="st0">
+	<path class="st1" d="M9.6,4.1L9.6,4.1C9,4.1,8.4,4.3,8.1,4.7C7.7,5,7.5,5.6,7.5,6.1v10.2c0,0.6,0.2,1.1,0.6,1.4
+		c0.4,0.4,0.9,0.6,1.4,0.6h0c0.6,0,1.1-0.2,1.4-0.6c0.4-0.4,0.6-0.9,0.6-1.4V6.1c0-0.6-0.2-1.1-0.6-1.4C10.7,4.3,10.1,4.1,9.6,4.1
+		L9.6,4.1z"/>
+	<path class="st1" d="M22.9,4.2l-5.4,3.1l0,0l0,0l-5.5,3.1c-0.3,0.2-0.4,0.6-0.2,0.8c0.1,0.1,0.2,0.2,0.2,0.2l5.5,3.1v0l5.4,3.1
+		c0.3,0.2,0.6,0,0.8-0.2c0.1-0.1,0.1-0.2,0.1-0.3l0,0v-6.3V4.6c0-0.3-0.2-0.6-0.6-0.6C23.1,4.1,23,4.1,22.9,4.2L22.9,4.2z"/>
+</g>
+</svg>

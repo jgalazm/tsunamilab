@@ -451,14 +451,18 @@ div[value="active"] p {
 #controls {
   border-radius: 5px;
   position: absolute;
-  bottom: 30px;
-  width: 400px !important;
+  bottom: 0px;
+  width: 800px !important;
   left: 50%;
-  margin-left: -200px;
-  height: 105px;
+  margin-left: -400px;
+  height: 125px;
   background: #09283a;;
   padding: 15px 30px;
   color: #536975;
+}
+
+.slider {
+    width: 100% !important;
 }
 
 #timeline-slider .slider-selection {
@@ -480,8 +484,17 @@ div[value="active"] p {
 
 #controls img {
     height: 45px;
-    padding: 6px 5px;
-    fill: red;
+    padding: 6px 0px;
+    cursor: pointer;
+    margin: 10px;
+    opacity: 0.3;
+}
+
+#controls img:hover {
+    height: 55px;
+    margin: 3px;
+    cursor: pointer;
+    opacity: 1;
 }
 
 .center {
@@ -492,4 +505,10 @@ div[value="active"] p {
 .timeline-text{
     text-align:center;
     color: white;
+    font-size: 16px;
 }
+
+#speed-multiplier::before { 
+    content: "x";
+}
+

@@ -25,6 +25,7 @@
   <script src="scripts/shadersLib.js"></script>
   <script src="scripts/tsunamiModel.js"></script>
   <script src="scripts/tsunamiView.js"></script>
+  <script src="scripts/tsunamiController.js"></script>
   <script src="scripts/main-cesium.js"></script>
   <style>
       @import url(../../node_modules/cesium/Build/Cesium/Widgets/widgets.css);
@@ -65,26 +66,25 @@
 
   <div class="row">
     <input type="text" data-provide="slider" data-slider-id="timeline-slider" data-slider-tooltip="hide" data-slider-min="0"
-      data-slider-max="20000" data-slider-step="1" data-slider-value="1400" />
+      data-slider-max="20000" data-slider-step="1" data-slider-value="0" />
   </div>
   <div class="row timeline-text">
-    <span class="time-text pull-left" id="current-time">00:00</span>
-    <span class="time-text center" id="speed-multiplier">x2</span>
-    <span class="time-text pull-right" id="finish-time">20:00</span>
+    <span class="time-text pull-left" id="current-time-hours">00</span>
+    <span class="time-text pull-left" id="current-time-separator">:</span>
+    <span class="time-text pull-left" id="current-time-minutes">00</span>
+    <span class="time-text pull-left" id="current-time-separator">:</span>
+    <span class="time-text pull-left" id="current-time-minutes">00</span>
+    <span class="time-text center" id="speed-multiplier">1</span>
+    <span class="time-text pull-right" id="finish-time">20:00:00</span>
   </div>
   <div class="row">
     <div class="center">
-      <img src="img/step-backward.svg" />
-      <img src="img/backward.svg" />
-      <!--<img src="img/pause.svg"/>-->
-      <img src="img/play.svg" />
-      <img src="img/forward.svg" />
-      <img src="img/step-forward.svg" />
-      <!--<i class="fa fa-fast-backward" aria-hidden="true"></i>
-      <i class="fa fa-backward" aria-hidden="true"></i>
-      <i class="fa fa-play" aria-hidden="true"></i>
-      <i class="fa fa-forward" aria-hidden="true"></i>
-      <i class="fa fa-fast-forward" aria-hidden="true"></i>-->
+      <img id="step-backward-button" src="img/step-backward.svg" />
+      <img id="backward-button" src="img/backward.svg" />
+      <img id="pause-button" class="hidden" src="img/pause.svg"/>
+      <img id="play-button" src="img/play.svg" />
+      <img id="forward-button" src="img/forward.svg" />
+      <img id="step-forward-button" src="img/step-forward.svg" />
     </div>
   </div>
 </div>

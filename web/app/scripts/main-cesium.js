@@ -127,6 +127,75 @@ var init = function() {
       // var historicalData;
 
 
+      // initialize Controller
+
+      function writeTimeStamp(time){
+        var timetext = "";
+
+        var hours = Math.floor(time/60/60),
+              minutes = Math.floor((time - (hours * 60 * 60))/60),
+              seconds = Math.round(time - (hours * 60 * 60) - (minutes * 60));
+          var timetext = timetext.concat(hours + ':' +
+                    ((minutes < 10) ? '0' + minutes : minutes) + ':' +
+                    ((seconds < 10) ? '0' + seconds : seconds));
+          var hoursText = ((hours < 10) ? '0' + hours : hours)
+          var minutesText = ((minutes < 10) ? '0' + minutes : minutes)
+        var hoursElement = document.getElementById("current-time-hours");
+        var minutesElement = document.getElementById("current-time-minutes");
+        hoursElement.textContent = hoursText;
+        minutesElement.textContent = minutesText;
+        // console.log(hoursText, minutesText)
+      }
+
+      function setSliderTime(time){
+        $('#timeline-slider').slider({
+            id: 'timeline-slider',
+            value : time,
+            min: 0,
+            max: 20*3600,
+            tooltip: 'hide'
+        });
+
+      }
+
+      function setTime(time){
+        writeTimeStamp(time);
+        setSliderTime(time);
+      }
+
+      var controller = TsunamiController(model, view);
+      // controller.tick();
+      $( "#step-backward-button" ).click(function() {
+        controller.reset();
+        controller.resetSpeed();
+        $("#speed-multiplier").text(controller.getSpeed()/10); 
+      });
+      $( "#backward-button" ).click(function() {
+        controller.decreaseSpeed();
+        $("#speed-multiplier").text(controller.getSpeed()/10); 
+      });
+      $( "#play-button" ).click(function() {
+        $(this).toggleClass('hidden');
+        $("#pause-button").toggleClass('hidden');
+        controller.play();
+      });
+      $( "#pause-button" ).click(function() {
+        $("#play-button").toggleClass('hidden');
+        $(this).toggleClass('hidden');        
+        controller.pause();
+      });
+      
+      $( "#forward-button" ).click(function() {
+        controller.increaseSpeed();
+        $("#speed-multiplier").text(controller.getSpeed()/10);
+      });
+
+      var processFrame = function(){
+        var time = controller.tick();
+        setTime(time)
+        requestAnimationFrame(processFrame);
+      }
+      processFrame();
       document.getElementsByClassName('cesium-widget-credits')[0].remove()
 
 

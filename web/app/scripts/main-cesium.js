@@ -124,8 +124,6 @@ var init = function() {
 
       var controller = TsunamiController(model, view, controllerParams);
 
-
-
       // var historicalData;
 
 

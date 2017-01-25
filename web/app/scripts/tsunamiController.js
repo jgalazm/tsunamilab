@@ -40,12 +40,15 @@ function TsunamiController(model, view, params){
   }
 
   for(var k = 0;k < Object.keys(historicalData).length;k++){
+
     var key = Object.keys(historicalData)[k];
     var scenario = historicalData[key];
+
     if (scenario.cn != undefined && scenario.ce!=undefined){
       var lat = scenario.cn;
       var lon = scenario.ce;
     }
+
     addCesiumPin(lat,lon);
   }
 

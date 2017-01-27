@@ -124,11 +124,6 @@ var init = function() {
 
       var controller = TsunamiController(model, view, controllerParams);
 
-      // var historicalData;
-
-
-      // initialize Controller
-
       function writeTimeStamp(time){
         var timetext = "";
 
@@ -162,9 +157,7 @@ var init = function() {
         writeTimeStamp(time);
         setSliderTime(time);
       }
-
-      var controller = TsunamiController(model, view);
-      // controller.tick();
+      
       $( "#step-backward-button" ).click(function() {
         controller.reset();
         controller.resetSpeed();

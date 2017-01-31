@@ -183,6 +183,15 @@ var init = function() {
         $("#speed-multiplier").text(controller.getSpeed()/10);
       });
 
+      $('[data-toggle="popover"]').popover()
+      $('#pin-info').css({top: 100, left: 100, position:'absolute'});
+      $('#pin-info').popover({
+        content: 'asdfadsf',
+        placement: 'top',
+        title: 'titulo',
+        trigger:'manual'
+      });
+
       var processFrame = function(){
         var time = controller.tick();
         setTime(time)

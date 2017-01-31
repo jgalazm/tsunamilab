@@ -76,8 +76,19 @@ function TsunamiController(model, view,  params){
               currentPin.billboard.image = 'img/pin.svg';
             }
             currentPin = entity;
+            $('#pin-info').css({top: movement.position.y, left: movement.position.x});
+            $('#pin-info').popover({
+              title: entity.usgsKey
+            });
+            $('#pin-info').popover('show');
 
           }
+          else{
+            $('#pin-info').popover('hide');
+          }
+        }
+        else{
+          $('#pin-info').popover('hide');
         }
 
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK );

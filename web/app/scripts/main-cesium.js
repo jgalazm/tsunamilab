@@ -113,18 +113,15 @@ var init = function() {
         initialImage: initialImage,
         bbox: bbox,
         zmin: model.zmin,
-        zmax: model.zmax
+        zmax: model.zmax,
+        historicalData: usgsapi.historicalData
       };
 
       var view = TsunamiView(viewParams);
 
       // initialize Controller
 
-      var controllerParams = {
-        historicalData: usgsapi.historicalData
-      }
-
-      var controller = TsunamiController(model, view, controllerParams);
+      var controller = TsunamiController(model, view);
 
       function writeTimeStamp(time){
         var timetext = "";
@@ -184,6 +181,8 @@ var init = function() {
         controller.increaseSpeed();
         $("#speed-multiplier").text(controller.getSpeed()/10);
       });
+
+
 
       var processFrame = function(){
         var time = controller.tick();

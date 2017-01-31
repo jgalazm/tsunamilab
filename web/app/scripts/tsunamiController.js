@@ -1,7 +1,5 @@
-function TsunamiController(model, view,  params){
-  var historicalData = params.historicalData;
+function TsunamiController(model, view){
   var paused = true;
-  var currentPin = undefined;
 
   var flyTo = function () {
     // TODO: set location as input
@@ -22,74 +20,10 @@ function TsunamiController(model, view,  params){
   var play = function () {
     paused = false;
   }
+
   var pause = function () {
     paused = true;
   }
-
-  var addCesiumPin = function(lat=-45,lon=-75.59777, usgsKey=""){
-    var pin = view.viewer.entities.add({
-          position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
-          billboard : {
-              width: 48,
-              height: 48,
-              image : 'img/pin.svg',//,
-              scaleByDistance :  new Cesium.NearFarScalar(1.5e1, 1.5, 4.0e7, 0.0)
-              // translucencyByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
-          }
-      });
-    pin.isPin = true;
-    pin.usgsKey = usgsKey;
-  }
-
-  var addAllPins = function(){
-    for(var k = 0;k < Object.keys(historicalData).length;k++){
-
-      var key = Object.keys(historicalData)[k];
-      var scenario = historicalData[key];
-
-      if (scenario.cn != undefined && scenario.ce!=undefined){
-        var lat = scenario.cn;
-        var lon = scenario.ce;
-      }
-
-      addCesiumPin(lat,lon,key);
-    }
-  }
-
-  var addPinsHandlers = function(){
-    // If the mouse is over the billboard, change its scale and color
-
-    var scene = view.viewer.scene;
-    var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
-
-    handler.setInputAction(function(movement) {
-
-        var pickedObject = scene.pick(movement.position);
-
-
-        if(pickedObject && pickedObject.primitive.id){ //check an object is picked
-
-          var entity = view.viewer.entities.getById(pickedObject.primitive.id._id);
-          if(entity.isPin){ // check the picked object is a pin
-            entity.billboard.image = 'img/pin-selected.svg';
-            if (currentPin != undefined){
-              currentPin.billboard.image = 'img/pin.svg';
-            }
-            currentPin = entity;
-
-          }
-        }
-
-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK );
-  }
-
-  addAllPins();
-
-  addPinsHandlers();
-
-  flyTo();
-
-
   var reset = function () {
     model.setSimulation();
     view.rectangle.appearance.material.uniforms.image = model.renderScreen();
@@ -107,6 +41,10 @@ function TsunamiController(model, view,  params){
   var getSpeed = function () {
     return model.simulation.speed;
   }
+
+
+  flyTo();
+
   return {
     play: play,
     pause: pause,

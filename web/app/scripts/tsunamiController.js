@@ -26,7 +26,7 @@ function TsunamiController(model, view, params){
   }
 
   function addCesiumPin(lat=-45,lon=-75.59777){
-    view.viewer.entities.add({
+    var pin = view.viewer.entities.add({
           position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
           billboard : {
               width: 48,
@@ -36,20 +36,51 @@ function TsunamiController(model, view, params){
               // translucencyByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
           }
       });
+    pin.isPin = true;
   }
 
-  for(var k = 0;k < Object.keys(historicalData).length;k++){
+  function addAllPins(){
+    for(var k = 0;k < Object.keys(historicalData).length;k++){
 
-    var key = Object.keys(historicalData)[k];
-    var scenario = historicalData[key];
+      var key = Object.keys(historicalData)[k];
+      var scenario = historicalData[key];
 
-    if (scenario.cn != undefined && scenario.ce!=undefined){
-      var lat = scenario.cn;
-      var lon = scenario.ce;
+      if (scenario.cn != undefined && scenario.ce!=undefined){
+        var lat = scenario.cn;
+        var lon = scenario.ce;
+      }
+
+      addCesiumPin(lat,lon);
     }
-
-    addCesiumPin(lat,lon);
   }
+
+  function addPinsHandlers(){
+    // If the mouse is over the billboard, change its scale and color
+    var scene = view.viewer.scene;
+    var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+    handler.setInputAction(function(movement) {
+
+        var pickedObject = scene.pick(movement.position);
+
+
+        if(pickedObject && pickedObject.primitive.id){ //check an object is picked
+
+          var entity = view.viewer.entities.getById(pickedObject.primitive.id._id);
+          if(entity.isPin){ // check the picked object is a pin
+            console.log('asdf');
+            entity.billboard.scale = 2;
+          }
+          else{
+            console.log('zxcv');
+          }
+        }
+
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK );
+  }
+
+  addAllPins();
+
+  addPinsHandlers()
 
   flyTo();
 

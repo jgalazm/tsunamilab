@@ -64,7 +64,8 @@ var TsunamiView = function(params){
             vec2 leftPixel = fract(repeat * (st + vec2(0.0, 1.0 / imageHeight)));
             float topBump = texture2D(image, leftPixel).r;
 
-            vec3 normalTangentSpace = normalize(vec3(centerBump - rightBump, centerBump - topBump, clamp(1.0 - strength, 0.1, 1.0)));
+            vec3 normalTangentSpace = normalize(vec3(centerBump - rightBump,
+              centerBump - topBump, clamp(1.0 - strength, 0.1, 1.0)));
             vec3 normalEC = materialInput.tangentToEyeMatrix * normalTangentSpace;
 
 

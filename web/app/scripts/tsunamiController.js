@@ -1,6 +1,7 @@
-function TsunamiController(model, view, params){
+function TsunamiController(model, view,  params){
   var historicalData = params.historicalData;
   var paused = true;
+  var currentPin = undefined;
 
   var flyTo = function () {
     // TODO: set location as input
@@ -25,7 +26,7 @@ function TsunamiController(model, view, params){
     paused = true;
   }
 
-  function addCesiumPin(lat=-45,lon=-75.59777){
+  var addCesiumPin = function(lat=-45,lon=-75.59777, usgsKey=""){
     var pin = view.viewer.entities.add({
           position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
           billboard : {
@@ -37,9 +38,10 @@ function TsunamiController(model, view, params){
           }
       });
     pin.isPin = true;
+    pin.usgsKey = usgsKey;
   }
 
-  function addAllPins(){
+  var addAllPins = function(){
     for(var k = 0;k < Object.keys(historicalData).length;k++){
 
       var key = Object.keys(historicalData)[k];
@@ -50,14 +52,16 @@ function TsunamiController(model, view, params){
         var lon = scenario.ce;
       }
 
-      addCesiumPin(lat,lon);
+      addCesiumPin(lat,lon,key);
     }
   }
 
-  function addPinsHandlers(){
+  var addPinsHandlers = function(){
     // If the mouse is over the billboard, change its scale and color
+
     var scene = view.viewer.scene;
     var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+
     handler.setInputAction(function(movement) {
 
         var pickedObject = scene.pick(movement.position);
@@ -67,11 +71,12 @@ function TsunamiController(model, view, params){
 
           var entity = view.viewer.entities.getById(pickedObject.primitive.id._id);
           if(entity.isPin){ // check the picked object is a pin
-            console.log('asdf');
-            entity.billboard.scale = 2;
-          }
-          else{
-            console.log('zxcv');
+            entity.billboard.image = 'img/pin-selected.svg';
+            if (currentPin != undefined){
+              currentPin.billboard.image = 'img/pin.svg';
+            }
+            currentPin = entity;
+
           }
         }
 
@@ -80,11 +85,10 @@ function TsunamiController(model, view, params){
 
   addAllPins();
 
-  addPinsHandlers()
+  addPinsHandlers();
 
   flyTo();
 
-  console.log(historicalData);
 
   var reset = function () {
     model.setSimulation();

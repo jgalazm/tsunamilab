@@ -2,6 +2,7 @@ var TsunamiView = function(params){
   var containerID = params.containerID;
   var initialImage = params.initialImage; //output de model.renderScreen()
   var bbox = params.bbox;
+  var historicalData = params.historicalData;
 
   var viewer = new Cesium.Viewer(containerID, {
     imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
@@ -73,9 +74,107 @@ var TsunamiView = function(params){
     })
   }));
 
+  var addCesiumPin = function(lat=-45,lon=-75.59777, usgsKey=""){
+    var pin = viewer.entities.add({
+          position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
+          billboard : {
+              width: 48,
+              height: 48,
+              image : 'img/pin.svg',//,
+              scaleByDistance :  new Cesium.NearFarScalar(1.5e1, 1.5, 4.0e7, 0.0)
+              // translucencyByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
+          }
+      });
+    pin.isPin = true;
+    pin.usgsKey = usgsKey;
+  }
+
+  var addAllPins = function(){
+    for(var k = 0;k < Object.keys(historicalData).length;k++){
+
+      var key = Object.keys(historicalData)[k];
+      var scenario = historicalData[key];
+
+      if (scenario.cn != undefined && scenario.ce!=undefined){
+        var lat = scenario.cn;
+        var lon = scenario.ce;
+      }
+
+      addCesiumPin(lat,lon,key);
+    }
+  }
+
+  var createPopover = function(){
+    $('[data-toggle="popover"]').popover({container:'body'});
+
+    var popover =  document.createElement("div");
+    popover.id = "pin-info";
+    document.body.appendChild(popover);
+    // popover.setAttribute('data-placement','top')
+
+
+    $('#pin-info').css({ position:'absolute' });
+
+    $('#pin-info').popover({
+      html: true,
+      trigger:'manual',
+      placement:'auto top'});
+  }
+
+  var addPinsHandlers = function(){
+    // If the mouse is over the billboard, change its scale and color
+
+    var scene = viewer.scene;
+    var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+    var currentPin = undefined;
+
+    handler.setInputAction(function(movement) {
+
+        var pickedObject = scene.pick(movement.position);
+
+
+        if(pickedObject && pickedObject.primitive.id){ //check an object is picked
+
+          var entity = viewer.entities.getById(pickedObject.primitive.id._id);
+          if(entity.isPin){ // check the picked object is a pin
+            entity.billboard.image = 'img/pin-selected.svg';
+            if (currentPin != undefined){
+              currentPin.billboard.image = 'img/pin.svg';
+            }
+            currentPin = entity;
+            $('#pin-info').css({
+              top: movement.position.y,
+              left: movement.position.x
+            });
+
+            $('#pin-info').attr('data-original-title', '<b>'+entity.usgsKey+'</b>');
+            $('#pin-info').attr('data-content', '<p>'+entity.usgsKey+'</p>');
+            $('#pin-info').popover('show');
+          }
+          else{
+            $('#pin-info').popover('hide');
+          }
+        }
+        else{
+          $('#pin-info').popover('hide');
+        }
+
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK );
+  }
+
+  // handler.setInputAction(function(movement){
+  //
+  // }, Cesium.ScreenSpaceEventType.MOUSE_DOWN)
+
+  createPopover();
+
+  addAllPins();
+
+  addPinsHandlers();
+
 
   return {
     viewer: viewer,
-    rectangle: rectangle
+    // rectangle: rectangle
   };
 }

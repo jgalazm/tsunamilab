@@ -1,7 +1,7 @@
 "use strict";
 
 function getColormapArray(cmap,k,d){
-	colors = {
+	var colors = {
 		'heat': [new THREE.Vector4(1, 1, 1, (-1-d)*k), //white
 				new THREE.Vector4(0, 1, 1, (-6.6-d)*k),  //cyan
 				new THREE.Vector4(0, 0, 1, (-3.3-d)*k),  //blue
@@ -99,22 +99,23 @@ function getColormapArray(cmap,k,d){
 				new THREE.Vector4(249, 26, 0,  (1.000-d)*k),
 				new THREE.Vector4(255, 255, 255,  (1.001-d)*k),
 				new THREE.Vector4(255, 64, 196,  (2.25-d)*k)],
-		'seismic': [ new THREE.Vector4(0, 0, 0.4, (-1.0-d)*k),
-				new THREE.Vector4(1.0, 1.0, 1.0, (0.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.01-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-				new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k)]};
+		'seismic': [ new THREE.Vector4(0, 0, 1.0, (-1.0)),
+				new THREE.Vector4(0, 0, 1.0, (-0.9)),
+				new THREE.Vector4(0, 0, 1.0, (-0.8)),
+				new THREE.Vector4(0, 0, 1.0, (-0.7)),
+				new THREE.Vector4(0, 0, 1.0, (-0.6)),
+				new THREE.Vector4(0, 0, 1.0, (-0.5)),
+				new THREE.Vector4(0, 0, 1.0, (-0.4)),
+				new THREE.Vector4(0, 0.0, 1.0, (-0.3)),
+				new THREE.Vector4(1.0, 1.0, 1.0, (0.0)),
+				new THREE.Vector4(1.0, 0, 0.0, (1.0)),
+				new THREE.Vector4(1.0, 0, 0.0, (1.0)),
+				new THREE.Vector4(1.0, 0, 0.0, (1.0)),
+				new THREE.Vector4(1.0, 0, 0.0, (1.0)),
+				new THREE.Vector4(1.0, 0, 0.0, (1.0)),
+				new THREE.Vector4(1.0, 0, 0.0, (1.0)),
+				new THREE.Vector4(1.0, 0, 0.0, (1.0))]
+			};
 	for (var i=0;i<16;i++){
 		colors['wave'][i].x = colors['wave'][i].x/255;
 		colors['wave'][i].y = colors['wave'][i].y/255;
@@ -126,26 +127,6 @@ function getColormapArray(cmap,k,d){
 
 
 	return colors[cmap];
-}
-
-function getColormapLabels(cmap,k,d){
-	var label_colors = {
-		'batitopo': [[mUniforms.zmin.value,0.0],
-					[0.0, d],
-					[ mUniforms.zmax.value, 1.0]],
-		'wave':  [[(0.006-d)*k,(0.006-d)*k],
-				 [(0.250-d)*k,(0.250-d)*k],
-				 [(0.500-d)*k,(0.500-d)*k],
-				 [(0.750-d)*k,(0.750-d)*k],
-				 [(1.000-d)*k,(1.000-d)*k]],
-		'wave2':  [[(0.00-d)*k,(0.00-d)*k],
-				 [(0.250-d)*k,(0.250-d)*k],
-				 [(0.500-d)*k,(0.500-d)*k],
-				 [(0.750-d)*k,(0.750-d)*k],
-				 [(1.000-d)*k,(1.000-d)*k]]
-	};
-
-	return label_colors[cmap];
 }
 
 function mix(cleft,cright,t){
@@ -190,7 +171,7 @@ function getpcolor(value, colors, ncolors){
     return pseudoColor;
 }
 
-function colorbar(cmap3js, canvas){
+function colorbar(cmap3js, labelMap, canvas){
 	/*cmap3js: list of THREE.Vector4 containing rgb colors
 			and cuts in  the alpha channel
 	  canvas: where to plot the colorbar, now horizontal only
@@ -201,112 +182,96 @@ function colorbar(cmap3js, canvas){
 	var istart = 0;
 	//number of color segments
 
-	var n = 8;
+	var n = 16;
 
 	var ctx = canvas.getContext('2d');
 
 	//colorbar canvas siz
-	canvas.width = 200;
-	canvas.height = 47;
+	canvas.width = 100;
+	canvas.height = 400;
 	var L = canvas.width;
-	var W = canvas.height;
+	var W = canvas.height-30;
 
 	//cmap3js
-	for(var i = istart; i < L; i++) {
+	for(var i = istart; i < W; i++) {
  		// curent fraction in the canvas
-
-		var t = i/L;
+		var t = i/W;
 
 		//color segment index for this t
-
 		var k = parseInt(t*n);
-
+		for(var j = 0; j < n-1; j++) {
+			if(labelMap[j+1][1] > t){
+				k = j;
+				break;
+			}
+		}
+		console.log('k', k, i)
+		if(i == 347)
+			console.log(i)
 		//re-scale to color range
-
-		var vk0 = cmap3js[2*k].w;
-		var vkf = cmap3js[2*k+1].w;
-		var s = n*t-k;
+		var vk0 = cmap3js[k].w;
+		if(k==n-1){
+			var vkf = vk0;
+		}else{
+			var vkf = cmap3js[k+1].w;		
+		}
+		// var s = n*t-k;
+		var s = (t-labelMap[k][1])/(labelMap[k+1][1]-labelMap[k][1]);
 		var v = vk0*(1-s) + vkf*s;
 
 		//get pseudo color for this value
-
-		var pcolor = getpcolor(v,cmap3js,2*n);
+		var pcolor = getpcolor(v,cmap3js,n);
 
 
 		//build color string
-
 		var color = 'rgb('+pcolor[0]+', '+pcolor[1]+', '+pcolor[2]+ ')';
-		// console.log(t,s);
-		// console.log(v,pcolor,getpcolor(vk0,cmap3js,2*n),getpcolor(vkf,cmap3js,2*n));
-		// console.log('');
 
 		// set color
 		ctx.fillStyle = color;
 
  		//draw a rectangle for this color
 	    ctx.beginPath();
-
 	    //5% offset in both sides
-    	ctx.fillRect((i-istart)*0.9+0.05*L,0 ,
-					L*0.95, W/3);
+    	ctx.fillRect(0,
+					 W-W*((i)/W)+15,
+					 L*0.4,
+					 L/30);
 	}
 
 
 	//write labels
-
-	var fontSize = L*0.04;
-	var angle = 0.33*Math.PI;
+	var fontSize = L*0.12;
 	ctx.font = "bold " + fontSize + "pt Verdana";//better exact px based on % of canvas.height?
 	ctx.fillStyle ="#fff";
 	ctx.textAlign = "right";
-
-	ctx.translate(0,W);
-	ctx.rotate(angle);
-	for (var i=0; i<n;i++){
+	ctx.lineWidth = 4;
+	for (var i=0; i<labelMap.length;i++){
+		var display = labelMap[i][0];
+		var position = labelMap[i][1];
+		if(!display)
+			continue;
 		var labelText,labelPosX,labelPosY;
-		var labelText  = cmap3js[Math.min(2*i,2*n-1)].w.toFixed(2).toString();
-		var labelPosX = (i+1)/n*L*0.9;
-		var labelPosY = W*1.0;
+		var labelText  = cmap3js[i].w.toFixed(2).toString();
+		var labelPosX = 90.0;
+		if(i == labelMap.length-1){
+			labelText = labelText + '+';
+			labelPosX += 9;
+		}
+		var labelPosY = W-((i)/labelMap.length*W*1)+15;
+		var newLabelPosY = W-(position*W*1)+15;
+		labelPosY = newLabelPosY;
+		console.log('labelPosY', labelPosY, newLabelPosY)
+		
 
-		ctx.rotate(-angle);
-		ctx.translate(L/n*0.9, 0)
-		ctx.rotate(angle);
-		ctx.fillText(labelText, 0, 0);
+		ctx.fillText(labelText, labelPosX, labelPosY+10);
 		//draw a tick line
 	    ctx.beginPath();
 	    ctx.strokeStyle = "white";
-	    labelPosX = labelPosX - L*0.95/n/2-1;
-	    ctx.moveTo(labelPosX,W/2);
-	    ctx.lineTo(labelPosX,W/2*1.1);
+		
+	    labelPosY = labelPosY + 4;
+	    ctx.moveTo(L/3*1.4,labelPosY);
+	    ctx.lineTo(L/3,labelPosY);
+		
 	    ctx.stroke();
 	}
-
-	//last label
-	var labelText  = parseInt(cmap3js[cmap3js.length-1].w).toString()+"+  ";
-	ctx.rotate(-angle);
-	ctx.translate(L/n*0.75, 0);
-	ctx.rotate(angle);
-	ctx.fillText(labelText, 0, 0);
-
-	ctx.beginPath();
-	ctx.strokeStyle = "white";
-	labelPosX = labelPosX - L*0.95/n/2-1;
-	ctx.moveTo(labelPosX,W/2);
-	ctx.lineTo(labelPosX,W/2*1.1);
-	ctx.stroke();
-
-	//draw colorbar border
-	ctx.rect(0.05*L, 0, L*0.95, W/2);
-	ctx.strokeStyle="white";
-	ctx.stroke();
-
-
-	/*canvas.onclick = function(e) {
-	    var x = e.offsetX,
-	        y = e.offsetY,
-	        p = ctx.getImageData(x, y, 1, 1),
-	        rgb = p.data;
-
-	    alert('Color: rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')');
-	};*/
 }

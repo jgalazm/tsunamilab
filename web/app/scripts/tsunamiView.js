@@ -2,6 +2,8 @@ var TsunamiView = function(params){
   var containerID = params.containerID;
   var initialImage = params.initialImage; //output de model.renderScreen()
   var bbox = params.bbox;
+  var zmin = params.zmin;
+  var zmax = params.zmax;
 
   var viewer = new Cesium.Viewer(containerID, {
     imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
@@ -72,9 +74,25 @@ var TsunamiView = function(params){
     })
   }));
 
+  var setColormap = function(cmap, labelsMap, canvas){
+    var cbwater  = canvas;
+    
+    //setup colorbar
+    if(typeof cmap == "string"){
+      var cmap_water = cmap;
+      var watermap = getColormapArray(cmap,1,0);
+    }else{
+      var watermap = cmap; 
+    }
+    cbwater.width = Math.min(window.innerWidth/4,300);
+    cbwater.height = 50;	
+    
+    colorbar(watermap,labelsMap,cbwater);
+  }
 
   return {
     viewer: viewer,
+    setColormap: setColormap,
     rectangle: rectangle
   };
 }

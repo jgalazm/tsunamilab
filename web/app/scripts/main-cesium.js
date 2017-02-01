@@ -111,7 +111,9 @@ var init = function() {
       var viewParams = {
         containerID: 'cesiumContainer',
         initialImage: initialImage,
-        bbox: bbox
+        bbox: bbox,
+        zmin: model.zmin,
+        zmax: model.zmax
       };
 
       view = TsunamiView(viewParams);
@@ -189,6 +191,48 @@ var init = function() {
         requestAnimationFrame(processFrame);
       }
       processFrame();
+      var k = 4;
+      var d = 0;
+      var colormapLabels = [
+        [true, 0/16],
+        [false, 1/16],
+        [true, 2/16],
+        [false, 3/16],
+        [true, 4/16],
+        [false, 5/16],
+        [true, 6/16],
+        [false, 7/16],
+        [true, 8/16],
+        [false, 9/16],
+        [true, 10/16],
+        [false, 11/16],
+        [true, 12/16],
+        [false, 13/16],
+        [true, 14/16],
+        [true, 1]
+      ];
+      // var colormapLabels = [
+      //   [true, 0/16],
+      //   [false, 1.999/16],
+      //   [false, 2.0/16],
+      //   [false, 3.999/16],
+      //   [false, 4.0/16],
+      //   [false, 6/16],
+      //   [false, 6.01/16],
+      //   [false, 8/16],
+      //   [true, 8.01/16],
+      //   [false, 10/16],
+      //   [false, 10.01/16],
+      //   [false, 12/16],
+      //   [false, 12.01/16],
+      //   [false, 14/16],
+      //   [false, 14.01/16],
+      //   [true, 1]
+      // ];
+      view.setColormap('seismic',
+                      colormapLabels,
+                      document.getElementById('cbwater'));
+
       document.getElementsByClassName('cesium-widget-credits')[0].remove()
 
 

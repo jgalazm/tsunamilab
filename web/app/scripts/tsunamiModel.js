@@ -320,6 +320,7 @@ var TsunamiModel = function (params, container) {
         setSimulation: setSimulation,
         renderScreen: renderScreen,
         simulation: simulation,
+        zlimits: [simulation.uniforms.zmin.value, simulation.uniforms.zmax.value],
         simulationData: simulationData,
         renderer : renderer,
         getTime: getTime

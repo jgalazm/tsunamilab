@@ -205,9 +205,6 @@ function colorbar(cmap3js, labelMap, canvas){
 				break;
 			}
 		}
-		console.log('k', k, i)
-		if(i == 347)
-			console.log(i)
 		//re-scale to color range
 		var vk0 = cmap3js[k].w;
 		if(k==n-1){
@@ -260,8 +257,6 @@ function colorbar(cmap3js, labelMap, canvas){
 		var labelPosY = W-((i)/labelMap.length*W*1)+15;
 		var newLabelPosY = W-(position*W*1)+15;
 		labelPosY = newLabelPosY;
-		console.log('labelPosY', labelPosY, newLabelPosY)
-		
 
 		ctx.fillText(labelText, labelPosX, labelPosY+10);
 		//draw a tick line

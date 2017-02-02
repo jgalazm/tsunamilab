@@ -140,7 +140,8 @@ var TsunamiView = function(params){
 
               entity.billboard.image = 'img/pin-selected.svg';
 
-              if (currentPin != undefined){
+              //change pin icon if and only if clicked on a different pin
+              if (currentPin != undefined && currentPin.usgsKey != entity.usgsKey){
                 currentPin.billboard.image = 'img/pin.svg';
               }
 
@@ -211,7 +212,7 @@ var TsunamiView = function(params){
           if(currentPin && currentPin.selected){
             console.log(movement);
             var coord = Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, currentPin.position._value) ;
-            
+
             $('#pin-info').css({top: coord.y, left: coord.x })
             $('#pin-info').popover('show');
 

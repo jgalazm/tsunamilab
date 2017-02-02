@@ -164,7 +164,8 @@ var TsunamiView = function(params){
 
               entity.billboard.image = 'img/pin-selected.svg';
 
-              if (currentPin != undefined){
+              //change pin icon if and only if clicked on a different pin
+              if (currentPin != undefined && currentPin.usgsKey != entity.usgsKey){
                 currentPin.billboard.image = 'img/pin.svg';
               }
 

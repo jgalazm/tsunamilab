@@ -224,10 +224,28 @@ var TsunamiView = function(params){
         handler.setInputAction(function(movement){
           if(currentPin && currentPin.selected && currentPin.dragged){
 
+            //move div
             var coord = Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, currentPin.position._value) ;
-
             $('#pin-info').css({top: coord.y, left: coord.x })
-            $('#pin-info').popover('show');
+
+            //show pin if on top of globe
+            var pickedObject = scene.pick(coord);
+
+            if(pickedObject && pickedObject.primitive && pickedObject.primitive.id){
+              var pickedEntity = viewer.entities.getById(pickedObject.primitive.id._id);
+
+              // var pickedEntity = scene.pick(coord):
+              console.log(pickedEntity.usgsKey);
+              if(pickedEntity.usgsKey == currentPin.usgsKey){
+                $('#pin-info').popover('show');
+              }
+              else{
+                $('#pin-info').popover('hide');
+              }
+            }
+            else{
+              $('#pin-info').popover('hide');
+            }
 
           }
         }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)

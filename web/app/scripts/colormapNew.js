@@ -85,18 +85,25 @@ function getColormapArray(cmap,k,d){
 				new THREE.Vector4(255, 64, 196,  (1.000-d)*k)],
 		'wave2': [ new THREE.Vector4(4, 29, 59,  (0.00-d)*k),
 				new THREE.Vector4(8, 59, 118,  (0.01-d)*k),
+
 				new THREE.Vector4(24, 77, 157,  (0.011-d)*k),
 				new THREE.Vector4(59, 106, 204,  (0.05-d)*k),
+
 				new THREE.Vector4(39, 32, 228,  (0.051-d)*k),
 				new THREE.Vector4(113, 184, 249,  (0.10-d)*k),
+
 				new THREE.Vector4(0, 106, 17,  (0.101-d)*k),
 				new THREE.Vector4(0, 208, 0,  (0.25-d)*k),
+
 				new THREE.Vector4(137, 130, 0,  (0.251-d)*k),
 				new THREE.Vector4(254, 229, 20,  (0.50-d)*k),
+
 				new THREE.Vector4(131, 80, 0,  (0.501-d)*k),
 				new THREE.Vector4(225, 128, 16,  (0.750-d)*k),
+
 				new THREE.Vector4(159, 19, 0,  (0.751-d)*k),
 				new THREE.Vector4(249, 26, 0,  (1.000-d)*k),
+
 				new THREE.Vector4(255, 255, 255,  (1.001-d)*k),
 				new THREE.Vector4(255, 64, 196,  (2.25-d)*k)],
 		'seismic': [ new THREE.Vector4(0, 0, 1.0, (-1.0)),

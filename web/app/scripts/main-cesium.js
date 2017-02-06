@@ -113,7 +113,7 @@ var init = function() {
         initialImage: initialImage,
         bbox: bbox,
         zmin: model.zmin,
-        zmax: model.zmax
+        zmax: model.zmax,
         historicalData: usgsapi.historicalData
       };
 

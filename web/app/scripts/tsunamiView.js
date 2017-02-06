@@ -25,6 +25,7 @@ var TsunamiView = function(params){
   viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
     url : 'https://dev.virtualearth.net',
     key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
+    culture: 'es-MX',
     mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
   }));
 
@@ -81,7 +82,6 @@ var TsunamiView = function(params){
     
     //setup colorbar
     if(typeof cmap == "string"){
-      var cmap_water = cmap;
       var watermap = getColormapArray(cmap,1,0);
     }else{
       var watermap = cmap; 

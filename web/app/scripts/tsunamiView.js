@@ -68,7 +68,9 @@ var TsunamiView = function(params){
 
             vec3 normalTangentSpace = normalize(vec3(centerBump - rightBump,
               centerBump - topBump, clamp(1.0 - strength, 0.1, 1.0)));
-              vec3 normalEC = materialInput.tangentToEyeMatrix * normalTangentSpace;
+
+            vec3 normalEC = materialInput.tangentToEyeMatrix * normalTangentSpace;
+
 
 
               return czm_material(color.rgb, 1.0, 10000.0, normalEC, vec3(0.0), color.a);
@@ -133,6 +135,7 @@ var TsunamiView = function(params){
       document.body.appendChild(popover);
 
       $('#pin-info').css({ position:'absolute' });
+
 
       $('#pin-info').popover({
         html: true,

@@ -74,7 +74,7 @@ var init = function() {
     var k = 1;
 
     var colormapArray = getColormapArray('seismic',k,d);
-    modelParams = {
+    var modelParams = {
       shaders: tsunamiShaders,
       rendererSize: {
         width: 1024,
@@ -99,18 +99,15 @@ var init = function() {
         initialImage: initialImage,
         bbox: bbox,
         zmin: model.zmin,
-        zmax: model.zmax
+        zmax: model.zmax,
+        historicalData: usgsapi.historicalData
       };
 
-      view = TsunamiView(viewParams);
+      var view = TsunamiView(viewParams);
 
       // initialize Controller
 
-      var controllerParams = {
-        historicalData: usgsapi.historicalData
-      }
-
-      var controller = TsunamiController(model, view, controllerParams);
+      var controller = TsunamiController(model, view);
 
       function writeTimeStamp(time){
         var timetext = "";
@@ -145,15 +142,15 @@ var init = function() {
         writeTimeStamp(time);
         setSliderTime(time);
       }
-      
+
       $( "#step-backward-button" ).click(function() {
         controller.reset();
         controller.resetSpeed();
-        $("#speed-multiplier").text(controller.getSpeed()/10); 
+        $("#speed-multiplier").text(controller.getSpeed()/10);
       });
       $( "#backward-button" ).click(function() {
         controller.decreaseSpeed();
-        $("#speed-multiplier").text(controller.getSpeed()/10); 
+        $("#speed-multiplier").text(controller.getSpeed()/10);
       });
       $( "#play-button" ).click(function() {
         $(this).toggleClass('hidden');
@@ -162,14 +159,16 @@ var init = function() {
       });
       $( "#pause-button" ).click(function() {
         $("#play-button").toggleClass('hidden');
-        $(this).toggleClass('hidden');        
+        $(this).toggleClass('hidden');
         controller.pause();
       });
-      
+
       $( "#forward-button" ).click(function() {
         controller.increaseSpeed();
         $("#speed-multiplier").text(controller.getSpeed()/10);
       });
+
+
 
       var processFrame = function(){
         var time = controller.tick();

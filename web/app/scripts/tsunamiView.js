@@ -5,10 +5,8 @@ var TsunamiView = function(params){
   var zmin = params.zmin;
   var zmax = params.zmax;
 
+  Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
   var viewer = new Cesium.Viewer(containerID, {
-    imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-      url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
-    }),
     // sceneMode: Cesium.SceneMode.SCENE2D,
     animation: false,
     baseLayerPicker: false,
@@ -23,14 +21,18 @@ var TsunamiView = function(params){
     navigationInstructionsInitiallyVisible: false
   });
   viewer.scene.debugShowFramesPerSecond = true;
+  viewer.scene.imageryLayers.removeAll(); // optional
+  viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+    url : 'https://dev.virtualearth.net',
+    key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
+    mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+  }));
 
-  var csscene = viewer.scene;
-
-  var rectangle = csscene.primitives.add(new Cesium.Primitive({
+  var rectangle = viewer.scene.primitives.add(new Cesium.Primitive({
     geometryInstances: new Cesium.GeometryInstance({
       geometry: new Cesium.RectangleGeometry({
-        rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89),
-        bbox[1][0],Math.min(bbox[1][1],89)),
+        rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
+        bbox[1][0],Math.min(bbox[1][1],89.99999)),
         vertexFormat: Cesium.EllipsoidSurfaceAppearance.VERTEX_FORMAT
       })
     }),

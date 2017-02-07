@@ -1,5 +1,5 @@
 {
-  "alaska1964": {
+  "Alaska, USA": {
     "depth": 25000.0,
     "slip": 9.9763115748443738,
     "rake": 90.0,
@@ -10,9 +10,11 @@
     "W": 315478.67224009649,
     "strike": 218.0,
     "dip": 8.0,
-    "cn": 60.908
+    "cn": 60.908,
+    "time": -303266923000,
+    "Mw": 9.2
   },
-  "valdivia1960": {
+  "Valdivia, Chile": {
     "slip": 17.0,
     "rake": 105.0,
     "L": 850000,
@@ -22,91 +24,12 @@
     "W": 130000,
     "strike": 7.0,
     "dip": 20.0,
-    "cn": -41.0
-  },
-  "48km W of Illapel, Chile": {
-          "name": "48km al Oeste de Illapel, Chile"
-  },
-  "76km W of Lata, Solomon Islands": {
-      "name": "76km Oeste de Lata, Islas Solomon"
-  },
-  "94km NW of Iquique, Chile": {
-      "name": "94km al NorOeste de Iquique, Chile"
-  },
-  "Andreanof Islands, Aleutian Islands, Alaska": {
-      "name":"Islas Andreanof, Islas Aleutian, Alaska"
-  },
-  "Antofagasta, Chile": {
-      "name": "Antofagasta"
-  },
-  "Balleny Islands region": {
-      "name": "Region de las Islas de Balleny"
-  },
-  "Biak region, Indonesia": {
-      "name": "Region de Biak, Indonesia"
-  },
-  "Colima, Mexico": {
-      "name": "Colima, Mexico"
-  },
-  "Hokkaido, Japan region": {
-      "name": "Hokkaido, Region de  Japon"
-  },
-  "Kermadec Islands region": {
-      "name": "Region de las islas de Kermadec"
-  },
-  "Kuril Islands": {
-      "name": "Islas de Kuril"
-  },
+    "cn": -41.0,
+    "year": 1960,
+    "month": 5,
+    "day": 22,
+    "time": -303266923000,
+    "Mw": 9.6
 
-  "Macquarie Island region": {
-      "name": "Region de la isla Macuarie"
-  },
-  "Michoacan, Mexico": {
-      "name": "Michoacan, Mexico"
-  },
-  "New Ireland region, Papua New Guinea": {
-      "name": "Region de Nueva Irlanda, Papua Nueva Guinea"
-  },
-  "Samoa Islands region": {
-      "name": "Region Islas Samoa"
-  },
-  "Sea of Okhotsk": {
-      "name": "Mar de Okhotsk"
-  },
-  "Solomon Islands": {
-      "name": "Islas Solomon"
-  },
-  "Tonga": {
-      "name": "Tonga"
-  },
-  "east of the Kuril Islands": {
-      "name": "Este de las islas Kuril"
-  },
-  "near the coast of central Peru": {
-      "name": "Cerca de la costa central de Peru"
-  },
-  "near the coast of southern Peru": {
-      "name":"Cerca de la costa del sur de Peru"
-  },
-  "near the east coast of Honshu, Japan": {
-      "name": "Cerca de la costa de Honshu, Japon"
-  },
-  "north of Macquarie Island": {
-      "name": "Norte de la isla Macquarie"
-  },
-  "northern Sumatra, Indonesia": {
-      "name": "Norte de Sumatra, Indonesia"
-  },
-  "off the west coast of northern Sumatra": {
-      "name": "Fuera de la costa oeste del norte de Sumatra"
-  },
-  "offshore Bio-Bio, Chile": {
-      "name": "Costa Afuera del Bio-Bio, Chile"
-  },
-  "offshore Valparaiso, Chile": {
-      "name": "Costa Afuera de Valparaiso, Chile"
-  },
-  "southern Sumatra, Indonesia": {
-      "name": "Sur de Sumatra, Indonesia"
   }
 }

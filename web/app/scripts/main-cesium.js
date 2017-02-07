@@ -59,6 +59,9 @@ var init = function() {
       data;
       usgsapi = USGSAPI(data);
 
+      Object.keys(data).forEach(function(val){
+        data[val].date = new Date(data[val].time);
+      })
       var finished =  usgsapi.makeUSGSQuery();
 
       $.when(finished).done(function(){

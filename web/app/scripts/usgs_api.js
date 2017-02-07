@@ -138,8 +138,8 @@ var USGSAPI = function(historicalData){
 // f=json&tolerance=5&returnGeometry=false&imageDisplay=1568,915,96&geometry={"x":-73.125,"y":-36.474}&geometryType=esriGeometryPoint&sr=4326&mapExtent=50,-82,49,85&layers=visible:1,11&layerDefs=0:EVENT_VALIDITY_CODE>0;1:EVENT_VALIDITY_CODE>0
 
     var  noaaQuery = 'https://maps.ngdc.noaa.gov/arcgis/rest/services/web_mercator/hazards/MapServer/identify?';
-    noaaQuery += 'f=json&tolerance=1&returnGeometry=false&imageDisplay=1568,915,96';
-    noaaQuery +='&geometry={"x":'+ce+',"y":'+cn+'}';
+    noaaQuery += 'f=json&tolerance=5&returnGeometry=false&imageDisplay=1568,915,96';
+    noaaQuery +='&geometry={"x":'+ce+',"y":'+cn+'}&getGeometry=false';
     noaaQuery += '&geometryType=esriGeometryPoint&sr=4326&mapExtent=50,-82,49,85&layers=visible:1,11';
     noaaQuery += '&layerDefs=0:EVENT_VALIDITY_CODE>0;1:EVENT_VALIDITY_CODE>0';
 
@@ -150,31 +150,53 @@ var USGSAPI = function(historicalData){
       success: function(data) {
         // compare dates from noaa and usgs scenarios
         // only first result from noaa
-        if(data.results[0]!=undefined){
-
-          var attributes = data.results[0].attributes;
-          var targetDate = new Date(time);
-          var thisDate = new Date(
-            parseInt(attributes.Year),
-            parseInt(attributes.Month)-1, // ok ..
-            parseInt(attributes.Day),
-            parseInt(attributes.Hour),
-            parseInt(attributes.Minute),
-            parseInt(attributes.Second),0);
-
-            var UTCOffset = thisDate.getTimezoneOffset();
-            thisDate = new Date(thisDate-UTCOffset*60*1000);
-
-            var honeOur = 60*60*1000; // tolerate only one hour offset
-            if (Math.abs(thisDate-targetDate)<= honeOur){
-              historicalData[place]["deaths"] = attributes["deaths"];
-              historicalData[place]["injuries"] = attributes["injuries"];
-              historicalData[place]["houses destroyed"] = attributes["Houses Destroyed"];
-              historicalData[place]["max runup"] = attributes["Max Event Runup"];
-              historicalData[place]["mill usd damage"] = attributes["Damage in millions of dollars"];
-              historicalData[place]["damage level"] = attributes["Damage Amount Order"]
-
+        for(var i=0; i<data.results.length;i++){
+          if(data.results[i]!=undefined){
+            if(data.results[i].attributes.Year==undefined||data.results[i].attributes.Year=="Null"
+            ||data.results[i].attributes.Month==undefined||data.results[i].attributes.Month=="Null"
+            ||data.results[i].attributes.Day==undefined||data.results[i].attributes.Day=="Null"){
+              continue;
             }
+            var attributes = data.results[i].attributes;
+            var targetDate = new Date(time);
+            var Hour = attributes.Hour && attributes.Hour != "Null" ? attributes.Hour : 0;
+            var Minute = attributes.Minute && attributes.Minute != "Null" ? attributes.Minute : 0;
+            var Second = attributes.Second && attributes.Second != "Null" ? attributes.Second : 0;
+            var thisDate = new Date(
+              parseInt(attributes.Year),
+              parseInt(attributes.Month)-1, // ok ..
+              parseInt(attributes.Day),
+              parseInt(Hour),
+              parseInt(Minute),
+              parseInt(Second),0);
+
+              var UTCOffset = thisDate.getTimezoneOffset();
+              // console.log(thisDate);
+              thisDate = new Date(thisDate-UTCOffset*60*1000);
+              // console.log(thisDate);
+              if(thisDate.toString()=="Invalid Date"){
+                console.log(thisDate.toString());
+                console.log(attributes);
+              }
+              console.log('asdfasdfsdfdsfadsfadfadfasdfasdfasdfs');
+              // // console.log
+              // // if(attributes.Deaths!="Null"){
+              // //   console.log('asdfsdf    '+place);
+              // //   console.log(attributes);
+              // // }
+
+              var honeOur = 60*60*1000; // tolerate only one hour offset
+              if (Math.abs(thisDate-targetDate)<= honeOur){
+                historicalData[place]["deaths"] = attributes["Deaths"];
+                historicalData[place]["injuries"] = attributes["Injuries"];
+                historicalData[place]["houses destroyed"] = attributes["Houses Destroyed"];
+                historicalData[place]["max runup"] = attributes["Max Event Runup"];
+                historicalData[place]["mill usd damage"] = attributes["Damage in millions of dollars"];
+                historicalData[place]["damage level"] = attributes["Damage Amount Order"]
+
+              }
+            }
+
         }
       }
     });

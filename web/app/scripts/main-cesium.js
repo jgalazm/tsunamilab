@@ -112,8 +112,6 @@ var init = function() {
         containerID: 'cesiumContainer',
         initialImage: initialImage,
         bbox: bbox,
-        zmin: model.zmin,
-        zmax: model.zmax
         historicalData: usgsapi.historicalData
       };
 

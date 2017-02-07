@@ -73,11 +73,13 @@ var USGSAPI = function(historicalData){
         value: place
       }));
 
-      makeMomentTensorQueries(place, f["id"]);
+      getMomentTensorInfo(place, f["id"]);
+
+      getNOAAInfo(coords[1],coords[0])
     }
   }
 
-  function makeMomentTensorQueries(place, eventid){
+  function getMomentTensorInfo(place, eventid){
     // query moment tensor data
     var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
     var eventIdString ="&eventid="+eventid;
@@ -96,8 +98,6 @@ var USGSAPI = function(historicalData){
           changeScenario("39km SSW of Puerto Quellon, Chile");
         }
       }
-
-
     });
   }
 
@@ -120,6 +120,24 @@ var USGSAPI = function(historicalData){
     historicalData[place]["dip"] = dip;
     historicalData[place]["rake"] = rake;
     historicalData[place]["strike"] = strike;
+  }
+
+  function getNOAAInfo(time,coords){
+    var  noaaQuery = 'https://maps.ngdc.noaa.gov/arcgis/rest/services/web_mercator/hazards/MapServer/identify?';
+    noaaQuery += 'f=json&tolerance=1&returnGeometry=false&imageDisplay=1568,915,96';
+    noaaQuery +='&geometry={"x":'+coords[0]+',"y":'+coords[1]+'-36.474}';
+    noaaQuery += '&geometryType=esriGeometryPoint&sr=4326&mapExtent=50,-82,49,85&layers=visible:1,11';
+    noaaQuery += '&layerDefs=0:EVENT_VALIDITY_CODE>0;1:EVENT_VALIDITY_CODE>0';
+
+    $.ajax({
+      dataType: "json",
+      url: noaaQuery,
+      async: true,
+      success: function(data) {
+        console.log(coords);
+        console.log(data);
+      }
+    });
   }
 
   function Mw2Mo(Mw){

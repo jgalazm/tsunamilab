@@ -156,6 +156,9 @@ var TsunamiView = function(params){
               $('#pin-info').data('bs.popover').options.animation = true;
               $('#pin-info').attr('data-original-title', '<b>'+entity.usgsKey+'</b>');
               $('#pin-info').attr('data-content', '<p>'+entity.usgsKey+'</p>');
+
+
+
               $('#pin-info').popover('show');
               $('#pin-info').data('bs.popover').options.animation = false;
 

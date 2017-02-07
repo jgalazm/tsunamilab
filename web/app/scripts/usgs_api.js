@@ -44,6 +44,7 @@ var USGSAPI = function(historicalData){
         break;
       }
 
+
       var LWslip = getLengthWidthSlip(mag);
 
       if(historicalData[place]==undefined){
@@ -51,6 +52,9 @@ var USGSAPI = function(historicalData){
         historicalData[place]["name"] = place;
       }
 
+      historicalData[place]["time"] = time;
+      historicalData[place]["date"] = date;
+      historicalData[place]["year"] = year;
       historicalData[place]["cn"]= coords[1],
       historicalData[place]["ce"]= coords[0],
       historicalData[place]["depth"]= coords[2],
@@ -70,12 +74,12 @@ var USGSAPI = function(historicalData){
         text: mag.toString()+' M - ' +
             '('+year.toString() + ') '+
             historicalData[place]["name"],
-        value: place
+            value: place
       }));
 
       getMomentTensorInfo(place, f["id"]);
 
-      getNOAAInfo(coords[1],coords[0])
+      getNOAAInfo(place);
     }
   }
 
@@ -122,10 +126,20 @@ var USGSAPI = function(historicalData){
     historicalData[place]["strike"] = strike;
   }
 
-  function getNOAAInfo(time,coords){
+  function getNOAAInfo(place){
+    var cn = historicalData[place]["cn"];
+    var ce = historicalData[place]["ce"];
+    var year = historicalData[place]["year"];
+    var date = historicalData[place]["date"];
+    var time = historicalData[place]["time"];
+//
+// "https://maps.ngdc.noaa.gov/arcgis/rest/services/web_mercator/hazards/MapServer/identify?f=json&tolerance=1&returnGeometry=false&imageDisplay=1568,915,96&geometry={"x":-73.9395,"y":-43.4029-36.474}&geometryType=esriGeometryPoint&sr=4326&mapExtent=50,-82,49,85&layers=visible:1,11&layerDefs=0:EVENT_VALIDITY_CODE>0;1:EVENT_VALIDITY_CODE>0"
+// https://maps.ngdc.noaa.gov/arcgis/rest/services/web_mercator/hazards/MapServer/identify?
+// f=json&tolerance=5&returnGeometry=false&imageDisplay=1568,915,96&geometry={"x":-73.125,"y":-36.474}&geometryType=esriGeometryPoint&sr=4326&mapExtent=50,-82,49,85&layers=visible:1,11&layerDefs=0:EVENT_VALIDITY_CODE>0;1:EVENT_VALIDITY_CODE>0
+
     var  noaaQuery = 'https://maps.ngdc.noaa.gov/arcgis/rest/services/web_mercator/hazards/MapServer/identify?';
     noaaQuery += 'f=json&tolerance=1&returnGeometry=false&imageDisplay=1568,915,96';
-    noaaQuery +='&geometry={"x":'+coords[0]+',"y":'+coords[1]+'-36.474}';
+    noaaQuery +='&geometry={"x":'+ce+',"y":'+cn+'}';
     noaaQuery += '&geometryType=esriGeometryPoint&sr=4326&mapExtent=50,-82,49,85&layers=visible:1,11';
     noaaQuery += '&layerDefs=0:EVENT_VALIDITY_CODE>0;1:EVENT_VALIDITY_CODE>0';
 
@@ -134,8 +148,34 @@ var USGSAPI = function(historicalData){
       url: noaaQuery,
       async: true,
       success: function(data) {
-        console.log(coords);
-        console.log(data);
+        // compare dates from noaa and usgs scenarios
+        // only first result from noaa
+        if(data.results[0]!=undefined){
+
+          var attributes = data.results[0].attributes;
+          var targetDate = new Date(time);
+          var thisDate = new Date(
+            parseInt(attributes.Year),
+            parseInt(attributes.Month)-1, // ok ..
+            parseInt(attributes.Day),
+            parseInt(attributes.Hour),
+            parseInt(attributes.Minute),
+            parseInt(attributes.Second),0);
+
+            var UTCOffset = thisDate.getTimezoneOffset();
+            thisDate = new Date(thisDate-UTCOffset*60*1000);
+
+            var honeOur = 60*60*1000; // tolerate only one hour offset
+            if (Math.abs(thisDate-targetDate)<= honeOur){
+              historicalData[place]["deaths"] = attributes["deaths"];
+              historicalData[place]["injuries"] = attributes["injuries"];
+              historicalData[place]["houses destroyed"] = attributes["Houses Destroyed"];
+              historicalData[place]["max runup"] = attributes["Max Event Runup"];
+              historicalData[place]["mill usd damage"] = attributes["Damage in millions of dollars"];
+              historicalData[place]["damage level"] = attributes["Damage Amount Order"]
+
+            }
+        }
       }
     });
   }

@@ -376,10 +376,10 @@ div[value="active"] p {
 	padding: none;
 }
 
-.btn {
+/*.btn {
     opacity: 1.0;
     margin: 0px 0px 15px 0px;
-}
+}*/
 
 .btn-group-lg>.btn, .btn-lg {
     padding: 6px 16px 1px 16px;
@@ -508,7 +508,7 @@ div[value="active"] p {
     font-size: 16px;
 }
 
-#speed-multiplier::before { 
+#speed-multiplier::before {
     content: "x";
 }
 

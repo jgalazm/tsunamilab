@@ -73,6 +73,7 @@ var init = function() {
     var d = 0;
     var k = 1;
 
+    var colormapArray = getColormapArray('seismic',k,d);
     var modelParams = {
       shaders: tsunamiShaders,
       rendererSize: {
@@ -80,22 +81,7 @@ var init = function() {
         height: 512
       },
       bathymetry: bathymetry,
-      colormap: [ new THREE.Vector4(0, 0, 0.4, (-1.0-d)*k),
-        new THREE.Vector4(1.0, 1.0, 1.0, (0.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.01-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k),
-        new THREE.Vector4(1.0, 0, 0.0, (1.0-d)*k)]
+      colormap: colormapArray
       }
 
       // initialize Model
@@ -226,7 +212,7 @@ var init = function() {
       //   [false, 14.01/16],
       //   [true, 1]
       // ];
-      view.setColormap('seismic',
+      view.setColormap(colormapArray,
                       colormapLabels,
                       document.getElementById('cbwater'));
 

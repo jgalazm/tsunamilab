@@ -2,12 +2,13 @@ var TsunamiView = function(params){
   var containerID = params.containerID;
   var initialImage = params.initialImage; //output de model.renderScreen()
   var bbox = params.bbox;
+  var zmin = params.zmin;
+  var zmax = params.zmax;
   var historicalData = params.historicalData;
 
+
+  Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
   var viewer = new Cesium.Viewer(containerID, {
-    imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-      url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
-    }),
     // sceneMode: Cesium.SceneMode.SCENE2D,
     animation: false,
     baseLayerPicker: false,
@@ -22,14 +23,19 @@ var TsunamiView = function(params){
     navigationInstructionsInitiallyVisible: false
   });
   viewer.scene.debugShowFramesPerSecond = true;
+  viewer.scene.imageryLayers.removeAll(); // optional
+  viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+    url : 'https://dev.virtualearth.net',
+    key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
+    culture: 'es-MX',
+    mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+  }));
 
-  var csscene = viewer.scene;
-
-  var rectangle = csscene.primitives.add(new Cesium.Primitive({
+  var rectangle = viewer.scene.primitives.add(new Cesium.Primitive({
     geometryInstances: new Cesium.GeometryInstance({
       geometry: new Cesium.RectangleGeometry({
-        rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89),
-        bbox[1][0],Math.min(bbox[1][1],89)),
+        rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
+        bbox[1][0],Math.min(bbox[1][1],89.99999)),
         vertexFormat: Cesium.EllipsoidSurfaceAppearance.VERTEX_FORMAT
       })
     }),
@@ -63,27 +69,44 @@ var TsunamiView = function(params){
 
             vec3 normalTangentSpace = normalize(vec3(centerBump - rightBump,
               centerBump - topBump, clamp(1.0 - strength, 0.1, 1.0)));
-              vec3 normalEC = materialInput.tangentToEyeMatrix * normalTangentSpace;
+
+            vec3 normalEC = materialInput.tangentToEyeMatrix * normalTangentSpace;
 
 
-              return czm_material(color.rgb, 1.0, 10000.0, normalEC, vec3(0.0), color.a);
-            }
-            `
+
+            return czm_material(color.rgb, 1.0, 10000.0, normalEC, vec3(0.0), color.a);
           }
-        })
+          `
+          }
       })
-    }));
+    })
+  }));
 
-    var addCesiumPin = function(lat=-45,lon=-75.59777, usgsKey=""){
-      var pin = viewer.entities.add({
-        position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
-        billboard : {
-          width: 48,
-          height: 48,
-          image : 'img/pin.svg',//,
-          scaleByDistance :  new Cesium.NearFarScalar(1.5e1, 1.5, 4.0e7, 0.0)
-          // translucencyByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
-        }
+  var setColormap = function(cmap, labelsMap, canvas){
+    var cbwater  = canvas;
+
+    //setup colorbar
+    if(typeof cmap == "string"){
+      var watermap = getColormapArray(cmap,1,0);
+    }else{
+      var watermap = cmap;
+    }
+    cbwater.width = Math.min(window.innerWidth/4,300);
+    cbwater.height = 50;
+
+    colorbar(watermap,labelsMap,cbwater);
+  }
+
+  var addCesiumPin = function(lat=-45,lon=-75.59777, usgsKey=""){
+    var pin = viewer.entities.add({
+          position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
+          billboard : {
+              width: 48,
+              height: 48,
+              image : 'img/pin.svg',//,
+              scaleByDistance :  new Cesium.NearFarScalar(1.5e1, 1.5, 4.0e7, 0.0)
+              // translucencyByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
+          }
       });
       pin.isPin = true;
       pin.usgsKey = usgsKey;
@@ -155,9 +178,34 @@ var TsunamiView = function(params){
               // show info for selected scenario
               $('#pin-info').data('bs.popover').options.animation = true;
               $('#pin-info').attr('data-original-title', '<b>'+entity.usgsKey+'</b>');
-              $('#pin-info').attr('data-content', '<p>'+entity.usgsKey+'</p>');
+              $('#pin-info').attr('data-content',
 
-
+              ` <div class="row">
+                  <div class="col-xs-5"><strong>Magnitud</strong></div>
+                  <div class="col-xs-7">9.0</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>Fecha</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>N° de heridos</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>N° de muertos</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>Pérdidas en USD</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row text-center">
+                  <div class="col-xs-12">
+                    <div class="btn btn-info btn-pin-info"> Simular</div>
+                  </div>
+                </div>
+               </div>`);
 
               $('#pin-info').popover('show');
               $('#pin-info').data('bs.popover').options.animation = false;
@@ -249,8 +297,9 @@ var TsunamiView = function(params){
       addPinsHandlers();
 
 
-      return {
-        viewer: viewer,
-        // rectangle: rectangle
-      };
-    }
+        return {
+          viewer: viewer,
+          setColormap: setColormap,
+          rectangle: rectangle
+        };
+      }

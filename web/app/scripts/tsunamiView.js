@@ -74,9 +74,9 @@ var TsunamiView = function(params){
 
 
 
-              return czm_material(color.rgb, 1.0, 10000.0, normalEC, vec3(0.0), color.a);
-            }
-            `
+            return czm_material(color.rgb, 1.0, 10000.0, normalEC, vec3(0.0), color.a);
+          }
+          `
           }
       })
     })
@@ -136,7 +136,6 @@ var TsunamiView = function(params){
 
       $('#pin-info').css({ position:'absolute' });
 
-
       $('#pin-info').popover({
         html: true,
         trigger:'manual',
@@ -179,7 +178,34 @@ var TsunamiView = function(params){
               // show info for selected scenario
               $('#pin-info').data('bs.popover').options.animation = true;
               $('#pin-info').attr('data-original-title', '<b>'+entity.usgsKey+'</b>');
-              $('#pin-info').attr('data-content', '<p>'+entity.usgsKey+'</p>');
+              $('#pin-info').attr('data-content',
+
+              ` <div class="row">
+                  <div class="col-xs-5"><strong>Magnitud</strong></div>
+                  <div class="col-xs-7">9.0</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>Fecha</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>N° de heridos</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>N° de muertos</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"><strong>Pérdidas en USD</strong></div>
+                  <div class="col-xs-7">6 de febrero 2017</div>
+                </div>
+                <div class="row text-center">
+                  <div class="col-xs-12">
+                    <div class="btn btn-info btn-pin-info"> Simular</div>
+                  </div>
+                </div>
+               </div>`);
               $('#pin-info').popover('show');
               $('#pin-info').data('bs.popover').options.animation = false;
 

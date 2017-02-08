@@ -171,19 +171,7 @@ var USGSAPI = function(historicalData){
               parseInt(Second),0);
 
               var UTCOffset = thisDate.getTimezoneOffset();
-              // console.log(thisDate);
               thisDate = new Date(thisDate-UTCOffset*60*1000);
-              // console.log(thisDate);
-              if(thisDate.toString()=="Invalid Date"){
-                console.log(thisDate.toString());
-                console.log(attributes);
-              }
-              console.log('asdfasdfsdfdsfadsfadfadfasdfasdfasdfs');
-              // // console.log
-              // // if(attributes.Deaths!="Null"){
-              // //   console.log('asdfsdf    '+place);
-              // //   console.log(attributes);
-              // // }
 
               var honeOur = 60*60*1000; // tolerate only one hour offset
               if (Math.abs(thisDate-targetDate)<= honeOur){

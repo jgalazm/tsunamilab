@@ -187,12 +187,18 @@ var TsunamiView = function(params){
               var muertos = historicalData[entity.usgsKey].deaths;
               var dolares = historicalData[entity.usgsKey]["mill usd damage"];
 
-              if(heridos==undefined){
-                heridos = "Sin datos"
+              if(heridos==undefined || heridos == "Null"){
+                heridos = "No hay datos disponibles"
               }
-              else if(heridos=="Null"){
-                heridos = 0;
+
+              if(muertos==undefined || muertos == "Null"){
+                muertos = "No hay datos disponibles"
               }
+
+              if(dolares==undefined || dolares == "Null"){
+                dolares = "No hay datos disponibles"
+              }
+
               // var casas = historicalData[entity.]
 
               var pinContent =

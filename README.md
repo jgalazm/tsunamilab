@@ -18,4 +18,4 @@ Now, to open the application go to the project root folder and open a localhost 
 
 `python -m SimpleHTTPServer`
 
-which should allow you to open the app in Chrome at `localhost:8000/web/app`
+which should allow you to open the app in **Chrome** at `localhost:8000/web/app`

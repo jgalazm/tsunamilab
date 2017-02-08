@@ -23,6 +23,9 @@ var TsunamiView = function(params){
     navigationInstructionsInitiallyVisible: false
   });
   viewer.scene.debugShowFramesPerSecond = true;
+  viewer.scene.screenSpaceCameraController.inertiaSpin = 0;
+  viewer.scene.screenSpaceCameraController.inertiaTranslate = 0;
+  viewer.scene.screenSpaceCameraController.inertiaZoom = 0;
   viewer.scene.imageryLayers.removeAll(); // optional
   viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
     url : 'https://dev.virtualearth.net',
@@ -274,7 +277,7 @@ var TsunamiView = function(params){
           }
         }, Cesium.ScreenSpaceEventType.LEFT_UP);
 
-        handler.setInputAction(function(movement){
+        var trackPin = function(movement){
           if(currentPin && currentPin.selected && currentPin.dragged){
 
             //move div
@@ -301,7 +304,12 @@ var TsunamiView = function(params){
             }
 
           }
-        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+        }
+
+        handler.setInputAction(trackPin, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+        viewer.camera.moveEnd.addEventListener(function(){
+          trackPin();
+        });
 
         handler.setInputAction(function(movement){
           if(currentPin && currentPin.selected){

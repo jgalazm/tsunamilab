@@ -70,10 +70,10 @@ var init = function() {
   });
 
   var startMVC = function () {
-    var d = 0;
-    var k = 1;
+    var d = 0.5;
+    var k = 3;
 
-    var colormapArray = getColormapArray('seismic',k,d);
+    var colormapArray = getColormapArray('bwr',k,d);
     var modelParams = {
       shaders: tsunamiShaders,
       rendererSize: {

@@ -6,6 +6,10 @@ To install the depencies go to the project root directory and run
 
 ` npm install cesium`
 
+You should have bower intall, for this run:
+
+` npm install bower -g`
+
 then go to the `web` folder and run
 
 `bower install`

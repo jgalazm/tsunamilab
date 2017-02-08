@@ -10,7 +10,7 @@ then go to the `web` folder and run
 
 `bower install`
 
-Now, to open the application go to the `web/app/` folder and open a localhost with
+Now, to open the application go to the project root folder and open a localhost with
 
 `python -m SimpleHTTPServer`
 

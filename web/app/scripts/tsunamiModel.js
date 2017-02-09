@@ -204,15 +204,18 @@ var TsunamiModel = function (params, container) {
     };
 
     var renderScreen = function () {
+        renderScreenVoid();
+        return renderer.domElement.toDataURL("image/png", 0.98);
+    };
+
+    var renderScreenVoid = function () {
         objects.planeScreen.material = materials.screenMaterial;
 
         renderer.render(
             scene,
             camera
         );
-        // return bufferTexture;
-        return renderer.domElement.toDataURL("image/png", 0.98);
-    };
+    }
 
     var setSimulation = function () {
         nstep = 0;
@@ -311,6 +314,10 @@ var TsunamiModel = function (params, container) {
         return nstep*simulationData.timeStep;
     }
 
+    var getCanvas = function (){
+        return renderer.domElement;
+    }
+
     var simulationData = {};
 
     setSimulation();
@@ -319,10 +326,12 @@ var TsunamiModel = function (params, container) {
         renderSimulation: renderSimulation,
         setSimulation: setSimulation,
         renderScreen: renderScreen,
+        renderScreenVoid: renderScreenVoid,
         simulation: simulation,
         zlimits: [simulation.uniforms.zmin.value, simulation.uniforms.zmax.value],
         simulationData: simulationData,
         renderer : renderer,
+        getCanvas: getCanvas,
         getTime: getTime
     };
 };

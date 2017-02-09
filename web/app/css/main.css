@@ -166,3 +166,19 @@ a:hover{
 .tsunami-font-third{
 	color: #d4d4d4 !important;
 }
+
+#videoElement{
+    z-index: 1500;
+    position: absolute;
+    top: 0px;
+    width: 300px;
+}
+
+
+#videoPlayback{
+    z-index: 1500;
+    position: absolute;
+    top: 0px;
+	right:100px;
+    width: 300px;
+}

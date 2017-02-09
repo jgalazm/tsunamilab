@@ -5,6 +5,7 @@ var TsunamiView = function(params){
   var zmin = params.zmin;
   var zmax = params.zmax;
   var historicalData = params.historicalData;
+  var videoElement = params.videoElement;
 
 
   Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
@@ -34,57 +35,16 @@ var TsunamiView = function(params){
     mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
   }));
 
-  var rectangle = viewer.scene.primitives.add(new Cesium.Primitive({
-    geometryInstances: new Cesium.GeometryInstance({
-      geometry: new Cesium.RectangleGeometry({
-        rectangle: Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
+  var videoLayer = viewer.entities.add({
+      rectangle : {
+          coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
         bbox[1][0],Math.min(bbox[1][1],89.99999)),
-        vertexFormat: Cesium.EllipsoidSurfaceAppearance.VERTEX_FORMAT
-      })
-    }),
-    appearance: new Cesium.EllipsoidSurfaceAppearance({
-      aboveGround: false,
-      material: new Cesium.Material({
-        fabric : {
-          uniforms: {image: initialImage},
-          source:
-          `
-          czm_material czm_getMaterial(czm_materialInput materialInput)
-          {
-            vec2 vUv = materialInput.st;
-            vec4 color =  texture2D(image, vUv);
-
-            // bump mapping
-            vec2 st = materialInput.st;
-            float repeat = 1.0;
-            float strength = 1.0;
-
-            vec2 centerPixel = fract(repeat * st);
-            float centerBump = texture2D(image, centerPixel).r;
-
-            float imageWidth = float(imageDimensions.x);
-            vec2 rightPixel = fract(repeat * (st + vec2(1.0 / imageWidth, 0.0)));
-            float rightBump = texture2D(image, rightPixel).r;
-
-            float imageHeight = float(imageDimensions.y);
-            vec2 leftPixel = fract(repeat * (st + vec2(0.0, 1.0 / imageHeight)));
-            float topBump = texture2D(image, leftPixel).r;
-
-            vec3 normalTangentSpace = normalize(vec3(centerBump - rightBump,
-              centerBump - topBump, clamp(1.0 - strength, 0.1, 1.0)));
-
-            vec3 normalEC = materialInput.tangentToEyeMatrix * normalTangentSpace;
-
-
-
-            return czm_material(color.rgb, 1.0, 10000.0, normalEC, vec3(0.0), color.a);
-          }
-          `
-          }
-      })
-    })
-  }));
-
+          material : videoElement,
+          asynchronous: true
+      }
+  });
+  videoLayer.rectangle.material.transparent = true;
+ 
   var setColormap = function(cmap, labelsMap, canvas){
     var cbwater  = canvas;
 
@@ -333,7 +293,6 @@ var TsunamiView = function(params){
 
         return {
           viewer: viewer,
-          setColormap: setColormap,
-          rectangle: rectangle
+          setColormap: setColormap
         };
       }

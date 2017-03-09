@@ -5,7 +5,7 @@ var USGSAPI = function(historicalData){
     /* loads data from the usgs
     select only scenarios with moment tensor information available*/
 
-    var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
+    var baseQueryString = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
     var startTime = "&starttime=1990-01-01"
     var endTime = "&endtime=2016-12-31"
     var minMagnitudeString = "&minmagnitude=7.0"

@@ -178,7 +178,7 @@ var init = function() {
 
       mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorder.ondataavailable = handleDataAvailable;
-      
+
 
       function handleDataAvailable(event) {
         if (event.data && event.data.size > 0) {
@@ -246,7 +246,7 @@ var init = function() {
 
       document.getElementsByClassName('cesium-widget-credits')[0].remove()
       processFrame();
-      
+
 
     }
 

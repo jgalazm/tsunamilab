@@ -12,7 +12,7 @@ function TsunamiController(model, view){
   var tick = function () {
     if (!paused) {
       model.renderSimulation();
-      view.rectangle.appearance.material.uniforms.image = model.renderScreen();
+      model.renderScreenVoid();
     }
     return model.getTime();
   }
@@ -24,9 +24,12 @@ function TsunamiController(model, view){
   var pause = function () {
     paused = true;
   }
+  var isPaused = function(){
+    return paused;
+  }
   var reset = function () {
     model.setSimulation();
-    view.rectangle.appearance.material.uniforms.image = model.renderScreen();
+    model.renderScreenVoid();
   }
   var increaseSpeed = function () {
     model.simulation.speed += 10;
@@ -48,6 +51,7 @@ function TsunamiController(model, view){
   return {
     play: play,
     pause: pause,
+    isPaused: isPaused,
     reset: reset,
     flyTo: flyTo,
     increaseSpeed: increaseSpeed,

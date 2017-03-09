@@ -73,10 +73,10 @@ var init = function() {
   });
 
   var startMVC = function () {
-    var d = 0;
-    var k = 1;
+    var d = 0.5;
+    var k = 3;
 
-    var colormapArray = getColormapArray('seismic',k,d);
+    var colormapArray = getColormapArray('bwr',k,d);
     var modelParams = {
       shaders: tsunamiShaders,
       rendererSize: {
@@ -88,20 +88,21 @@ var init = function() {
       }
 
       // initialize Model
-
-      var model = TsunamiModel(modelParams);
+      var rendererCanvas = document.getElementById('container');
+      var model = TsunamiModel(modelParams, rendererCanvas);
 
       // initialize View
 
       var initialImage = model.renderScreen();
 
       var bbox = model.simulationData.bbox;
-
+      var videoElement = document.getElementById('videoElement');
       var viewParams = {
         containerID: 'cesiumContainer',
         initialImage: initialImage,
         bbox: bbox,
-        historicalData: usgsapi.historicalData
+        historicalData: usgsapi.historicalData,
+        videoElement: videoElement
       };
 
       var view = TsunamiView(viewParams);
@@ -136,7 +137,6 @@ var init = function() {
             max: 20*3600,
             tooltip: 'hide'
         });
-
       }
 
       function setTime(time){
@@ -170,13 +170,38 @@ var init = function() {
       });
 
 
+      canvas = model.getCanvas();
+      var video = document.getElementById('videoElement');
+      var stream = canvas.captureStream(15);
+      video.srcObject = stream;
+      var options = {mimeType: 'video/webm'};
 
+      mediaRecorder = new MediaRecorder(stream, options);
+      mediaRecorder.ondataavailable = handleDataAvailable;
+      
+
+      function handleDataAvailable(event) {
+        if (event.data && event.data.size > 0) {
+          recordedBlobs.push(event.data);
+        }
+      }
+      recordedBlobs = [];
+
+      play = function() {
+        var video = document.getElementById('videoPlayback');
+        var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
+        video.src = window.URL.createObjectURL(superBuffer);
+        video.controls = true;
+      }
       var processFrame = function(){
         var time = controller.tick();
-        setTime(time)
+        if(!controller.isPaused()){
+          setTime(time);
+          if(mediaRecorder.state != 'recording')
+            mediaRecorder.start(100);
+        }
         requestAnimationFrame(processFrame);
       }
-      processFrame();
       var k = 4;
       var d = 0;
       var colormapLabels = [
@@ -220,7 +245,8 @@ var init = function() {
                       document.getElementById('cbwater'));
 
       document.getElementsByClassName('cesium-widget-credits')[0].remove()
-
+      processFrame();
+      
 
     }
 

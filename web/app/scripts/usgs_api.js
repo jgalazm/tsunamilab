@@ -170,21 +170,20 @@ var USGSAPI = function(historicalData){
               parseInt(Minute),
               parseInt(Second),0);
 
-              var UTCOffset = thisDate.getTimezoneOffset();
-              thisDate = new Date(thisDate-UTCOffset*60*1000);
+            var UTCOffset = thisDate.getTimezoneOffset();
+            thisDate = new Date(thisDate-UTCOffset*60*1000);
 
-              var honeOur = 60*60*1000; // tolerate only one hour offset
-              if (Math.abs(thisDate-targetDate)<= honeOur){
-                historicalData[place]["deaths"] = attributes["Deaths"];
-                historicalData[place]["injuries"] = attributes["Injuries"];
-                historicalData[place]["houses destroyed"] = attributes["Houses Destroyed"];
-                historicalData[place]["max runup"] = attributes["Max Event Runup"];
-                historicalData[place]["mill usd damage"] = attributes["Damage in millions of dollars"];
-                historicalData[place]["damage level"] = attributes["Damage Amount Order"]
-
-              }
+            var honeOur = 60*60*1000; // tolerate only one hour offset
+            if (Math.abs(thisDate-targetDate)<= honeOur){
+              historicalData[place]["deaths"] = attributes["Deaths"];
+              historicalData[place]["injuries"] = attributes["Injuries"];
+              historicalData[place]["houses destroyed"] = attributes["Houses Destroyed"];
+              historicalData[place]["max runup"] = attributes["Max Event Runup"];
+              historicalData[place]["mill usd damage"] = attributes["Damage in millions of dollars"];
+              historicalData[place]["damage level"] = attributes["Damage Amount Order"]
+              historicalData[place]["noaaURL"] = attributes["URL"];
             }
-
+          }
         }
       }
     });

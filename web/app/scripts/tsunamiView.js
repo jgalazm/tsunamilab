@@ -149,6 +149,7 @@ var TsunamiView = function(params){
               var heridos = historicalData[entity.usgsKey].injuries;
               var muertos = historicalData[entity.usgsKey].deaths;
               var dolares = historicalData[entity.usgsKey]["mill usd damage"];
+              var url = historicalData[entity.usgsKey].noaaURL;
 
               if(heridos==undefined || heridos == "Null"){
                 heridos = "No hay datos disponibles"
@@ -165,33 +166,47 @@ var TsunamiView = function(params){
               // var casas = historicalData[entity.]
 
               var pinContent =
-              ` <div class="row">
-                  <div class="col-xs-5"><strong>Magnitud</strong></div>
-                  <div class="col-xs-7">${magnitud} Mw</div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-5"><strong>Fecha</strong></div>
-                  <div class="col-xs-7">${fecha}</div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-5"><strong>N° de heridos</strong></div>
-                  <div class="col-xs-7">${heridos}</div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-5"><strong>N° de fallecidos</strong></div>
-                  <div class="col-xs-7">${muertos}</div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-5"><strong>Pérdidas en USD</strong></div>
-                  <div class="col-xs-7">${dolares}</div>
-                </div>
-                <div class="row text-center">
-                  <div class="col-xs-12">
-                    <div class="btn btn-info btn-pin-info"> Simular</div>
-                  </div>
-                </div>
-               </div>
               `
+              <div class="row">
+                <div class="col-xs-5"><strong>Magnitud</strong></div>
+                <div class="col-xs-7">${magnitud} Mw</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5"><strong>Fecha</strong></div>
+                <div class="col-xs-7">${fecha}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5"><strong>N° de heridos</strong></div>
+                <div class="col-xs-7">${heridos}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5"><strong>N° de fallecidos</strong></div>
+                <div class="col-xs-7">${muertos}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5"><strong>Pérdidas en USD</strong></div>
+                <div class="col-xs-7">${dolares}</div>
+              </div>
+
+              `
+
+              if(url!=undefined){
+                pinContent+=
+                `
+                <div class="row">
+                  <div class="col-xs-12"><a href="${url}">Más información<a></div>
+                </div>
+                `
+              }
+              pinContent+=
+              `
+              <div class="row text-center">
+                <div class="col-xs-12">
+                  <div class="btn btn-info btn-pin-info"> Simular </div>
+                </div>
+              </div>
+              `
+
               $('#pin-info').data('bs.popover').options.animation = true;
               $('#pin-info').attr('data-original-title', '<b>'+entity.usgsKey+'</b>');
               $('#pin-info').attr('data-content',pinContent);

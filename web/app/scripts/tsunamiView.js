@@ -141,6 +141,7 @@ var TsunamiView = function(params){
               // show info for selected scenario
               var magnitud = historicalData[entity.usgsKey].Mw;
               var fecha = historicalData[entity.usgsKey].date;
+              var profundidad  = historicalData[entity.usgsKey].depth;
               // fecha = fecha.toLocaleDateString({weekday: 'long'});
               var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
               fecha = fecha.toLocaleDateString('es-CL', options);
@@ -169,7 +170,11 @@ var TsunamiView = function(params){
               `
               <div class="row">
                 <div class="col-xs-5"><strong>Magnitud</strong></div>
-                <div class="col-xs-7">${magnitud} Mw</div>
+                <div class="col-xs-7">${magnitud} Mw </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5"><strong>Profundidad</strong></div>
+                <div class="col-xs-7">${profundidad} km </div>
               </div>
               <div class="row">
                 <div class="col-xs-5"><strong>Fecha</strong></div>

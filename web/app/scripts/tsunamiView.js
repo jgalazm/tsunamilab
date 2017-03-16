@@ -44,7 +44,7 @@ var TsunamiView = function(params){
       }
   });
   videoLayer.rectangle.material.transparent = true;
- 
+
   var setColormap = function(cmap, labelsMap, canvas){
     var cbwater  = canvas;
 
@@ -65,8 +65,8 @@ var TsunamiView = function(params){
           position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
           billboard : {
               width: 48,
-              height: 48,
-              image : 'img/pin.svg',//,
+              height: 51,
+              image : 'img/pin2.svg',//,
               scaleByDistance :  new Cesium.NearFarScalar(1.5e1, 1.5, 4.0e7, 0.0)
               // translucencyByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
           }
@@ -124,11 +124,11 @@ var TsunamiView = function(params){
 
             if(entity.isPin){ // check the picked object is a pin
 
-              entity.billboard.image = 'img/pin-selected.svg';
+              entity.billboard.image = 'img/pin2-selected.svg';
 
               //change pin icon if and only if clicked on a different pin
               if (currentPin != undefined && currentPin.usgsKey != entity.usgsKey){
-                currentPin.billboard.image = 'img/pin.svg';
+                currentPin.billboard.image = 'img/pin2.svg';
               }
 
               currentPin = entity;

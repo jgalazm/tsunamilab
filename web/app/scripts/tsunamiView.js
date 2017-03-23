@@ -199,7 +199,7 @@ var TsunamiView = function(params){
                 pinContent+=
                 `
                 <div class="row">
-                  <div class="col-xs-12"><a href="${url}">Más información<a></div>
+                  <div class="col-xs-12"><a href="${url}" target="_blank">Más información<a></div>
                 </div>
                 `
               }

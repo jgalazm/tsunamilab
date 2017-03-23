@@ -84,173 +84,185 @@ var init = function() {
         height: 512
       },
       bathymetry: bathymetry,
-      colormap: colormapArray
+      colormap: colormapArray,
+      faultParameters:{
+        L: { type: 'f', value: 850000.0 },
+        W: { type: 'f', value: 130000.0 },
+        depth: { type: 'f', value: 63341.44 },
+        slip: { type: 'f', value: 17.0 },
+        strike: { type: 'f', value: 7.0 },
+        dip: { type: 'f', value: 20.0 },
+        rake: { type: 'f', value: 105.0 },
+        U3: { type: 'f', value: 0.0 },
+        cn: { type: 'f', value: -41.0 },   //centroid N coordinate, 18zone
+        ce: { type: 'f', value: -75.0 }
       }
-
-      // initialize Model
-      var rendererCanvas = document.getElementById('container');
-      var model = TsunamiModel(modelParams, rendererCanvas);
-
-      // initialize View
-
-      var initialImage = model.renderScreen();
-
-      var bbox = model.simulationData.bbox;
-      var videoElement = document.getElementById('videoElement');
-      var viewParams = {
-        containerID: 'cesiumContainer',
-        initialImage: initialImage,
-        bbox: bbox,
-        historicalData: usgsapi.historicalData,
-        videoElement: videoElement
-      };
-      simular = function(escenario){
-        console.log(escenario);
-      }
-
-      var view = TsunamiView(viewParams);
-
-      // initialize Controller
-
-      var controller = TsunamiController(model, view);
-
-      function writeTimeStamp(time){
-        var timetext = "";
-
-        var hours = Math.floor(time/60/60),
-              minutes = Math.floor((time - (hours * 60 * 60))/60),
-              seconds = Math.round(time - (hours * 60 * 60) - (minutes * 60));
-          var timetext = timetext.concat(hours + ':' +
-                    ((minutes < 10) ? '0' + minutes : minutes) + ':' +
-                    ((seconds < 10) ? '0' + seconds : seconds));
-          var hoursText = ((hours < 10) ? '0' + hours : hours)
-          var minutesText = ((minutes < 10) ? '0' + minutes : minutes)
-        var hoursElement = document.getElementById("current-time-hours");
-        var minutesElement = document.getElementById("current-time-minutes");
-        hoursElement.textContent = hoursText;
-        minutesElement.textContent = minutesText;
-        // console.log(hoursText, minutesText)
-      }
-
-      function setSliderTime(time){
-        $('#timeline-slider').slider({
-            id: 'timeline-slider',
-            value : time,
-            min: 0,
-            max: 20*3600,
-            tooltip: 'hide'
-        });
-      }
-
-      function setTime(time){
-        writeTimeStamp(time);
-        setSliderTime(time);
-      }
-
-      $( "#step-backward-button" ).click(function() {
-        controller.reset();
-        controller.resetSpeed();
-        $("#speed-multiplier").text(controller.getSpeed()/10);
-      });
-      $( "#backward-button" ).click(function() {
-        controller.decreaseSpeed();
-        $("#speed-multiplier").text(controller.getSpeed()/10);
-      });
-      $( "#play-button" ).click(function() {
-        $(this).toggleClass('hidden');
-        $("#pause-button").toggleClass('hidden');
-        controller.play();
-      });
-      $( "#pause-button" ).click(function() {
-        $("#play-button").toggleClass('hidden');
-        $(this).toggleClass('hidden');
-        controller.pause();
-      });
-
-      $( "#forward-button" ).click(function() {
-        controller.increaseSpeed();
-        $("#speed-multiplier").text(controller.getSpeed()/10);
-      });
-
-
-      canvas = model.getCanvas();
-      var video = document.getElementById('videoElement');
-      var stream = canvas.captureStream(15);
-      video.srcObject = stream;
-      var options = {mimeType: 'video/webm'};
-
-      mediaRecorder = new MediaRecorder(stream, options);
-      mediaRecorder.ondataavailable = handleDataAvailable;
-
-
-      function handleDataAvailable(event) {
-        if (event.data && event.data.size > 0) {
-          recordedBlobs.push(event.data);
-        }
-      }
-      recordedBlobs = [];
-
-      play = function() {
-        var video = document.getElementById('videoPlayback');
-        var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
-        video.src = window.URL.createObjectURL(superBuffer);
-        video.controls = true;
-      }
-      var processFrame = function(){
-        var time = controller.tick();
-        if(!controller.isPaused()){
-          setTime(time);
-          if(mediaRecorder.state != 'recording')
-            mediaRecorder.start(100);
-        }
-        requestAnimationFrame(processFrame);
-      }
-      var k = 4;
-      var d = 0;
-      var colormapLabels = [
-        [true, 0/16],
-        [false, 1/16],
-        [true, 2/16],
-        [false, 3/16],
-        [true, 4/16],
-        [false, 5/16],
-        [true, 6/16],
-        [false, 7/16],
-        [true, 8/16],
-        [false, 9/16],
-        [true, 10/16],
-        [false, 11/16],
-        [true, 12/16],
-        [false, 13/16],
-        [true, 14/16],
-        [true, 1]
-      ];
-      // var colormapLabels = [
-      //   [true, 0/16],
-      //   [false, 1.999/16],
-      //   [false, 2.0/16],
-      //   [false, 3.999/16],
-      //   [false, 4.0/16],
-      //   [false, 6/16],
-      //   [false, 6.01/16],
-      //   [false, 8/16],
-      //   [true, 8.01/16],
-      //   [false, 10/16],
-      //   [false, 10.01/16],
-      //   [false, 12/16],
-      //   [false, 12.01/16],
-      //   [false, 14/16],
-      //   [false, 14.01/16],
-      //   [true, 1]
-      // ];
-      view.setColormap(colormapArray,
-                      colormapLabels,
-                      document.getElementById('cbwater'));
-
-      document.getElementsByClassName('cesium-widget-credits')[0].remove()
-      processFrame();
-
-
     }
 
+    // initialize Model
+    var rendererCanvas = document.getElementById('container');
+    var model = TsunamiModel(modelParams, rendererCanvas);
+
+    // initialize View
+
+    var initialImage = model.renderScreen();
+
+    var bbox = model.simulationData.bbox;
+    var videoElement = document.getElementById('videoElement');
+    var viewParams = {
+      containerID: 'cesiumContainer',
+      initialImage: initialImage,
+      bbox: bbox,
+      historicalData: usgsapi.historicalData,
+      videoElement: videoElement
+    };
+    simular = function(escenario){
+      console.log(escenario);
+    }
+
+    var view = TsunamiView(viewParams);
+
+    // initialize Controller
+
+    var controller = TsunamiController(model, view);
+
+    function writeTimeStamp(time){
+      var timetext = "";
+
+      var hours = Math.floor(time/60/60),
+            minutes = Math.floor((time - (hours * 60 * 60))/60),
+            seconds = Math.round(time - (hours * 60 * 60) - (minutes * 60));
+        var timetext = timetext.concat(hours + ':' +
+                  ((minutes < 10) ? '0' + minutes : minutes) + ':' +
+                  ((seconds < 10) ? '0' + seconds : seconds));
+        var hoursText = ((hours < 10) ? '0' + hours : hours)
+        var minutesText = ((minutes < 10) ? '0' + minutes : minutes)
+      var hoursElement = document.getElementById("current-time-hours");
+      var minutesElement = document.getElementById("current-time-minutes");
+      hoursElement.textContent = hoursText;
+      minutesElement.textContent = minutesText;
+      // console.log(hoursText, minutesText)
+    }
+
+    function setSliderTime(time){
+      $('#timeline-slider').slider({
+          id: 'timeline-slider',
+          value : time,
+          min: 0,
+          max: 20*3600,
+          tooltip: 'hide'
+      });
+    }
+
+    function setTime(time){
+      writeTimeStamp(time);
+      setSliderTime(time);
+    }
+
+    $( "#step-backward-button" ).click(function() {
+      controller.reset();
+      controller.resetSpeed();
+      $("#speed-multiplier").text(controller.getSpeed()/10);
+    });
+    $( "#backward-button" ).click(function() {
+      controller.decreaseSpeed();
+      $("#speed-multiplier").text(controller.getSpeed()/10);
+    });
+    $( "#play-button" ).click(function() {
+      $(this).toggleClass('hidden');
+      $("#pause-button").toggleClass('hidden');
+      controller.play();
+    });
+    $( "#pause-button" ).click(function() {
+      $("#play-button").toggleClass('hidden');
+      $(this).toggleClass('hidden');
+      controller.pause();
+    });
+
+    $( "#forward-button" ).click(function() {
+      controller.increaseSpeed();
+      $("#speed-multiplier").text(controller.getSpeed()/10);
+    });
+
+
+    canvas = model.getCanvas();
+    var video = document.getElementById('videoElement');
+    var stream = canvas.captureStream(15);
+    video.srcObject = stream;
+    var options = {mimeType: 'video/webm'};
+
+    mediaRecorder = new MediaRecorder(stream, options);
+    mediaRecorder.ondataavailable = handleDataAvailable;
+
+
+    function handleDataAvailable(event) {
+      if (event.data && event.data.size > 0) {
+        recordedBlobs.push(event.data);
+      }
+    }
+    recordedBlobs = [];
+
+    play = function() {
+      var video = document.getElementById('videoPlayback');
+      var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
+      video.src = window.URL.createObjectURL(superBuffer);
+      video.controls = true;
+    }
+    var processFrame = function(){
+      var time = controller.tick();
+      if(!controller.isPaused()){
+        setTime(time);
+        if(mediaRecorder.state != 'recording')
+          mediaRecorder.start(100);
+      }
+      requestAnimationFrame(processFrame);
+    }
+    var k = 4;
+    var d = 0;
+    var colormapLabels = [
+      [true, 0/16],
+      [false, 1/16],
+      [true, 2/16],
+      [false, 3/16],
+      [true, 4/16],
+      [false, 5/16],
+      [true, 6/16],
+      [false, 7/16],
+      [true, 8/16],
+      [false, 9/16],
+      [true, 10/16],
+      [false, 11/16],
+      [true, 12/16],
+      [false, 13/16],
+      [true, 14/16],
+      [true, 1]
+    ];
+    // var colormapLabels = [
+    //   [true, 0/16],
+    //   [false, 1.999/16],
+    //   [false, 2.0/16],
+    //   [false, 3.999/16],
+    //   [false, 4.0/16],
+    //   [false, 6/16],
+    //   [false, 6.01/16],
+    //   [false, 8/16],
+    //   [true, 8.01/16],
+    //   [false, 10/16],
+    //   [false, 10.01/16],
+    //   [false, 12/16],
+    //   [false, 12.01/16],
+    //   [false, 14/16],
+    //   [false, 14.01/16],
+    //   [true, 1]
+    // ];
+    view.setColormap(colormapArray,
+                    colormapLabels,
+                    document.getElementById('cbwater'));
+
+    document.getElementsByClassName('cesium-widget-credits')[0].remove()
+    processFrame();
+
+
   }
+
+}

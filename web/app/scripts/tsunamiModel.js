@@ -219,16 +219,17 @@ var TsunamiModel = function (params, container) {
     }
 
     var setInitialCondition = function(faultParameters){
-      simulation.uniforms.L = faultParameters.L;
-      simulation.uniforms.W = faultParameters.W;
-      simulation.uniforms.depth = faultParameters.depth;
-      simulation.uniforms.slip = faultParameters.slip;
-      simulation.uniforms.strike = faultParameters.strike;
-      simulation.uniforms.dip = faultParameters.dip;
-      simulation.uniforms.rake = faultParameters.rake;
-      simulation.uniforms.U3 = faultParameters.U3;
-      simulation.uniforms.cn = faultParameters.cn;
-      simulation.uniforms.ce = faultParameters.ce;
+      nstep = 0;
+      simulation.uniforms.L.value = faultParameters.L;
+      simulation.uniforms.W.value = faultParameters.W;
+      simulation.uniforms.depth.value = faultParameters.depth;
+      simulation.uniforms.slip.value = faultParameters.slip;
+      simulation.uniforms.strike.value = faultParameters.strike;
+      simulation.uniforms.dip.value = faultParameters.dip;
+      simulation.uniforms.rake.value = faultParameters.rake;
+      simulation.uniforms.U3.value = faultParameters.U3;
+      simulation.uniforms.cn.value = faultParameters.cn;
+      simulation.uniforms.ce.value = faultParameters.ce;
 
       objects.planeScreen.material = materials.initialMaterial;
       renderer.render(
@@ -296,7 +297,6 @@ var TsunamiModel = function (params, container) {
 
 
         // simulation data
-        nstep = 0;
         simulationData.timeStep = dt;
         simulationData.gridSize = [simNx, simNy];
         simulationData.bbox = [[simulation.uniforms.xmin.value,
@@ -322,6 +322,7 @@ var TsunamiModel = function (params, container) {
     return {
         renderSimulation: renderSimulation,
         setSimulation: setSimulation,
+        setInitialCondition: setInitialCondition,
         renderScreen: renderScreen,
         renderScreenVoid: renderScreenVoid,
         simulation: simulation,

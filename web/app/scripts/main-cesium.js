@@ -86,16 +86,16 @@ var init = function() {
       bathymetry: bathymetry,
       colormap: colormapArray,
       faultParameters:{
-        L: { type: 'f', value: 850000.0 },
-        W: { type: 'f', value: 130000.0 },
-        depth: { type: 'f', value: 63341.44 },
-        slip: { type: 'f', value: 17.0 },
-        strike: { type: 'f', value: 7.0 },
-        dip: { type: 'f', value: 20.0 },
-        rake: { type: 'f', value: 105.0 },
-        U3: { type: 'f', value: 0.0 },
-        cn: { type: 'f', value: -41.0 },   //centroid N coordinate, 18zone
-        ce: { type: 'f', value: -75.0 }
+        L:  850000.0 ,
+        W:  130000.0 ,
+        depth:  63341.44 ,
+        slip:  17.0 ,
+        strike:  7.0 ,
+        dip:  20.0 ,
+        rake:  105.0 ,
+        U3:  0.0 ,
+        cn:  -41.0 ,   //centroid N coordinate, e
+        ce:  -75.
       }
     }
 
@@ -116,11 +116,12 @@ var init = function() {
       historicalData: usgsapi.historicalData,
       videoElement: videoElement
     };
-    simular = function(escenario){
-      console.log(escenario);
-    }
 
     var view = TsunamiView(viewParams);
+
+    simular = function(escenario){
+      model.setInitialCondition(usgsapi.historicalData[escenario]);
+    }
 
     // initialize Controller
 

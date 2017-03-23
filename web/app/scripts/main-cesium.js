@@ -104,6 +104,9 @@ var init = function() {
         historicalData: usgsapi.historicalData,
         videoElement: videoElement
       };
+      simular = function(escenario){
+        console.log(escenario);
+      }
 
       var view = TsunamiView(viewParams);
 

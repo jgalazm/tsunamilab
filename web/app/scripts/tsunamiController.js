@@ -44,7 +44,9 @@ function TsunamiController(model, view){
   var getSpeed = function () {
     return model.simulation.speed;
   }
-
+  // $("#popover-btn-simular").click(function(){
+  //   console.log('asdfasdfasdf');
+  // });
 
   flyTo();
 

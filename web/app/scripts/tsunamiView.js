@@ -34,6 +34,7 @@ var TsunamiView = function(params){
     culture: 'es-MX',
     mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
   }));
+  viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
   var videoLayer = viewer.entities.add({
       rectangle : {

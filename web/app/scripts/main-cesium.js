@@ -169,6 +169,10 @@ var init = function() {
         $("#speed-multiplier").text(controller.getSpeed()/10);
       });
 
+      $( "#reset-view-button" ).click(function() {
+        controller.flyHome();
+      });
+
 
       canvas = model.getCanvas();
       var video = document.getElementById('videoElement');
@@ -246,7 +250,7 @@ var init = function() {
 
       document.getElementsByClassName('cesium-widget-credits')[0].remove()
       processFrame();
-
+      controller.flyHome();
 
     }
 

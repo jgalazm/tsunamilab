@@ -160,6 +160,10 @@ var init = function() {
       writeTimeStamp(time);
       setSliderTime(time);
     }
+    $( "#reset-view-button" ).click(function() {
+      controller.flyHome();
+    });
+
 
     $( "#step-backward-button" ).click(function() {
       controller.reset();
@@ -219,6 +223,7 @@ var init = function() {
       }
       requestAnimationFrame(processFrame);
     }
+
     var k = 4;
     var d = 0;
     var colormapLabels = [
@@ -263,8 +268,7 @@ var init = function() {
 
     document.getElementsByClassName('cesium-widget-credits')[0].remove()
     processFrame();
-
-
+    controller.flyHome();
   }
 
 }

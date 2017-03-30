@@ -1,12 +1,18 @@
 function TsunamiController(model, view){
   var paused = true;
 
-  var flyTo = function () {
-    // TODO: set location as input
-    var a = 8;
+  var flyTo = function (lat, lng, scale) {
+    var scale = scale ? scale : 8;
     view.viewer.camera.flyTo({
-      destination: Cesium.Rectangle.fromDegrees(-80 - 3 * a, -45 - 3 * a, -70 + 3 * a, -35 + 3 * a)
+      destination: Cesium.Rectangle.fromDegrees((lng-5) - 3 * scale, (lat-5) - 3 * scale,
+                                                (lng+5) + 3 * scale, (lat-5) + 3 * scale)
     });
+  }
+
+  var flyHome = function (){
+    var lng = model.simulation.uniforms.ce.value;
+    var lat = model.simulation.uniforms.cn.value;
+    flyTo(lat, lng, 12);
   }
 
   var tick = function () {
@@ -44,18 +50,19 @@ function TsunamiController(model, view){
   var getSpeed = function () {
     return model.simulation.speed;
   }
+
   // $("#popover-btn-simular").click(function(){
   //   console.log('asdfasdfasdf');
   // });
 
   flyTo();
-
   return {
     play: play,
     pause: pause,
     isPaused: isPaused,
     reset: reset,
     flyTo: flyTo,
+    flyHome: flyHome,
     increaseSpeed: increaseSpeed,
     decreaseSpeed: decreaseSpeed,
     resetSpeed: resetSpeed,

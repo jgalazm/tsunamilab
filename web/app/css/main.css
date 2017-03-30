@@ -182,3 +182,16 @@ a:hover{
 	right:100px;
     width: 300px;
 }
+
+#reset-view-button {
+	position: absolute;
+	right: 30px;
+	bottom: 0px;
+}
+
+#reset-view-button:hover {
+	height: 45px !important;
+    margin: 10px !important;
+    cursor: pointer;
+    opacity: 1;
+}

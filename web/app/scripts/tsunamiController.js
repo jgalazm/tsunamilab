@@ -5,14 +5,22 @@ function TsunamiController(model, view){
     var scale = scale ? scale : 8;
     view.viewer.camera.flyTo({
       destination: Cesium.Rectangle.fromDegrees((lng-5) - 3 * scale, (lat-5) - 3 * scale,
-                                                (lng+5) + 3 * scale, (lat-5) + 3 * scale)
+                                                (lng+5) + 3 * scale, (lat+5) + 3 * scale)
     });
   }
 
   var flyHome = function (){
     var lng = model.simulation.uniforms.ce.value;
     var lat = model.simulation.uniforms.cn.value;
-    flyTo(lat, lng, 12);
+    var maxL = Math.max(
+      model.simulation.uniforms.L.value,
+      model.simulation.uniforms.W.value
+    );
+    // normalize using valdivia as reference
+    // but not farther than valdivia's scale
+    var scale = Math.min(12,12*maxL/850000);
+
+    flyTo(lat, lng, scale);
   }
 
   var tick = function () {

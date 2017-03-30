@@ -22,6 +22,7 @@ var TsunamiModel = function (params, container) {
     bathymetry.texture.needsUpdate = true;
     var filesProgress = 0;
     var totalFilesToLoad = 2;
+    var faultParameters = params.faultParameters;
 
 
     var width = rendererSize.width;
@@ -88,16 +89,16 @@ var TsunamiModel = function (params, container) {
             zmax: { type: "f", value: 1.0 },
 
             //fault params
-            L: { type: 'f', value: 850000.0 },
-            W: { type: 'f', value: 130000.0 },
-            depth: { type: 'f', value: 63341.44 },
-            slip: { type: 'f', value: 17.0 },
-            strike: { type: 'f', value: 7.0 },
-            dip: { type: 'f', value: 20.0 },
-            rake: { type: 'f', value: 105.0 },
-            U3: { type: 'f', value: 0.0 },
-            cn: { type: 'f', value: -41.0 },   //centroid N coordinate, 18zone
-            ce: { type: 'f', value: -75.0 },    //centroid E coordinate, 18zone
+            L: { type: 'f', value: undefined},
+            W: { type: 'f', value: undefined},
+            depth: { type: 'f', value: undefined},
+            slip: { type: 'f', value: undefined},
+            strike: { type: 'f', value: undefined},
+            dip: { type: 'f', value: undefined},
+            rake: { type: 'f', value: undefined},
+            U3: { type: 'f', value: undefined},
+            cn: { type: 'f', value: undefined},   //centroid N coordinate, 18zone
+            ce: { type: 'f', value: undefined},    //centroid E coordinate, 18zone
 
             //misc
             pause: { type: 'i', value: 0 }
@@ -217,8 +218,39 @@ var TsunamiModel = function (params, container) {
         );
     }
 
+    var setInitialCondition = function(faultParameters){
+      nstep = 0;
+      simulation.uniforms.L.value = faultParameters.L;
+      simulation.uniforms.W.value = faultParameters.W;
+      simulation.uniforms.depth.value = faultParameters.depth;
+      simulation.uniforms.slip.value = faultParameters.slip;
+      simulation.uniforms.strike.value = faultParameters.strike;
+      simulation.uniforms.dip.value = faultParameters.dip;
+      simulation.uniforms.rake.value = faultParameters.rake;
+      simulation.uniforms.U3.value = faultParameters.U3;
+      simulation.uniforms.cn.value = faultParameters.cn;
+      simulation.uniforms.ce.value = faultParameters.ce;
+
+      objects.planeScreen.material = materials.initialMaterial;
+      renderer.render(
+          scene,
+          camera,
+          simulation.mTextureBuffer1,
+          true
+      );
+      renderer.render(
+          scene,
+          camera,
+          simulation.mTextureBuffer2,
+          true
+      );
+      simulation.uniforms.tSource.value = simulation.mTextureBuffer1;
+      renderScreenVoid();
+    }
+
     var setSimulation = function () {
-        nstep = 0;
+        // bathymetry
+
         simulation.uniforms.xmin.value = parseFloat(bathymetry.metadata[2].split(':')[1]);
         simulation.uniforms.xmax.value = parseFloat(bathymetry.metadata[3].split(':')[1]);
         simulation.uniforms.ymin.value = parseFloat(bathymetry.metadata[4].split(':')[1]);
@@ -233,34 +265,10 @@ var TsunamiModel = function (params, container) {
             throw e;
         }
 
-        // simNx = parseInt(bathymetry.metadata[1].split(':')[1]);//parseInt(batidata.nx);
-        // simNy = parseInt(bathymetry.metadata[0].split(':')[1]);//parseInt(batidata.nx);
-        // if (simNx > 1000) {
-        //     simNx = simNx / 3;
-        //     simNy = simNy / 3;
-        // }
+        // numerical grid / domain
+
         simNx = width;
         simNy = height;
-
-        // set simNx and simNy as the nearest power of two
-        // this is needed by THREE.RepeatWrapping
-        // var xpower = Math.floor(Math.log(simNx) / Math.log(2));
-        // var ypower = Math.floor(Math.log(simNy) / Math.log(2));
-
-        // if (simNx - Math.pow(2, xpower) < Math.pow(2, xpower + 1) - simNx) {
-        //     simNx = Math.pow(2, xpower);
-        // }
-        // else {
-        //     simNx = Math.pow(2, xpower + 1)
-        // }
-
-        // if (simNy - Math.pow(2, ypower) < Math.pow(2, ypower + 1) - simNy) {
-        //     simNy = Math.pow(2, ypower);
-        // }
-        // else {
-        //     simNy = Math.pow(2, ypower + 1)
-        // }
-
 
         simulation.uniforms.xmin.value = 0.0;
         simulation.uniforms.xmax.value = 360 - 360 / simNx / 2.0;
@@ -281,34 +289,24 @@ var TsunamiModel = function (params, container) {
 
         var dt = 0.5 * Math.min(dx_real, dy_real) / Math.sqrt(-9.81 * simulation.uniforms.zmin.value);
 
+        // shallow water equation constants
         simulation.uniforms.RR.value = dt / R_earth;
         simulation.uniforms.RS.value = 9.81 * simulation.uniforms.RR.value;
 
         simulation.uniforms.tBati.value = bathymetry.texture;
 
 
-        objects.planeScreen.material = materials.initialMaterial;
-        renderer.render(
-            scene,
-            camera,
-            simulation.mTextureBuffer1,
-            true
-        );
-        renderer.render(
-            scene,
-            camera,
-            simulation.mTextureBuffer2,
-            true
-        );
-        simulation.uniforms.tSource.value = simulation.mTextureBuffer1;
 
+        // simulation data
         simulationData.timeStep = dt;
         simulationData.gridSize = [simNx, simNy];
         simulationData.bbox = [[simulation.uniforms.xmin.value,
                                 simulation.uniforms.ymin.value],
                                 [simulation.uniforms.xmax.value,
                                 simulation.uniforms.ymax.value]];
+        setInitialCondition(faultParameters);
     }
+
 
     var getTime = function() {
         return nstep*simulationData.timeStep;
@@ -325,6 +323,7 @@ var TsunamiModel = function (params, container) {
     return {
         renderSimulation: renderSimulation,
         setSimulation: setSimulation,
+        setInitialCondition: setInitialCondition,
         renderScreen: renderScreen,
         renderScreenVoid: renderScreenVoid,
         simulation: simulation,

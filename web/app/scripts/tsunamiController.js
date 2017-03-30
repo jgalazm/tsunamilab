@@ -4,7 +4,7 @@ function TsunamiController(model, view){
   var flyTo = function (lat, lng, scale) {
     var scale = scale ? scale : 8;
     view.viewer.camera.flyTo({
-      destination: Cesium.Rectangle.fromDegrees((lng-5) - 3 * scale, (lat-5) - 3 * scale, 
+      destination: Cesium.Rectangle.fromDegrees((lng-5) - 3 * scale, (lat-5) - 3 * scale,
                                                 (lng+5) + 3 * scale, (lat-5) + 3 * scale)
     });
   }
@@ -51,6 +51,11 @@ function TsunamiController(model, view){
     return model.simulation.speed;
   }
 
+  // $("#popover-btn-simular").click(function(){
+  //   console.log('asdfasdfasdf');
+  // });
+
+  flyTo();
   return {
     play: play,
     pause: pause,

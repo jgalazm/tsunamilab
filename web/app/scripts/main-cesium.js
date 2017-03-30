@@ -119,14 +119,16 @@ var init = function() {
 
     var view = TsunamiView(viewParams);
 
-    simular = function(escenario){
-      model.setInitialCondition(usgsapi.historicalData[escenario]);
-      $('#pin-info').popover('hide');
-    }
 
     // initialize Controller
 
     var controller = TsunamiController(model, view);
+
+    simular = function(escenario){
+      model.setInitialCondition(usgsapi.historicalData[escenario]);
+      $('#pin-info').popover('hide');
+      controller.flyHome();
+    }
 
     function writeTimeStamp(time){
       var timetext = "";

@@ -121,6 +121,7 @@ var init = function() {
 
     simular = function(escenario){
       model.setInitialCondition(usgsapi.historicalData[escenario]);
+      $('#pin-info').popover('hide');
     }
 
     // initialize Controller

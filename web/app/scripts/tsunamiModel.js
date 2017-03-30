@@ -245,6 +245,7 @@ var TsunamiModel = function (params, container) {
           true
       );
       simulation.uniforms.tSource.value = simulation.mTextureBuffer1;
+      renderScreenVoid();
     }
 
     var setSimulation = function () {

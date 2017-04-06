@@ -220,6 +220,7 @@ var TsunamiModel = function (params, container) {
 
     var setInitialCondition = function(faultParameters){
       nstep = 0;
+      setFaultParameters(faultParameters);
       simulation.uniforms.L.value = faultParameters.L;
       simulation.uniforms.W.value = faultParameters.W;
       simulation.uniforms.depth.value = faultParameters.depth;
@@ -246,9 +247,10 @@ var TsunamiModel = function (params, container) {
       );
       simulation.uniforms.tSource.value = simulation.mTextureBuffer1;
       renderScreenVoid();
+
     }
 
-    var setSimulation = function () {
+    var setSimulation = function (faultParameters) {
         // bathymetry
 
         simulation.uniforms.xmin.value = parseFloat(bathymetry.metadata[2].split(':')[1]);
@@ -316,9 +318,15 @@ var TsunamiModel = function (params, container) {
         return renderer.domElement;
     }
 
+    var getFaultParameters = function(){
+      return faultParameters;
+    }
+    var setFaultParameters = function(parameters){
+      faultParameters = parameters;
+    }
     var simulationData = {};
 
-    setSimulation();
+    setSimulation(faultParameters);
 
     return {
         renderSimulation: renderSimulation,
@@ -331,6 +339,7 @@ var TsunamiModel = function (params, container) {
         simulationData: simulationData,
         renderer : renderer,
         getCanvas: getCanvas,
-        getTime: getTime
+        getTime: getTime,
+        getFaultParameters:getFaultParameters
     };
 };

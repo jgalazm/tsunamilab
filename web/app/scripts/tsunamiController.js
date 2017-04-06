@@ -42,7 +42,7 @@ function TsunamiController(model, view){
     return paused;
   }
   var reset = function () {
-    model.setSimulation();
+    model.setSimulation(model.getFaultParameters());
     model.renderScreenVoid();
   }
   var increaseSpeed = function () {

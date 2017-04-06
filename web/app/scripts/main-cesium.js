@@ -127,6 +127,8 @@ var init = function() {
     simular = function(escenario){
       model.setInitialCondition(usgsapi.historicalData[escenario]);
       $('#pin-info').popover('hide');
+      var currentPin = view.getCurrentPin();
+      currentPin.selected = false;
       controller.flyHome();
     }
 

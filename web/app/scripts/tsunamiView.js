@@ -6,6 +6,7 @@ var TsunamiView = function(params){
   var zmax = params.zmax;
   var historicalData = params.historicalData;
   var videoElement = params.videoElement;
+  var currentPin = undefined;
 
 
   Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
@@ -200,7 +201,7 @@ var TsunamiView = function(params){
 
     var scene = viewer.scene;
     var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
-    var currentPin = undefined;
+
 
     handler.setInputAction(function(movement) { //left click event
       var pickedObject = scene.pick(movement.position);
@@ -310,6 +311,9 @@ var TsunamiView = function(params){
     }, Cesium.ScreenSpaceEventType.WHEEL)
   }
 
+  var getCurrentPin = function(){
+    return currentPin;
+  }
 
     createPopover();
 
@@ -320,6 +324,7 @@ var TsunamiView = function(params){
 
     return {
       viewer: viewer,
-      setColormap: setColormap
+      setColormap: setColormap,
+      getCurrentPin: getCurrentPin
     };
   }

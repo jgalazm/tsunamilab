@@ -223,11 +223,11 @@ void main()
 	vec2 pos = stereographic_projection(n,e,cn,ce);
 
 	float value = 0.0;
-	// if (abs(pos.x)<L/2.0*4.0 && abs(pos.y)<L/2.0*4.0){
+	if (abs(pos.x)<L/2.0*6.0 && abs(pos.y)<L/2.0*6.0){
 		value  = okada(pos.g,pos.r,depth,strike,dip,L,W,rake,slip,U3);
-	// }
+	}
 	// value = 1.0;
-	float k = 6.0;
+	float k = 4.0;
 	value = value*smoothstep(-L/2.0*k,-L/2.0*2.0,pos.x);
 	value = value*smoothstep(-L/2.0*k,-L/2.0*2.0,-pos.x);
 	value = value*smoothstep(-L/2.0*k,-L/2.0*2.0,pos.y);

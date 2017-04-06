@@ -101,7 +101,7 @@ var init = function() {
 
     // initialize Model
     var rendererCanvas = document.getElementById('container');
-    var model = TsunamiModel(modelParams, rendererCanvas);
+    model = TsunamiModel(modelParams, rendererCanvas);
 
     // initialize View
 
@@ -117,12 +117,12 @@ var init = function() {
       videoElement: videoElement
     };
 
-    var view = TsunamiView(viewParams);
+    view = TsunamiView(viewParams);
 
 
     // initialize Controller
 
-    var controller = TsunamiController(model, view);
+    controller = TsunamiController(model, view);
 
     simular = function(escenario){
       model.setInitialCondition(usgsapi.historicalData[escenario]);

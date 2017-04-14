@@ -40,9 +40,9 @@ var USGSAPI = function(historicalData){
       var time = f['properties']['time'];
       var date = new Date(time);
       var year = date.getYear()+1900;
-      if (place.toUpperCase().indexOf("BOLIVIA")>-1){
-        break;
-      }
+      // if (place.toUpperCase().indexOf("BOLIVIA")>-1){
+      //   break;
+      // }
 
 
       var LWslip = getLengthWidthSlip(mag);

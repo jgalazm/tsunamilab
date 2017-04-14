@@ -124,16 +124,38 @@ var TsunamiView = function(params){
     var dolares = historicalData[entity.usgsKey]["mill usd damage"];
     var url = historicalData[entity.usgsKey].noaaURL;
 
+    // format strings:
+    //from http://stackoverflow.com/questions/149055/how-can-i-format-numbers-as-money-in-javascript
+    // heridos = parseInt(heridos).toString().replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+
+
     if(heridos==undefined || heridos == "Null"){
       heridos = "No hay datos disponibles"
+    }
+    else {
+      heridos = heridos.replace(/./g, function(c, i, a) {
+          return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c;
+      });
     }
 
     if(muertos==undefined || muertos == "Null"){
       muertos = "No hay datos disponibles"
     }
+    else{
+      muertos = muertos.replace(/./g, function(c, i, a) {
+          return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c;
+      });
+    }
 
     if(dolares==undefined || dolares == "Null"){
       dolares = "No hay datos disponibles"
+    }
+    else{
+      dolares = dolares.replace(/./g, function(c, i, a) {
+          return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c;
+      });
+      dolares = '$'+dolares
     }
 
     // var casas = historicalData[entity.]

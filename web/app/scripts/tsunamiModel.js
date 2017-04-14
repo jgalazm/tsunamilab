@@ -309,6 +309,17 @@ var TsunamiModel = function (params, container) {
         setInitialCondition(faultParameters);
     }
 
+    var getSimulationPixels = function(left,top,width,height){
+      var gridSize = model.simulationData.gridSize;
+      var pixelData = new Float32Array(width * height * 4);
+      var framebuffer = model.renderer.properties.get(model.simulation.mTextureBuffer1);
+      framebuffer = framebuffer.__webglFramebuffer;
+
+      var gl = model.renderer.domElement.getContext('webgl');
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      gl.readPixels(left, top, width, height, gl.RGBA, gl.FLOAT, pixelData);
+      return pixelData;
+    }
 
     var getTime = function() {
         return nstep*simulationData.timeStep;
@@ -340,6 +351,7 @@ var TsunamiModel = function (params, container) {
         renderer : renderer,
         getCanvas: getCanvas,
         getTime: getTime,
-        getFaultParameters:getFaultParameters
+        getFaultParameters:getFaultParameters,
+        getSimulationPixels: getSimulationPixels
     };
 };

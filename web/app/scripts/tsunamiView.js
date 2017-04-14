@@ -64,7 +64,7 @@ var TsunamiView = function(params){
 
   var addCesiumPin = function(lat=-45,lon=-75.59777, usgsKey=""){
     var pin = viewer.entities.add({
-      position : Cesium.Cartesian3.fromDegrees(lon, lat,100000),
+      position : Cesium.Cartesian3.fromDegrees(lon, lat,100),
       billboard : {
         width: 48,
         height: 51,
@@ -82,7 +82,6 @@ var TsunamiView = function(params){
 
       var key = Object.keys(historicalData)[k];
       var scenario = historicalData[key];
-
       if (scenario.cn != undefined && scenario.ce!=undefined){
         var lat = scenario.cn;
         var lon = scenario.ce;
@@ -114,6 +113,7 @@ var TsunamiView = function(params){
     var magnitud = historicalData[entity.usgsKey].Mw;
     var fecha = historicalData[entity.usgsKey].date;
     var profundidad  = historicalData[entity.usgsKey].depth/1000;
+    var batimetria = historicalData[entity.usgsKey].bathymetry;
     // fecha = fecha.toLocaleDateString({weekday: 'long'});
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     fecha = fecha.toLocaleDateString('es-CL', options);
@@ -123,6 +123,7 @@ var TsunamiView = function(params){
     var muertos = historicalData[entity.usgsKey].deaths;
     var dolares = historicalData[entity.usgsKey]["mill usd damage"];
     var url = historicalData[entity.usgsKey].noaaURL;
+
 
     // format strings:
     //from http://stackoverflow.com/questions/149055/how-can-i-format-numbers-as-money-in-javascript
@@ -163,6 +164,10 @@ var TsunamiView = function(params){
     var pinContent =
     `
     <div class="row">
+      <div class="col-xs-5"><strong>Fecha</strong></div>
+      <div class="col-xs-7">${fecha}</div>
+    </div>
+    <div class="row">
       <div class="col-xs-5"><strong>Magnitud</strong></div>
       <div class="col-xs-7">${magnitud} Mw </div>
     </div>
@@ -171,9 +176,10 @@ var TsunamiView = function(params){
       <div class="col-xs-7">${profundidad} km </div>
     </div>
     <div class="row">
-      <div class="col-xs-5"><strong>Fecha</strong></div>
-      <div class="col-xs-7">${fecha}</div>
+      <div class="col-xs-5"><strong>Profundidad del mar</strong></div>
+      <div class="col-xs-7">${batimetria} mm </div>
     </div>
+
     <div class="row">
       <div class="col-xs-5"><strong>N° de heridos</strong></div>
       <div class="col-xs-7">${heridos}</div>

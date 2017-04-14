@@ -102,11 +102,40 @@ var init = function() {
     // initialize Model
     var rendererCanvas = document.getElementById('container');
     model = TsunamiModel(modelParams, rendererCanvas);
-
-    // initialize View
-
     var initialImage = model.renderScreen();
 
+    // Assign bathymetry values for the epicenter of each
+
+    var dx = model.simulation.uniforms.dx.value/60;
+    var dy = model.simulation.uniforms.dy.value/60;
+    var xmin = model.simulation.uniforms.xmin.value;
+    var xmax = model.simulation.uniforms.xmax.value;
+    var ymin = model.simulation.uniforms.ymin.value;
+    var ymax = model.simulation.uniforms.ymax.value;
+    var zmin = model.simulation.uniforms.zmin.value;
+    var zmax = model.simulation.uniforms.zmax.value;
+
+    // default "%" operator is wrong for negative numbers
+    // http://stackoverflow.com/questions/4467539/javascript-modulo-not-behaving
+    var mod = function(n, m) {
+        return ((n % m) + m) % m;
+    }
+    Object.keys(usgsapi.historicalData).forEach(function(scenario){
+      var cn = usgsapi.historicalData[scenario].cn;
+      var ce = usgsapi.historicalData[scenario].ce;
+
+      var i = mod(ce-xmin,xmax-xmin)/dx; //  what if mod(ce,360)>xmax?:
+      var j = mod(cn-ymin,ymax-ymin)/dy; //  assume mod(ce,360) \in[xmax,xmin]
+      i = Math.floor(i+0.5);
+      j = Math.floor(j+0.5);
+      usgsapi.historicalData[scenario].gridCoord = [i,j];
+      var pixelData = model.getSimulationPixels(i,j,1,1);
+      usgsapi.historicalData[scenario].bathymetry =pixelData[3]*(zmax-zmin)+zmin;
+
+    });
+
+
+    // initialize View
     var bbox = model.simulationData.bbox;
     var videoElement = document.getElementById('videoElement');
     var viewParams = {

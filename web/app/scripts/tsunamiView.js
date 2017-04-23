@@ -41,6 +41,7 @@ var TsunamiView = function(params){
     rectangle : {
       coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
       bbox[1][0],Math.min(bbox[1][1],89.99999)),
+      height: 0,
       material : videoElement,
       asynchronous: true
     }
@@ -64,13 +65,12 @@ var TsunamiView = function(params){
 
   var addCesiumPin = function(lat=-45,lon=-75.59777, usgsKey=""){
     var pin = viewer.entities.add({
-      position : Cesium.Cartesian3.fromDegrees(lon, lat,100),
+      position : Cesium.Cartesian3.fromDegrees(lon, lat,1000),
       billboard : {
         width: 48,
         height: 51,
         image : 'img/pin2.svg',//,
         scaleByDistance :  new Cesium.NearFarScalar(1.5e1, 1.5, 4.0e7, 0.0)
-        // translucencyByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
       }
     });
     pin.isPin = true;
@@ -213,7 +213,9 @@ var TsunamiView = function(params){
     `
 
     $('#pin-info').data('bs.popover').options.animation = true;
-    $('#pin-info').attr('data-original-title', '<b>'+entity.usgsKey+'</b>');
+    $('#pin-info').attr('data-original-title', '<b>'+entity.usgsKey+'</b>' +`
+    <button type="button" id="close" class="close" onclick="$(&quot;#pin-info&quot;).popover(&quot;hide&quot;);">&times;</button>
+    `);//http://stackoverflow.com/questions/13413057/how-to-insert-close-button-in-popover-for-bootstrap
     $('#pin-info').attr('data-content',pinContent);
 
     $('#pin-info').popover('show');
@@ -247,14 +249,17 @@ var TsunamiView = function(params){
             currentPin.billboard.image = 'img/pin2.svg';
           }
 
-          currentPin = entity;
+
+          if(currentPin == undefined || !currentPin.dragged){
+            currentPin = entity;
+          }
 
           $('#pin-info').css({
             top: movement.position.y,
             left: movement.position.x
           });
 
-          setPinContent(entity);
+          setPinContent(currentPin);
 
           // deactivate animation while popover is being shown
           // so it won't "blink" when the camera moves
@@ -295,7 +300,8 @@ var TsunamiView = function(params){
     }, Cesium.ScreenSpaceEventType.LEFT_UP);
 
     var trackPin = function(movement){ //move and hide pin when necessary
-      if(currentPin && currentPin.selected && currentPin.dragged){
+      var visible = $('#pin-info').data()['bs.popover'].tip().hasClass('in');
+      if(currentPin && currentPin.selected && currentPin.dragged && visible){
 
         //move div
         var coord = Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, currentPin.position._value) ;

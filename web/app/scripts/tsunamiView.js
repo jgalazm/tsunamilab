@@ -82,12 +82,15 @@ var TsunamiView = function(params){
 
       var key = Object.keys(historicalData)[k];
       var scenario = historicalData[key];
+      var wetFraction = scenario.wetFraction;
+
       if (scenario.cn != undefined && scenario.ce!=undefined){
         var lat = scenario.cn;
         var lon = scenario.ce;
       }
-
-      addCesiumPin(lat,lon,key);
+      if (wetFraction>0.01){
+        addCesiumPin(lat,lon,key);
+      }
     }
   }
 
@@ -114,6 +117,7 @@ var TsunamiView = function(params){
     var fecha = historicalData[entity.usgsKey].date;
     var profundidad  = historicalData[entity.usgsKey].depth/1000;
     var batimetria = historicalData[entity.usgsKey].bathymetry;
+
     // fecha = fecha.toLocaleDateString({weekday: 'long'});
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     fecha = fecha.toLocaleDateString('es-CL', options);

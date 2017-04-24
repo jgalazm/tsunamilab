@@ -120,17 +120,64 @@ var init = function() {
     var mod = function(n, m) {
         return ((n % m) + m) % m;
     }
+
+
     Object.keys(usgsapi.historicalData).forEach(function(scenario){
+      var R_earth = 6378000.0;
       var cn = usgsapi.historicalData[scenario].cn;
       var ce = usgsapi.historicalData[scenario].ce;
+      var strike = usgsapi.historicalData[scenario].strike;
 
+      // get pixel of the epicenter
       var i = mod(ce-xmin,xmax-xmin)/dx; //  what if mod(ce,360)>xmax?:
       var j = mod(cn-ymin,ymax-ymin)/dy; //  assume mod(ce,360) \in[xmax,xmin]
       i = Math.floor(i+0.5);
       j = Math.floor(j+0.5);
       usgsapi.historicalData[scenario].gridCoord = [i,j];
-      var pixelData = model.getSimulationPixels(i,j,1,1);
-      usgsapi.historicalData[scenario].bathymetry =pixelData[3]*(zmax-zmin)+zmin;
+      var pixelsData = model.getSimulationPixels(i,j,1,1);
+      usgsapi.historicalData[scenario].bathymetry =pixelsData[3]*(zmax-zmin)+zmin;
+
+      // now get % of wet cells in the fault rectangle
+      var cn = usgsapi.historicalData[scenario].cn;
+      var ce = usgsapi.historicalData[scenario].ce;
+      var strike = usgsapi.historicalData[scenario].strike;
+
+      // get pixel of the epicenter
+      var i = mod(ce-xmin,xmax-xmin)/dx; //  what if mod(ce,360)>xmax?:
+      var j = mod(cn-ymin,ymax-ymin)/dy; //  assume mod(ce,360) \in[xmax,xmin]
+      i = Math.floor(i+0.5);
+      j = Math.floor(j+0.5);
+
+      if( Math.abs(strike%90)< 45){
+        // fault is pointing to the north; is "vertical"
+        var L = usgsapi.historicalData[scenario].L;
+        var W = usgsapi.historicalData[scenario].W;
+      }
+      else{
+        // fault is "horizontal"
+        var L = usgsapi.historicalData[scenario].W;
+        var W = usgsapi.historicalData[scenario].L;
+      }
+
+      var degree2meters_lon = R_earth*Math.cos(cn*Math.PI/180.0)*Math.PI/180.0;
+      var degree2meters_lat = R_earth*Math.PI/180.0;
+      var Lpix = parseInt(4*L/(dx*degree2meters_lat));
+      var Wpix = parseInt(4*W/(dy*degree2meters_lon));
+
+      var ilower = Math.max(parseInt(i-Lpix/2),0);
+      var jlower = Math.max(parseInt(j-Wpix/2),0);
+
+      var pixelsData2 = model.getSimulationPixels(ilower,jlower,Lpix,Wpix);
+
+      var nwet = 0;
+      for(var ipix =0; ipix<pixelsData2.length; ipix=ipix+4){
+        if(pixelsData2[ipix+3]*(zmax-zmin)+zmin<=0){
+          nwet = nwet+1;
+        }
+      }
+      var fwet = nwet/(pixelsData2.length/4);
+
+      usgsapi.historicalData[scenario].wetFraction = fwet;
 
     });
 

@@ -33,6 +33,7 @@ var USGSAPI = function(historicalData){
       var f = data["features"][ifeature];//feature
       var coords = f['geometry']['coordinates'];
       var place = f['properties']['place'];
+      var title = f['properties']['title'];
       var mag = f['properties']['mag'];
       var magType = f['properties']['magType'];
       var tsunamiFlag = f['properties']['tsunami'];
@@ -40,50 +41,40 @@ var USGSAPI = function(historicalData){
       var time = f['properties']['time'];
       var date = new Date(time);
       var year = date.getYear()+1900;
-      // if (place.toUpperCase().indexOf("BOLIVIA")>-1){
-      //   break;
-      // }
 
 
       var LWslip = getLengthWidthSlip(mag);
 
-      if(historicalData[place]==undefined){
-        historicalData[place] = {};
-        historicalData[place]["name"] = place;
+      if(historicalData[title]==undefined){
+        historicalData[title] = {};
+        historicalData[title]["name"] = title;
       }
 
-      historicalData[place]["time"] = time;
-      historicalData[place]["date"] = date;
-      historicalData[place]["year"] = year;
-      historicalData[place]["cn"]= coords[1],
-      historicalData[place]["ce"]= coords[0],
-      historicalData[place]["depth"]= coords[2]*1000,
-      historicalData[place]["Mw"]= mag,
-      historicalData[place]["L"]= LWslip.L,
-      historicalData[place]["W"]= LWslip.W,
-      historicalData[place]["slip"]= LWslip.slip,
-      historicalData[place]["strike"]= 0.0,
-      historicalData[place]["dip"]= 9.0,
-      historicalData[place]["rake"]= 45.0,
-      historicalData[place]["U3"]= 0.0
+
+      historicalData[title]["time"] = time;
+      historicalData[title]["date"] = date;
+      historicalData[title]["year"] = year;
+      historicalData[title]["cn"]= coords[1];
+      historicalData[title]["ce"]= coords[0];
+      historicalData[title]["depth"]= coords[2]*1000;
+      historicalData[title]["Mw"]= mag;
+      historicalData[title]["L"]= LWslip.L;
+      historicalData[title]["W"]= LWslip.W;
+      historicalData[title]["slip"]= LWslip.slip;
+      historicalData[title]["strike"]= 0.0;
+      historicalData[title]["dip"]= 9.0;
+      historicalData[title]["rake"]= 45.0;
+      historicalData[title]["U3"]= 0.0;
+      historicalData[title]["place"]= place;
 
 
-      // TODO : sacar esto de aquí
+      getMomentTensorInfo(title, f["id"]);
 
-      $('#scenarios').append($('<option>', {
-        text: mag.toString()+' M - ' +
-            '('+year.toString() + ') '+
-            historicalData[place]["name"],
-            value: place
-      }));
-
-      getMomentTensorInfo(place, f["id"]);
-
-      getNOAAInfo(place);
+      getNOAAInfo(title);
     }
   }
 
-  function getMomentTensorInfo(place, eventid){
+  function getMomentTensorInfo(scenario, eventid){
     // query moment tensor data
     var baseQueryString = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
     var eventIdString ="&eventid="+eventid;
@@ -94,19 +85,18 @@ var USGSAPI = function(historicalData){
       url: qMomentString,
       async: true,
       success: function(data) {
-        loadMomentTensorData(place,data, historicalData);
+        loadMomentTensorData(scenario,data, historicalData);
         console.log( "success" );
-
-        if(place=="39km SSW of Puerto Quellon, Chile"){
-          document.getElementById("scenarios").selectedIndex = "2";
-          changeScenario("39km SSW of Puerto Quellon, Chile");
-        }
       }
     });
   }
 
-  function loadMomentTensorData(place, data){
+  function loadMomentTensorData(scenario, data){
+
     var tensors = data['properties']['products']['moment-tensor'];
+        if(!tensors || !tensors.length){
+          console.log(scenario);
+        }
     var ntensors = tensors.length;
     var nBestTensor = 0;
     var weightBestTensor = 0;
@@ -121,17 +111,17 @@ var USGSAPI = function(historicalData){
     var rake = tensors[nBestTensor]['properties']['nodal-plane-1-rake'];
     var strike = tensors[nBestTensor]['properties']['nodal-plane-1-strike'];
 
-    historicalData[place]["dip"] = dip;
-    historicalData[place]["rake"] = rake;
-    historicalData[place]["strike"] = strike;
+    historicalData[scenario]["dip"] = dip;
+    historicalData[scenario]["rake"] = rake;
+    historicalData[scenario]["strike"] = strike;
   }
 
-  function getNOAAInfo(place){
-    var cn = historicalData[place]["cn"];
-    var ce = historicalData[place]["ce"];
-    var year = historicalData[place]["year"];
-    var date = historicalData[place]["date"];
-    var time = historicalData[place]["time"];
+  function getNOAAInfo(scenario){
+    var cn = historicalData[scenario]["cn"];
+    var ce = historicalData[scenario]["ce"];
+    var year = historicalData[scenario]["year"];
+    var date = historicalData[scenario]["date"];
+    var time = historicalData[scenario]["time"];
 //
 // "https://maps.ngdc.noaa.gov/arcgis/rest/services/web_mercator/hazards/MapServer/identify?f=json&tolerance=1&returnGeometry=false&imageDisplay=1568,915,96&geometry={"x":-73.9395,"y":-43.4029-36.474}&geometryType=esriGeometryPoint&sr=4326&mapExtent=50,-82,49,85&layers=visible:1,11&layerDefs=0:EVENT_VALIDITY_CODE>0;1:EVENT_VALIDITY_CODE>0"
 // https://maps.ngdc.noaa.gov/arcgis/rest/services/web_mercator/hazards/MapServer/identify?
@@ -175,13 +165,13 @@ var USGSAPI = function(historicalData){
 
             var honeOur = 60*60*1000; // tolerate only one hour offset
             if (Math.abs(thisDate-targetDate)<= honeOur){
-              historicalData[place]["deaths"] = attributes["Deaths"];
-              historicalData[place]["injuries"] = attributes["Injuries"];
-              historicalData[place]["houses destroyed"] = attributes["Houses Destroyed"];
-              historicalData[place]["max runup"] = attributes["Max Event Runup"];
-              historicalData[place]["mill usd damage"] = attributes["Damage in millions of dollars"];
-              historicalData[place]["damage level"] = attributes["Damage Amount Order"]
-              historicalData[place]["noaaURL"] = attributes["URL"];
+              historicalData[scenario]["deaths"] = attributes["Deaths"];
+              historicalData[scenario]["injuries"] = attributes["Injuries"];
+              historicalData[scenario]["houses destroyed"] = attributes["Houses Destroyed"];
+              historicalData[scenario]["max runup"] = attributes["Max Event Runup"];
+              historicalData[scenario]["mill usd damage"] = attributes["Damage in millions of dollars"];
+              historicalData[scenario]["damage level"] = attributes["Damage Amount Order"]
+              historicalData[scenario]["noaaURL"] = attributes["URL"];
             }
           }
         }

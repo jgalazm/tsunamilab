@@ -49,7 +49,7 @@ var init = function() {
     }
   });
 
-  var usgsapi;
+  // var usgsapi;
 
   $.ajax({
     dataType: "json",
@@ -280,18 +280,18 @@ var init = function() {
     // var colormapLabels = [
     //   [true, 0/16],
     //   [false, 1.999/16],
-    //   [false, 2.0/16],
+    //   [true, 2.0/16],
     //   [false, 3.999/16],
-    //   [false, 4.0/16],
-    //   [false, 6/16],
+    //   [true, 4.0/16],
+    //   [true, 6/16],
     //   [false, 6.01/16],
-    //   [false, 8/16],
+    //   [true, 8/16],
     //   [true, 8.01/16],
-    //   [false, 10/16],
+    //   [true, 10/16],
     //   [false, 10.01/16],
-    //   [false, 12/16],
+    //   [true, 12/16],
     //   [false, 12.01/16],
-    //   [false, 14/16],
+    //   [true, 14/16],
     //   [false, 14.01/16],
     //   [true, 1]
     // ];

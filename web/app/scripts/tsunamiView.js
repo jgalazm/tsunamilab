@@ -1,5 +1,6 @@
 var TsunamiView = function(params){
-  var containerID = params.containerID;
+  var containerID1 = params.containerID1;
+  var containerID2 = params.containerID2;
   var initialImage = params.initialImage; //output de model.renderScreen()
   var bbox = params.bbox;
   var zmin = params.zmin;
@@ -9,44 +10,64 @@ var TsunamiView = function(params){
   var currentPin = undefined;
 
 
-  Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
-  var viewer = new Cesium.Viewer(containerID, {
-    // sceneMode: Cesium.SceneMode.SCENE2D,
-    animation: false,
-    baseLayerPicker: false,
-    fullscreenButton: false,
-    geocoder: true,
-    homeButton: false,
-    infoBox: false,
-    sceneModePicker: false,
-    selectionIndicator: false,
-    timeline: false,
-    navigationHelpButton: false,
-    navigationInstructionsInitiallyVisible: false
-  });
-  viewer.scene.debugShowFramesPerSecond = true;
-  viewer.scene.screenSpaceCameraController.inertiaSpin = 0;
-  viewer.scene.screenSpaceCameraController.inertiaTranslate = 0;
-  viewer.scene.screenSpaceCameraController.inertiaZoom = 0;
-  viewer.scene.imageryLayers.removeAll(); // optional
-  viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
-    url : 'https://dev.virtualearth.net',
-    key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
-    culture: 'es-MX',
-    mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
-  }));
-  viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+  var createViewer = function(canvasID){
+    Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
+    var viewer = new Cesium.Viewer(canvasID, {
+      // sceneMode: Cesium.SceneMode.SCENE2D,
+      animation: false,
+      baseLayerPicker: false,
+      fullscreenButton: false,
+      scene3DOnly: true,
+      geocoder: true,
+      homeButton: false,
+      infoBox: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+      timeline: false,
+      navigationHelpButton: false,
+      navigationInstructionsInitiallyVisible: false
+    });
+    viewer.scene.debugShowFramesPerSecond = true;
+    viewer.scene.screenSpaceCameraController.inertiaSpin = 0;
+    viewer.scene.screenSpaceCameraController.inertiaTranslate = 0;
+    viewer.scene.screenSpaceCameraController.inertiaZoom = 0;
+    viewer.scene.imageryLayers.removeAll(); // optional
+    viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+      url : 'https://dev.virtualearth.net',
+      key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
+      culture: 'es-MX',
+      mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+    }));
+    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
-  var videoLayer = viewer.entities.add({
-    rectangle : {
-      coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
-      bbox[1][0],Math.min(bbox[1][1],89.99999)),
-      height: 0,
-      material : videoElement,
-      asynchronous: true
-    }
-  });
-  videoLayer.rectangle.material.transparent = true;
+    var videoLayer = viewer.entities.add({
+      rectangle : {
+        coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
+        bbox[1][0],Math.min(bbox[1][1],89.99999)),
+        height: 0,
+        material : videoElement,
+        asynchronous: true
+      }
+    });
+    videoLayer.rectangle.material.transparent = true;
+
+    return viewer;
+  }
+
+  viewer2 = createViewer(containerID1);
+  viewer = createViewer(containerID2);
+
+
+  var flyTo = function (viewer,lat, lng, scale) {
+    var scale = scale ? scale : 8;
+    viewer.camera.flyTo({
+      destination: Cesium.Rectangle.fromDegrees((lng-5) - 3 * scale, (lat-5) - 3 * scale,
+                                                (lng+5) + 3 * scale, (lat+5) + 3 * scale)
+    });
+  }
+
+  // flyTo(viewer2,0,90,10);
+  // flyTo(viewer,0,0,10);
 
   var setColormap = function(cmap, labelsMap, canvas){
     var cbwater  = canvas;
@@ -361,6 +382,7 @@ var TsunamiView = function(params){
 
 
     return {
+      viewers : [viewer,viewer2],
       viewer: viewer,
       setColormap: setColormap,
       getCurrentPin: getCurrentPin

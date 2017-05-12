@@ -186,7 +186,8 @@ var init = function() {
     var bbox = model.simulationData.bbox;
     var videoElement = document.getElementById('videoElement');
     var viewParams = {
-      containerID: 'cesiumContainer',
+      containerID1: 'cesiumContainer1',
+      containerID2: 'cesiumContainer2',
       initialImage: initialImage,
       bbox: bbox,
       historicalData: usgsapi.historicalData,

@@ -9,6 +9,20 @@ function TsunamiController(model, view){
     });
   }
 
+  var flyToMultiple = function (viewers,lat, lng, scale) {
+    var scale = scale ? scale : 8;
+    viewers.forEach(function(viewer,index){
+      console.log(viewer);
+      var offset = index*90;
+      var lng_corrected = lng + offset;
+      viewer.camera.flyTo({
+
+        destination: Cesium.Rectangle.fromDegrees((lng_corrected-5) - 3 * scale, (lat-5) - 3 * scale,
+        (lng_corrected+5) + 3 * scale, (lat+5) + 3 * scale)
+      });
+    })
+  }
+
   var flyHome = function (){
     var lng = model.simulation.uniforms.ce.value;
     var lat = model.simulation.uniforms.cn.value;
@@ -20,7 +34,8 @@ function TsunamiController(model, view){
     // but not farther than valdivia's scale
     var scale = Math.min(12,12*maxL/850000);
 
-    flyTo(lat, lng, scale);
+    // flyTo(lat, lng, scale);
+    flyToMultiple(view.viewers,lat, lng, scale);
   }
 
   var tick = function () {

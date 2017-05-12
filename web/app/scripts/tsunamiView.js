@@ -1,6 +1,8 @@
 var TsunamiView = function(params){
   var containerID1 = params.containerID1;
   var containerID2 = params.containerID2;
+  var containerID3 = params.containerID3;
+  var containerID4 = params.containerID4;
   var initialImage = params.initialImage; //output de model.renderScreen()
   var bbox = params.bbox;
   var zmin = params.zmin;
@@ -54,8 +56,26 @@ var TsunamiView = function(params){
     return viewer;
   }
 
-  viewer2 = createViewer(containerID1);
-  viewer = createViewer(containerID2);
+  viewer = createViewer(containerID1);
+  viewer2 = createViewer(containerID2);
+  viewer3 = createViewer(containerID3);
+  viewer4 = createViewer(containerID4);
+
+  var setSlaves = function(masterCamera, slaveCamera,slaveViewer,offset){
+    console.log(masterCamera);
+    slaveViewer.scene.preRender.addEventListener(function(){
+      Cesium.Cartesian3.clone(masterCamera.position, slaveCamera.position);
+      Cesium.Cartesian3.clone(masterCamera.direction, slaveCamera.direction);
+      Cesium.Cartesian3.clone(masterCamera.up, slaveCamera.up);
+      Cesium.Cartesian3.clone(masterCamera.write, slaveCamera.write);
+      slaveCamera.lookAtTransform(masterCamera.transform);
+    });
+  }
+
+  setSlaves(viewer.camera, viewer2.camera, viewer2);
+  setSlaves(viewer.camera, viewer3.camera, viewer3);
+  setSlaves(viewer.camera, viewer4.camera, viewer4);
+
 
 
   var flyTo = function (viewer,lat, lng, scale) {
@@ -382,8 +402,8 @@ var TsunamiView = function(params){
 
 
     return {
-      viewers : [viewer,viewer2],
-      viewer: viewer,
+      viewers : [viewer,viewer2,viewer3,viewer4],
+      viewer: viewer2,
       setColormap: setColormap,
       getCurrentPin: getCurrentPin
     };

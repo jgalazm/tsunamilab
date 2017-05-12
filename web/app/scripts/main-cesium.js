@@ -3,6 +3,53 @@ $('#init_modal').modal();
 
 var init = function() {
 
+  var windowheight = window.innerHeight;;
+  var windowwidth = window.innerWidth;
+  var d = 0.2*windowheight;
+  var centerTop = 0.5*windowheight;
+  var centerLeft = 0.5*windowwidth;
+
+  var canvasWidth = 2*d ; //45°
+  var canvasHeight  = canvasWidth*windowheight/windowwidth;
+
+  var top1 = centerTop - d-canvasHeight;
+  var left1 = centerLeft - d;
+
+  var top2 = centerTop-0.5*canvasHeight;
+  var left2 = centerLeft + d -0.5*canvasHeight;
+
+  var top3 = centerTop+1.0*canvasHeight;
+  var left3 = centerLeft + d -2.0*canvasHeight;
+
+  var top4 = centerTop-0.5*canvasHeight;
+  var left4 = centerLeft - d -1.5*canvasHeight;
+
+  // var top3 = centerTop +d+canvasHeight;
+  // var
+  $("#cesiumContainer1").css({
+    top: top1,
+    left: left1,
+    position:'absolute',
+    width: canvasWidth});
+
+  $("#cesiumContainer2").css({
+    top: top2,
+    left: left2,
+    position:'absolute',
+    width: canvasWidth});
+  $("#cesiumContainer3").css({
+    top: top3,
+    left: left3,
+    position:'absolute',
+    width: canvasWidth});
+
+  $("#cesiumContainer4").css({
+    top: top4,
+    left: left4,
+    position:'absolute',
+    width: canvasWidth});
+
+
   var tsunamiShaders = shadersCode('tsunami');
 
   var bathymetry = {
@@ -188,6 +235,8 @@ var init = function() {
     var viewParams = {
       containerID1: 'cesiumContainer1',
       containerID2: 'cesiumContainer2',
+      containerID3: 'cesiumContainer3',
+      containerID4: 'cesiumContainer4',
       initialImage: initialImage,
       bbox: bbox,
       historicalData: usgsapi.historicalData,

@@ -1,26 +1,33 @@
 function TsunamiController(model, view){
   var paused = true;
 
-  var flyTo = function (lat, lng, scale) {
-    var scale = scale ? scale : 8;
-    view.viewer.camera.flyTo({
-      destination: Cesium.Rectangle.fromDegrees((lng-5) - 3 * scale, (lat-5) - 3 * scale,
-                                                (lng+5) + 3 * scale, (lat+5) + 3 * scale)
-    });
-  }
+  // var flyTo = function (lat, lng, scale) {
+  //   var scale = scale ? scale : 8;
+  //   view.viewer.camera.flyTo({
+  //     destination: Cesium.Rectangle.fromDegrees((lng-5) - 3 * scale, (lat-5) - 3 * scale,
+  //                                               (lng+5) + 3 * scale, (lat+5) + 3 * scale)
+  //   });
+  // }
 
   var flyToMultiple = function (viewers,lat, lng, scale) {
     var scale = scale ? scale : 8;
-    viewers.forEach(function(viewer,index){
-      console.log(viewer);
-      var offset = index*90;
-      var lng_corrected = lng + offset;
-      viewer.camera.flyTo({
+    // for(var index =0; index<viewers.length; index++){
+    //
 
-        destination: Cesium.Rectangle.fromDegrees((lng_corrected-5) - 3 * scale, (lat-5) - 3 * scale,
-        (lng_corrected+5) + 3 * scale, (lat+5) + 3 * scale)
-      });
-    })
+      // var offset = index*90;
+      // var lng_corrected = (lng + offset)%180;
+
+      for(var i=0; i<4; i++){
+        var lng2 = lng + i*90;
+        lng2 = lng2>180 ? lng2-360: lng2;
+        viewers[i].camera.flyTo({
+          destination: Cesium.Rectangle.fromDegrees(
+            ((lng2-5) - 3 * scale)%180,
+            ((lat-5) - 3 * scale)%90,
+            ((lng2+5) + 3 * scale)%180,
+            ((lat+5) + 3 * scale)%90
+          )});
+      }
   }
 
   var flyHome = function (){
@@ -78,13 +85,13 @@ function TsunamiController(model, view){
   //   console.log('asdfasdfasdf');
   // });
 
-  flyTo();
+  // flyTo();
   return {
     play: play,
     pause: pause,
     isPaused: isPaused,
     reset: reset,
-    flyTo: flyTo,
+    // flyTo: flyTo,
     flyHome: flyHome,
     increaseSpeed: increaseSpeed,
     decreaseSpeed: decreaseSpeed,

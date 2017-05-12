@@ -227,11 +227,12 @@ void main()
 		value  = okada(pos.g,pos.r,depth,strike,dip,L,W,rake,slip,U3);
 	}
 	// value = 1.0;
-	float k = 4.0;
-	value = value*smoothstep(-L/2.0*k,-L/2.0*2.0,pos.x);
-	value = value*smoothstep(-L/2.0*k,-L/2.0*2.0,-pos.x);
-	value = value*smoothstep(-L/2.0*k,-L/2.0*2.0,pos.y);
-	value = value*smoothstep(-L/2.0*k,-L/2.0*2.0,-pos.y);
+	float k = 40.0;
+	float Lmax = max(L,W);
+	value = value*smoothstep(-Lmax/2.0*k,-Lmax/2.0*2.0,pos.x);
+	value = value*smoothstep(-Lmax/2.0*k,-Lmax/2.0*2.0,-pos.x);
+	value = value*smoothstep(-Lmax/2.0*k,-Lmax/2.0*2.0,pos.y);
+	value = value*smoothstep(-Lmax/2.0*k,-Lmax/2.0*2.0,-pos.y);
 
 
 	float bati = texture2D(tBati, vUv).r;
@@ -530,7 +531,7 @@ void main()
     float bati = texval.a;
     float bati_real = zmin + (zmax-zmin)*bati;
 
-    float corrected_color =  pow(abs(value),0.8);
+    float corrected_color =  pow(abs(value),0.1);
     if (bati_real>-0.0){
         corrected_color = 0.0;
     }

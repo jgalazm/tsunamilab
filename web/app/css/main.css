@@ -195,3 +195,7 @@ a:hover{
     cursor: pointer;
     opacity: 1;
 }
+
+.cesium-viewer-bottom {
+	display: none !important;
+}

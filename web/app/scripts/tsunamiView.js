@@ -61,7 +61,7 @@ var TsunamiView = function(params){
   viewer3 = createViewer(containerID3);
   viewer4 = createViewer(containerID4);
 
-  var setSlaves = function(masterCamera, slaveCamera,slaveViewer,offset){
+  var setSlaves = function(masterCamera, slaveCamera, slaveViewer, offset){
     console.log(masterCamera);
     slaveViewer.scene.preRender.addEventListener(function(){
       Cesium.Cartesian3.clone(masterCamera.position, slaveCamera.position);
@@ -69,12 +69,13 @@ var TsunamiView = function(params){
       Cesium.Cartesian3.clone(masterCamera.up, slaveCamera.up);
       Cesium.Cartesian3.clone(masterCamera.write, slaveCamera.write);
       slaveCamera.lookAtTransform(masterCamera.transform);
+      slaveCamera.rotate(slaveCamera.up, offset/180*Math.PI)
     });
   }
 
-  setSlaves(viewer.camera, viewer2.camera, viewer2);
-  setSlaves(viewer.camera, viewer3.camera, viewer3);
-  setSlaves(viewer.camera, viewer4.camera, viewer4);
+  setSlaves(viewer.camera, viewer2.camera, viewer2, 90);
+  setSlaves(viewer.camera, viewer3.camera, viewer3, 180);
+  setSlaves(viewer.camera, viewer4.camera, viewer4, 270);
 
 
 

@@ -5,7 +5,7 @@ var init = function() {
 
   var windowheight = window.innerHeight;;
   var windowwidth = window.innerWidth;
-  var d = 0.2*windowheight;
+  var d = 0.24*windowheight;
   var centerTop = 0.5*windowheight;
   var centerLeft = 0.5*windowwidth;
 
@@ -15,14 +15,14 @@ var init = function() {
   var top1 = centerTop - d-canvasHeight;
   var left1 = centerLeft - d;
 
-  var top2 = centerTop-0.5*canvasHeight;
+  var top2 = centerTop - d + 1.0*canvasWidth - 1.5*canvasHeight;
   var left2 = centerLeft + d -0.5*canvasHeight;
 
-  var top3 = centerTop+1.0*canvasHeight;
-  var left3 = centerLeft + d -2.0*canvasHeight;
+  var top3 = centerTop + d+ 1.0*canvasWidth - 2.0*canvasHeight;
+  var left3 = centerLeft + d -0.0*canvasHeight - 1.0*canvasWidth;
 
-  var top4 = centerTop-0.5*canvasHeight;
-  var left4 = centerLeft - d -1.5*canvasHeight;
+  var top4 = centerTop-1.5*canvasHeight + 0.5*canvasWidth;
+  var left4 = centerLeft - d +0.5*canvasHeight - 1.0*canvasWidth;
 
   // var top3 = centerTop +d+canvasHeight;
   // var

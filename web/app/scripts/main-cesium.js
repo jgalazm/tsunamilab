@@ -5,24 +5,24 @@ var init = function() {
 
   var windowheight = window.innerHeight;;
   var windowwidth = window.innerWidth;
-  var d = 0.24*windowheight;
+  var d = 0.20*windowheight;
   var centerTop = 0.5*windowheight;
   var centerLeft = 0.5*windowwidth;
 
   var canvasWidth = 2*d ; //45°
-  var canvasHeight  = canvasWidth*windowheight/windowwidth;
+  var canvasHeight  = windowheight/2.0 - d;
 
   var top1 = centerTop - d-canvasHeight;
   var left1 = centerLeft - d;
 
-  var top2 = centerTop - d + 1.0*canvasWidth - 1.5*canvasHeight;
-  var left2 = centerLeft + d -0.5*canvasHeight;
+  var top2 = centerTop - canvasHeight/2;
+  var left2 = centerLeft + d + canvasHeight/2 - canvasWidth/2;
 
-  var top3 = centerTop + d+ 1.0*canvasWidth - 2.0*canvasHeight;
-  var left3 = centerLeft + d -0.0*canvasHeight - 1.0*canvasWidth;
+  var top3 = centerTop + d;
+  var left3 = centerLeft - d;
 
-  var top4 = centerTop-1.5*canvasHeight + 0.5*canvasWidth;
-  var left4 = centerLeft - d +0.5*canvasHeight - 1.0*canvasWidth;
+  var top4 = centerTop - canvasHeight/2;
+  var left4 = centerLeft - d - canvasHeight/2 - canvasWidth/2;
 
   // var top3 = centerTop +d+canvasHeight;
   // var
@@ -30,24 +30,28 @@ var init = function() {
     top: top1,
     left: left1,
     position:'absolute',
-    width: canvasWidth});
+    width: canvasWidth,
+    height: canvasHeight});
 
   $("#cesiumContainer2").css({
     top: top2,
     left: left2,
     position:'absolute',
-    width: canvasWidth});
+    width: canvasWidth,
+    height: canvasHeight});
   $("#cesiumContainer3").css({
     top: top3,
     left: left3,
     position:'absolute',
-    width: canvasWidth});
+    width: canvasWidth,
+    height: canvasHeight});
 
   $("#cesiumContainer4").css({
     top: top4,
     left: left4,
     position:'absolute',
-    width: canvasWidth});
+    width: canvasWidth,
+    height: canvasHeight});
 
 
   var tsunamiShaders = shadersCode('tsunami');

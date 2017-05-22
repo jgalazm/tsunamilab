@@ -5,7 +5,7 @@ var init = function() {
 
   var windowheight = window.innerHeight;;
   var windowwidth = window.innerWidth;
-  var d = 0.20*windowheight;
+  var d = 0.10*windowheight;
   var centerTop = 0.5*windowheight;
   var centerLeft = 0.5*windowwidth;
 

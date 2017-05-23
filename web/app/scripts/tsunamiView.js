@@ -20,7 +20,7 @@ var TsunamiView = function(params){
       baseLayerPicker: false,
       fullscreenButton: false,
       scene3DOnly: true,
-      geocoder: true,
+      geocoder: false,
       homeButton: false,
       infoBox: false,
       sceneModePicker: false,

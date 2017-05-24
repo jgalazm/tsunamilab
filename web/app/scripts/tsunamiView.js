@@ -70,9 +70,9 @@ var TsunamiView = function(params){
       Cesium.Cartesian3.clone(masterCamera.write, slaveCamera.write);
       slaveCamera.lookAtTransform(masterCamera.transform);
       var height = masterCamera.positionCartographic.height;
-      var offsetFactor1 = Math.min(1, Math.pow(height/10000000, 1.5));
+      var offsetFactor1 = Math.min(1, Math.pow(height/10000000, 2.5));
       var offsetFactor2 = Math.min(1, Math.pow(height/10000000, 0.5));
-      console.log(offsetFactor1, offsetFactor2);
+      // console.log(offsetFactor1, offsetFactor2);
       if(offset == 180)
         offsetFactor1 = 1;
       slaveCamera.rotate(slaveCamera.up, offsetFactor1*offset/180*Math.PI);
@@ -80,7 +80,7 @@ var TsunamiView = function(params){
         slaveCamera.setView({
             orientation: {
                 heading : Cesium.Math.toRadians(90.0), // east, default value is 0.0 (north)
-                pitch : Cesium.Math.toRadians(-90+(1-offsetFactor2)*offset/1.5),    // default value (looking down)
+                pitch : Cesium.Math.toRadians(-90+(1-offsetFactor2)*offset/1.3),    // default value (looking down)
                 roll : Cesium.Math.toRadians(-90)                           // default value
             }
         });

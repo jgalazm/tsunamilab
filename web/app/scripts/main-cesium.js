@@ -5,21 +5,21 @@ var init = function() {
 
   var windowheight = window.innerHeight;;
   var windowwidth = window.innerWidth;
-  var d = 0.2*windowheight;
+  var d = 0.10*windowheight;
   var centerTop = 0.5*windowheight;
   var centerLeft = 0.5*windowwidth;
 
-  var canvasWidth = 2*d ; //45°
+  var canvasWidth = windowwidth*0.6; //45°
   var canvasHeight  = windowheight/2.0 - d;
 
   var top1 = centerTop - d-canvasHeight;
-  var left1 = centerLeft - d;
+  var left1 = centerLeft - canvasWidth/2;
 
   var top2 = centerTop - canvasHeight/2;
   var left2 = centerLeft + d + canvasHeight/2 - canvasWidth/2;
 
   var top3 = centerTop + d;
-  var left3 = centerLeft - d;
+  var left3 = centerLeft - canvasWidth/2;
 
   var top4 = centerTop - canvasHeight/2;
   var left4 = centerLeft - d - canvasHeight/2 - canvasWidth/2;
@@ -30,6 +30,7 @@ var init = function() {
     top: top1,
     left: left1,
     position:'absolute',
+    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
     width: canvasWidth,
     height: canvasHeight});
 
@@ -37,12 +38,14 @@ var init = function() {
     top: top2,
     left: left2,
     position:'absolute',
+    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
     width: canvasWidth,
     height: canvasHeight});
   $("#cesiumContainer3").css({
     top: top3,
     left: left3,
     position:'absolute',
+    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
     width: canvasWidth,
     height: canvasHeight});
 
@@ -50,6 +53,7 @@ var init = function() {
     top: top4,
     left: left4,
     position:'absolute',
+    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
     width: canvasWidth,
     height: canvasHeight});
 

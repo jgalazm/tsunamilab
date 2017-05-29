@@ -26,6 +26,13 @@ var init = function() {
 
   // var top3 = centerTop +d+canvasHeight;
   // var
+  $("#cesiumContainer0").css({
+    top: windowheight/2 - canvasHeight/2,
+    left: 0,
+    position:'absolute',
+    width: 400,
+    height: 400});
+
   $("#cesiumContainer1").css({
     top: top1,
     left: left1,
@@ -241,6 +248,7 @@ var init = function() {
     var bbox = model.simulationData.bbox;
     var videoElement = document.getElementById('videoElement');
     var viewParams = {
+      containerID0: 'cesiumContainer0',
       containerID1: 'cesiumContainer1',
       containerID2: 'cesiumContainer2',
       containerID3: 'cesiumContainer3',

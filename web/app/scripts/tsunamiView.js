@@ -1,4 +1,5 @@
 var TsunamiView = function(params){
+  var containerID0 = params.containerID0;
   var containerID1 = params.containerID1;
   var containerID2 = params.containerID2;
   var containerID3 = params.containerID3;
@@ -16,8 +17,12 @@ var TsunamiView = function(params){
     Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
     var viewer = new Cesium.Viewer(canvasID, {
       // sceneMode: Cesium.SceneMode.SCENE2D,
+      imageryProvider : new Cesium.createTileMapServiceImageryProvider({
+          url : 'http://localhost:1313/node_modules/cesium/Build/Cesium/Assets/Textures/NaturalEarthII'
+      }),
+      baseLayerPicker : false,
       animation: false,
-      baseLayerPicker: false,
+      baseLayerPicker: true,
       fullscreenButton: false,
       scene3DOnly: true,
       geocoder: false,
@@ -26,21 +31,34 @@ var TsunamiView = function(params){
       sceneModePicker: false,
       selectionIndicator: false,
       timeline: false,
+      shadows: true,
+      skyAtmosphere: false,
       navigationHelpButton: false,
       navigationInstructionsInitiallyVisible: false
     });
+    viewer.scene.globe.enableLighting = true;
     viewer.scene.debugShowFramesPerSecond = true;
     viewer.scene.screenSpaceCameraController.inertiaSpin = 0;
     viewer.scene.screenSpaceCameraController.inertiaTranslate = 0;
     viewer.scene.screenSpaceCameraController.inertiaZoom = 0;
     viewer.scene.imageryLayers.removeAll(); // optional
-    viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
-      url : 'https://dev.virtualearth.net',
-      key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
-      culture: 'es-MX',
-      mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+    // viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+    //   url : 'https://dev.virtualearth.net',
+    //   key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
+    //   culture: 'es-MX',
+    //   mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+    // }));
+    viewer.imageryLayers.addImageryProvider(new Cesium.createTileMapServiceImageryProvider({
+        url : 'http://localhost:1313/node_modules/cesium/Build/Cesium/Assets/Textures/NaturalEarthII'
     }));
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+
+    // viewer.scene.primitives.add(new Cesium.DebugModelMatrixPrimitive({
+    //   modelMatrix : viewer.scene.primitives._primitives[0].modelMatrix,  // primitive to debug
+    //   length : 100000000000000.0,
+    //   width : 10.0
+    // }));
+
 
     var videoLayer = viewer.entities.add({
       rectangle : {
@@ -56,7 +74,8 @@ var TsunamiView = function(params){
     return viewer;
   }
 
-  viewer = createViewer(containerID1);
+  viewer = createViewer(containerID0);
+  viewer1 = createViewer(containerID1);
   viewer2 = createViewer(containerID2);
   viewer3 = createViewer(containerID3);
   viewer4 = createViewer(containerID4);
@@ -70,9 +89,10 @@ var TsunamiView = function(params){
       Cesium.Cartesian3.clone(masterCamera.write, slaveCamera.write);
       slaveCamera.lookAtTransform(masterCamera.transform);
       var height = masterCamera.positionCartographic.height;
-      var offsetFactor1 = Math.min(1, Math.pow(height/10000000, 2.5));
+      var offsetFactor1 = Math.min(1, Math.pow(height/50000000, 1.5));
       var offsetFactor2 = Math.min(1, Math.pow(height/10000000, 0.5));
       // console.log(offsetFactor1, offsetFactor2);
+      // console.log('offsetFactor1', slaveCamera.up);
       if(offset == 180)
         offsetFactor1 = 1;
       slaveCamera.rotate(slaveCamera.up, offsetFactor1*offset/180*Math.PI);
@@ -87,11 +107,20 @@ var TsunamiView = function(params){
     });
   }
 
-  setSlaves(viewer.camera, viewer2.camera, viewer2, 90);
+  setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
+  setSlaves(viewer.camera, viewer2.camera, viewer2, -90);
   setSlaves(viewer.camera, viewer3.camera, viewer3, 180);
-  setSlaves(viewer.camera, viewer4.camera, viewer4, -90);
+  setSlaves(viewer.camera, viewer4.camera, viewer4, 90);
 
+  var previousTime = Date.now();
 
+  viewer.scene.postRender.addEventListener(function (scene, time){
+      var spinRate = 0.1;
+      var currentTime = Date.now();
+      var delta = ( currentTime - previousTime ) / 1000;
+      previousTime = currentTime;
+      viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -spinRate * delta);
+  });
 
   var flyTo = function (viewer,lat, lng, scale) {
     var scale = scale ? scale : 8;

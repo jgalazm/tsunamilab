@@ -76,9 +76,9 @@ var TsunamiView = function(params){
 
   viewer = createViewer(containerID0);
   viewer1 = createViewer(containerID1);
-  viewer2 = createViewer(containerID2);
+  viewer2 = createViewer(containerID4);
   viewer3 = createViewer(containerID3);
-  viewer4 = createViewer(containerID4);
+  viewer4 = createViewer(containerID2);
 
   var setSlaves = function(masterCamera, slaveCamera, slaveViewer, offset){
     console.log(masterCamera);
@@ -117,7 +117,7 @@ var TsunamiView = function(params){
   viewer.scene.postRender.addEventListener(function (scene, time){
       var spinRate = 0.1;
       var currentTime = Date.now();
-      var delta = ( currentTime - previousTime ) / 1000;
+      var delta = -( currentTime - previousTime ) / 1000;
       previousTime = currentTime;
       viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -spinRate * delta);
   });
@@ -440,7 +440,7 @@ var TsunamiView = function(params){
 
     createPopover();
 
-    addAllPins();
+    // addAllPins();
 
     addPinsHandlers();
 

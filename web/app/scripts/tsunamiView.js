@@ -18,7 +18,7 @@ var TsunamiView = function(params){
     var viewer = new Cesium.Viewer(canvasID, {
       // sceneMode: Cesium.SceneMode.SCENE2D,
       imageryProvider : new Cesium.createTileMapServiceImageryProvider({
-          url : 'http://localhost:1313/node_modules/cesium/Build/Cesium/Assets/Textures/NaturalEarthII'
+          url : '/node_modules/cesium/Build/Cesium/Assets/Textures/NaturalEarthII'
       }),
       baseLayerPicker : false,
       animation: false,
@@ -49,7 +49,7 @@ var TsunamiView = function(params){
     //   mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
     // }));
     viewer.imageryLayers.addImageryProvider(new Cesium.createTileMapServiceImageryProvider({
-        url : 'http://localhost:1313/node_modules/cesium/Build/Cesium/Assets/Textures/NaturalEarthII'
+        url : '/node_modules/cesium/Build/Cesium/Assets/Textures/NaturalEarthII'
     }));
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 

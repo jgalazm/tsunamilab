@@ -1,0 +1,73 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
+  <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/eigencities.css">
+  <link rel="stylesheet" type="text/css" href="css/tsunami.css">
+  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+  <script>
+    var i = 0;
+
+    function increment() {
+        $('span').text(++i + ' time' + (i == 1 ? '' : 's'));
+    }
+
+    $(function() {
+        $('a').click(function() {
+           if (opener) opener.flash();
+            else alert('Main window is closed.');
+            return false;
+        });
+    });
+  </script>
+
+  <style>
+      @import url(../../node_modules/cesium/Build/Cesium/Widgets/widgets.css);
+      html, body  {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+      #cesiumContainer1 {
+          margin: 0; padding: 0; overflow: hidden;
+          transform: scale(-1, 1)
+      }
+      #cesiumContainer2 {
+          margin: 0; padding: 0; overflow: hidden;
+          transform: rotate(90deg) scale(-1, 1);
+
+      }
+      #cesiumContainer3 {
+          margin: 0; padding: 0; overflow: hidden;
+          transform: rotate(180deg) scale(-1, 1);
+
+      }
+      #cesiumContainer4 {
+          margin: 0; padding: 0; overflow: hidden;
+          transform: rotate(270deg) scale(-1, 1);
+      }
+      nav {
+        display: none;
+      }
+      body{
+        background: url(img/cruz.svg);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-color:black;
+      }
+
+
+  </style>
+</head>
+
+<body>
+  <p>This is the secondary window. You've clicked the link in the first window <span>0 times</span>.</p>
+  <p><a href="#">Call back to main window.</a>
+
+    <div id="cesiumContainer1"></div>
+    <div id="cesiumContainer2"></div>
+    <div id="cesiumContainer3"></div>
+    <div id="cesiumContainer4"></div>
+</body>
+</html>

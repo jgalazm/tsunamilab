@@ -24,6 +24,16 @@ var init = function() {
   var top4 = centerTop - canvasHeight/2;
   var left4 = centerLeft - d - canvasHeight/2 - canvasWidth/2;
 
+  var popup = window.open('popup.html', 'secondary', 'width=900,height=900');
+
+  $(popup.document.getElementById('cesiumContainer1')).css({
+      top: 0,
+      left: 0,
+      position:'absolute',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      width: canvasWidth,
+      height: canvasHeight});
+
   // var top3 = centerTop +d+canvasHeight;
   // var
   $("#cesiumContainer0").css({
@@ -33,36 +43,36 @@ var init = function() {
     width: 400,
     height: 400});
 
-  $("#cesiumContainer1").css({
-    top: top1,
-    left: left1,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
-
-  $("#cesiumContainer2").css({
-    top: top2,
-    left: left2,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
-  $("#cesiumContainer3").css({
-    top: top3,
-    left: left3,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
-
-  $("#cesiumContainer4").css({
-    top: top4,
-    left: left4,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
+  // $("#cesiumContainer1").css({
+  //   top: top1,
+  //   left: left1,
+  //   position:'absolute',
+  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+  //   width: canvasWidth,
+  //   height: canvasHeight});
+  //
+  // $("#cesiumContainer2").css({
+  //   top: top2,
+  //   left: left2,
+  //   position:'absolute',
+  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+  //   width: canvasWidth,
+  //   height: canvasHeight});
+  // $("#cesiumContainer3").css({
+  //   top: top3,
+  //   left: left3,
+  //   position:'absolute',
+  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+  //   width: canvasWidth,
+  //   height: canvasHeight});
+  //
+  // $("#cesiumContainer4").css({
+  //   top: top4,
+  //   left: left4,
+  //   position:'absolute',
+  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+  //   width: canvasWidth,
+  //   height: canvasHeight});
 
 
   var tsunamiShaders = shadersCode('tsunami');
@@ -249,7 +259,7 @@ var init = function() {
     var videoElement = document.getElementById('videoElement');
     var viewParams = {
       containerID0: 'cesiumContainer0',
-      containerID1: 'cesiumContainer1',
+      containerID1: popup.document.getElementById('cesiumContainer1'),
       containerID2: 'cesiumContainer2',
       containerID3: 'cesiumContainer3',
       containerID4: 'cesiumContainer4',
@@ -361,12 +371,12 @@ var init = function() {
       video.controls = true;
     }
     var processFrame = function(){
-      var time = controller.tick();
-      if(!controller.isPaused()){
-        setTime(time);
-        if(mediaRecorder.state != 'recording')
-          mediaRecorder.start(100);
-      }
+      // var time = controller.tick();
+      // if(!controller.isPaused()){
+      //   setTime(time);
+      //   if(mediaRecorder.state != 'recording')
+      //     mediaRecorder.start(100);
+      // }
       requestAnimationFrame(processFrame);
     }
 

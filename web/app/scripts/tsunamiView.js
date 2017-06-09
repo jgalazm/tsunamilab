@@ -60,25 +60,25 @@ var TsunamiView = function(params){
     // }));
 
 
-    var videoLayer = viewer.entities.add({
-      rectangle : {
-        coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
-        bbox[1][0],Math.min(bbox[1][1],89.99999)),
-        height: 0,
-        material : videoElement,
-        asynchronous: true
-      }
-    });
-    videoLayer.rectangle.material.transparent = true;
+    // var videoLayer = viewer.entities.add({
+    //   rectangle : {
+    //     coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
+    //     bbox[1][0],Math.min(bbox[1][1],89.99999)),
+    //     height: 0,
+    //     material : videoElement,
+    //     asynchronous: true
+    //   }
+    // });
+    // videoLayer.rectangle.material.transparent = true;
 
     return viewer;
   }
 
   viewer = createViewer(containerID0);
   viewer1 = createViewer(containerID1);
-  viewer2 = createViewer(containerID4);
-  viewer3 = createViewer(containerID3);
-  viewer4 = createViewer(containerID2);
+  // viewer2 = createViewer(containerID4);
+  // viewer3 = createViewer(containerID3);
+  // viewer4 = createViewer(containerID2);
 
   var setSlaves = function(masterCamera, slaveCamera, slaveViewer, offset){
     console.log(masterCamera);
@@ -108,16 +108,16 @@ var TsunamiView = function(params){
   }
 
   setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
-  setSlaves(viewer.camera, viewer2.camera, viewer2, -90);
-  setSlaves(viewer.camera, viewer3.camera, viewer3, 180);
-  setSlaves(viewer.camera, viewer4.camera, viewer4, 90);
+  // setSlaves(viewer.camera, viewer2.camera, viewer2, -90);
+  // setSlaves(viewer.camera, viewer3.camera, viewer3, 180);
+  // setSlaves(viewer.camera, viewer4.camera, viewer4, 90);
 
   var previousTime = Date.now();
 
   viewer.scene.postRender.addEventListener(function (scene, time){
       var spinRate = 0.1;
       var currentTime = Date.now();
-      var delta = -( currentTime - previousTime ) / 1000;
+      var delta = -( currentTime - previousTime ) / 1000 *0.5;
       previousTime = currentTime;
       viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -spinRate * delta);
   });
@@ -446,8 +446,8 @@ var TsunamiView = function(params){
 
 
     return {
-      viewers : [viewer,viewer2,viewer3,viewer4],
-      viewer: viewer2,
+      viewers : [viewer,viewer1],//,viewer3,viewer4],
+      viewer: viewer,
       setColormap: setColormap,
       getCurrentPin: getCurrentPin
     };

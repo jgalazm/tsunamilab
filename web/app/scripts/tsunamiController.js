@@ -17,7 +17,7 @@ function TsunamiController(model, view){
       // var offset = index*90;
       // var lng_corrected = (lng + offset)%180;
 
-      for(var i=0; i<4; i++){
+      for(var i=0; i<viewers.length; i++){
         var lng2 = lng + i*90;
         lng2 = lng2>180 ? lng2-360: lng2;
         viewers[i].camera.flyTo({
@@ -47,7 +47,7 @@ function TsunamiController(model, view){
 
   var tick = function () {
     if (!paused) {
-      model.renderSimulation();
+      model.renderSimulation() ;
       model.renderScreenVoid();
     }
     return model.getTime();

@@ -25,10 +25,25 @@ var init = function() {
   var left4 = centerLeft - d - canvasHeight/2 - canvasWidth/2;
 
   var popup = window.open('popup.html', 'secondary', 'width=900,height=900');
+  popup.document.write(
+`<head>
+  <style>
+      @import url(../../node_modules/cesium/Build/Cesium/Widgets/widgets.css);
+      html, body  {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  #cesiumContainer1 {
+          margin: 0; padding: 0; overflow: hidden;
+          transform: scale(-1, 1)
+  }
+  </style>
 
+  </head>
+`)
+  popup.document.write('<body><div id="cesiumContainer1"></div></body>');
   $(popup.document.getElementById('cesiumContainer1')).css({
       top: 0,
-      left: 0,
+      left: 100,
       position:'absolute',
       'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
       width: canvasWidth,
@@ -371,12 +386,12 @@ var init = function() {
       video.controls = true;
     }
     var processFrame = function(){
-      // var time = controller.tick();
-      // if(!controller.isPaused()){
-      //   setTime(time);
-      //   if(mediaRecorder.state != 'recording')
-      //     mediaRecorder.start(100);
-      // }
+      var time = controller.tick();
+      if(!controller.isPaused()){
+        setTime(time);
+        if(mediaRecorder.state != 'recording')
+          mediaRecorder.start(100);
+      }
       requestAnimationFrame(processFrame);
     }
 

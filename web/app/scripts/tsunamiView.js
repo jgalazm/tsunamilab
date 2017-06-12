@@ -12,7 +12,6 @@ var TsunamiView = function(params){
   var videoElement = params.videoElement;
   var currentPin = undefined;
 
-
   var createViewer = function(canvasID){
     Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
     var viewer = new Cesium.Viewer(canvasID, {
@@ -41,7 +40,7 @@ var TsunamiView = function(params){
     viewer.scene.screenSpaceCameraController.inertiaSpin = 0;
     viewer.scene.screenSpaceCameraController.inertiaTranslate = 0;
     viewer.scene.screenSpaceCameraController.inertiaZoom = 0;
-    viewer.scene.imageryLayers.removeAll(); // optional
+    // viewer.scene.imageryLayers.removeAll(); // optional
     // viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
     //   url : 'https://dev.virtualearth.net',
     //   key : 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym',
@@ -58,7 +57,11 @@ var TsunamiView = function(params){
     //   length : 100000000000000.0,
     //   width : 10.0
     // }));
-
+    viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
+                url : 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
+                requestWaterMask : true
+            });
+    viewer.scene.globe.depthTestAgainstTerrain = true
 
     var videoLayer = viewer.entities.add({
       rectangle : {

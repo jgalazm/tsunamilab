@@ -54,7 +54,7 @@ var init = function() {
 
   </head>
   <body>
-    <div id="cesiumContainer1">
+    <div id="cesiumContainer1"></div>
     <div id="cesiumContainer2"></div>
     <div id="cesiumContainer3"></div>
     <div id="cesiumContainer4"></div>
@@ -77,36 +77,29 @@ var init = function() {
     'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
     width: canvasWidth,
     height: canvasHeight});
-  // $("#cesiumContainer1").css({
-  //   top: top1,
-  //   left: left1,
-  //   position:'absolute',
-  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-  //   width: canvasWidth,
-  //   height: canvasHeight});
-  //
-  // $("#cesiumContainer2").css({
-  //   top: top2,
-  //   left: left2,
-  //   position:'absolute',
-  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-  //   width: canvasWidth,
-  //   height: canvasHeight});
-  // $("#cesiumContainer3").css({
-  //   top: top3,
-  //   left: left3,
-  //   position:'absolute',
-  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-  //   width: canvasWidth,
-  //   height: canvasHeight});
-  //
-  // $("#cesiumContainer4").css({
-  //   top: top4,
-  //   left: left4,
-  //   position:'absolute',
-  //   'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-  //   width: canvasWidth,
-  //   height: canvasHeight});
+
+  $(popup.document.getElementById('cesiumContainer2')).css({
+    top: top2,
+    left: left2,
+    position:'absolute',
+    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+    width: canvasWidth,
+    height: canvasHeight});
+  $(popup.document.getElementById('cesiumContainer3')).css({
+    top: top3,
+    left: left3,
+    position:'absolute',
+    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+    width: canvasWidth,
+    height: canvasHeight});
+
+  $(popup.document.getElementById('cesiumContainer4')).css({
+    top: top4,
+    left: left4,
+    position:'absolute',
+    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+    width: canvasWidth,
+    height: canvasHeight});
 
 
   var tsunamiShaders = shadersCode('tsunami');
@@ -294,9 +287,9 @@ var init = function() {
     var viewParams = {
       containerID0: 'cesiumContainer0',
       containerID1: popup.document.getElementById('cesiumContainer1'),
-      containerID2: 'cesiumContainer2',
-      containerID3: 'cesiumContainer3',
-      containerID4: 'cesiumContainer4',
+      containerID2: popup.document.getElementById('cesiumContainer2'),
+      containerID3: popup.document.getElementById('cesiumContainer3'),
+      containerID4: popup.document.getElementById('cesiumContainer4'),
       initialImage: initialImage,
       bbox: bbox,
       historicalData: usgsapi.historicalData,

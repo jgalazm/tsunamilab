@@ -1,0 +1,202 @@
+<html>
+  <head>
+    <style>
+      /*#widget {
+        height: inherit;
+        background-color: rgba(228, 228, 228, 0.94);
+        position: absolute;
+        top: 100px;
+        left: 100px;
+        color: #635c5c;
+        min-width: 150px;
+        max-width: 300px;
+        border-radius: 10px;
+        opacity: 0.95;
+        z-index: 1040;
+        padding-bottom: 10px;
+      }*/
+
+      #magcontrol {
+        top: 100px;
+        left: 100px;
+        background-color: rgba(228, 228, 228, 0.94);
+        border-radius: 10px;
+        width : 300px;
+        height: 400px;
+      }
+    </style>
+
+    <script>
+
+      var magcontrol = function(parentId,x,y){
+        var currentMw = 8.8;
+        var Mwmax = 9.2
+        var MwMagGuides = [7,8,  9];
+        var magnitudeToRadius = function(Mw){
+          // Returns the "relative" radius of a sphere
+          // such that its volume equals M0 and
+          // r=1 implies Mw = Mwmax
+          var M0 =  Math.pow(10.0, 1.5*(Mw-Mwmax));
+          return Math.pow(M0,1/3.);
+        };
+
+        var radiusToMagnitude = function(r,rmax){
+          // inverse of magnitudeToRadius
+          var M0max = Math.pow(10, 1.5*(Mwmax+6.07));
+          var M0 = Math.pow(r/rmax,3)*M0max;
+          var Mw = 2/3*Math.log10(M0)-6.07;
+          return Mw;
+        }
+        var guides = MwMagGuides.map(magnitudeToRadius);
+
+
+        var parent = document.getElementById(parentId);
+        var canvas = document.createElement('canvas');
+        parent.appendChild(canvas);
+        canvas.width = parent.offsetWidth;
+        canvas.height = parent.offsetHeight;
+        var x = canvas.width*0.5;
+        var y = canvas.height;
+        var context = canvas.getContext("2d");
+        var elemLeft = parent.offsetLeft; //canvas.offsetLeft;
+        var elemTop = parent.offsetTop; //canvas.offsetTop;
+        var rmax = Math.min(canvas.width,canvas.height)*0.5;
+
+        // var guides = [0.1*rmax,0.2*rmax,0.4*rmax,0.8*rmax];
+        var draw = function(x1,y1,x2,y2,color){
+
+          // custom sphere
+          var r1 = y1 < y ? Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1)): 0;
+          var r2 = y2 < y ? Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2)): 0;
+          var dr = r2-r1
+
+          var r = Math.max(Math.min(r1+dr, rmax), 0.0);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.beginPath();
+          context.arc(x, y - r, r, 0, 2 * Math.PI, false);
+          context.fillStyle =  color;
+          context.fill();
+
+          // draw guides
+
+          for(var i = 0; i<guides.length; i++){
+            context.beginPath();
+            context.arc(x, y-guides[i]*rmax, guides[i]*rmax, 0, 2 * Math.PI, false);
+            context.lineWidth = 0.25;
+            context.strokeStyle = 'black';
+            context.setLineDash([4,2]);
+            context.stroke();
+
+            Mw = MwMagGuides[i];
+            context.font = "8pt Arial";
+            context.fillStyle = 'black';
+            context.textAlign = "center";
+            context.fillText(Mw.toString()+' Mw',x,y-2*guides[i]*rmax-2);
+          }
+          context.beginPath();
+          context.arc(x, y-rmax, rmax, 0, 2 * Math.PI, false);
+          context.lineWidth = 0.125;
+          context.strokeStyle = 'black';
+          context.setLineDash([4,0]);
+          context.stroke();
+
+          currentMw = radiusToMagnitude(r,rmax);
+          return currentMw;
+        }
+
+        draw(x,y, x,y-magnitudeToRadius(currentMw)*rmax,'orange');
+
+        var resize = false;
+
+        return {
+          currentMw : currentMw,
+          resize: resize,
+          canvas: canvas,
+          draw: draw,
+          coords :   {
+            top: elemTop,
+            left: elemLeft
+          }
+        }
+      }
+
+      var x1,y1,x2,y2 = 0;
+      var init = function(){
+        control = magcontrol('magcontrol');
+        control.canvas.addEventListener('mousedown', function(event) {
+          control.resize = true;
+          x1 = event.pageX - control.coords.left;
+          y1 = event.pageY - control.coords.top;
+        }, false);
+        control.canvas.addEventListener('mouseup', function(event) {
+          control.resize = false;
+          x2 = event.pageX - control.coords.left;
+          y2 = event.pageY - control.coords.top;
+          control.draw(x1,y1,x2,y2,'orange');
+          console.log(control.draw(x1,y1,x2,y2,'orange'));
+        }, false);
+
+        control.canvas.addEventListener('click', function(event) {
+          control.resize = false;
+          x2 = event.pageX - control.coords.left;
+          y2 = event.pageY - control.coords.top;
+        }, false);
+
+        control.canvas.addEventListener('mousemove', function(event) {
+          if(control.resize){
+            x2 = event.pageX - control.coords.left;
+            y2 = event.pageY - control.coords.top;
+
+            control.draw(x1,y1,x2,y2,'orange');
+          }
+        }, false);
+      }
+    </script>
+  </head>
+
+  <body onload='init()'>
+    <div id="magcontrol">
+      <!-- <canvas id="ex1" width="150px" height="150px"></canvas> -->
+    </div>
+  </body>
+</html>
+
+<!-- // x = 75;
+// y = 150;
+// size = 100;
+// radius = 30;
+// var widget = document.getElementById("widget")
+// var canvas = document.getElementById("ex1");
+// var context = canvas.getContext("2d");
+// var elemLeft = widget.offsetLeft; //canvas.offsetLeft;
+// var elemTop = widget.offsetTop; //canvas.offsetTop;
+// context.beginPath();
+// context.arc(x, y - radius, radius, 0, 2 * Math.PI, false);
+// context.fillStyle = 'orange';
+// context.fill();
+// var resize = false;
+// canvas.addEventListener('mousedown', function(event) {
+//   resize = true;
+// }, false)
+
+// canvas.addEventListener('mouseup', function(event) {
+//   resize = false;
+// }, false)
+
+// canvas.addEventListener('mousemove', function(event) {
+//   console.log(elemLeft);
+//   if (resize) {
+//
+//     var x1 = event.pageX - elemLeft;
+//     var y1 = event.pageY - elemTop;
+//    	console.log(y1,y);
+//     var r = y1 < y ? Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1)): 0;
+//     r = Math.min(r,75);
+//     context.clearRect(0, 0, canvas.width, canvas.height);
+//     context.beginPath();
+//     context.arc(x, y + r * Math.sign(y1 - y), r, 0, 2 * Math.PI, false);
+//     context.fillStyle = 'orange';
+//     context.fill();
+//     console.log('asdf')
+//   }
+// }, false) -->

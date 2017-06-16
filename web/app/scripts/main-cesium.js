@@ -27,14 +27,16 @@ var init = function() {
   var popup = window.open('popup.html', 'secondary', `width=${window.outerWidth},height=${window.outerHeight}`);
   popup.document.write(
 `<head>
+  <link rel="stylesheet" type="text/css" href="css/main.css">
     <style>
         @import url(../../node_modules/cesium/Build/Cesium/Widgets/widgets.css);
         html, body  {
             width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
         }
+
     #cesiumContainer1 {
             margin: 0; padding: 0; overflow: hidden;
-            transform: scale(-1, 1)
+            transform: scale(-1, 1);
     }
     #cesiumContainer2 {
         margin: 0; padding: 0; overflow: hidden;
@@ -65,11 +67,11 @@ var init = function() {
   // var top3 = centerTop +d+canvasHeight;
   // var
   $("#cesiumContainer0").css({
-    top: windowheight/2 - canvasHeight/2,
+    top: 0,
     left: 0,
     position:'absolute',
-    width: 400,
-    height: 400});
+    width: window.innerWidth,
+    height: window.innerHeight});
   $(popup.document.getElementById('cesiumContainer1')).css({
     top: top1,
     left: left1,
@@ -101,6 +103,9 @@ var init = function() {
     width: canvasWidth,
     height: canvasHeight});
 
+    $( window ).unload(function() {
+      popup.close();
+    });
 
   var tsunamiShaders = shadersCode('tsunami');
 

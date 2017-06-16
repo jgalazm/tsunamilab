@@ -40,6 +40,7 @@ var TsunamiView = function(params){
     viewer.scene.screenSpaceCameraController.inertiaSpin = 0;
     viewer.scene.screenSpaceCameraController.inertiaTranslate = 0;
     viewer.scene.screenSpaceCameraController.inertiaZoom = 0;
+
     // viewer.scene.imageryLayers.removeAll(); // optional
     // viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
     //   url : 'https://dev.virtualearth.net',
@@ -62,6 +63,8 @@ var TsunamiView = function(params){
                 requestWaterMask : true
             });
     viewer.scene.globe.depthTestAgainstTerrain = true
+
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*6;
 
     var videoLayer = viewer.entities.add({
       rectangle : {
@@ -114,6 +117,7 @@ var TsunamiView = function(params){
   setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
   setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
   setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
+
 
   var previousTime = Date.now();
 

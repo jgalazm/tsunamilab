@@ -96,24 +96,24 @@ var TsunamiView = function(params){
       var offsetFactor2 = Math.min(1, Math.pow(height/10000000, 0.5));
       // console.log(offsetFactor1, offsetFactor2);
       // console.log('offsetFactor1', slaveCamera.up);
-      if(offset == 180)
-        offsetFactor1 = 1;
-      slaveCamera.rotate(slaveCamera.up, offsetFactor1*offset/180*Math.PI);
-      if(offset != 180)
-        slaveCamera.setView({
-            orientation: {
-                heading : Cesium.Math.toRadians(90.0), // east, default value is 0.0 (north)
-                pitch : Cesium.Math.toRadians(-90+(1-offsetFactor2)*offset/1.3),    // default value (looking down)
-                roll : Cesium.Math.toRadians(-90)                           // default value
-            }
-        });
+    //   if(offset == 180)
+    //     offsetFactor1 = 1;
+    //   slaveCamera.rotate(slaveCamera.up, offsetFactor1*offset/180*Math.PI);
+    //   if(offset != 180)
+    //     slaveCamera.setView({
+    //         orientation: {
+    //             heading : Cesium.Math.toRadians(90.0), // east, default value is 0.0 (north)
+    //             pitch : Cesium.Math.toRadians(-90+(1-offsetFactor2)*offset/1.3),    // default value (looking down)
+    //             roll : Cesium.Math.toRadians(-90)                           // default value
+    //         }
+    //     });
     });
   }
 
   setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
-  setSlaves(viewer.camera, viewer2.camera, viewer2, -90);
-  setSlaves(viewer.camera, viewer3.camera, viewer3, 180);
-  setSlaves(viewer.camera, viewer4.camera, viewer4, 90);
+  setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
+  setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
+  setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
 
   var previousTime = Date.now();
 

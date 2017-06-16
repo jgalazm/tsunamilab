@@ -60,6 +60,8 @@ var init = function() {
     <div id="cesiumContainer2"></div>
     <div id="cesiumContainer3"></div>
     <div id="cesiumContainer4"></div>
+    <img src="tsunami_labs-logo.png"> </img>
+
   </body>
 `);
 

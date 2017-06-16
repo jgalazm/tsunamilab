@@ -1,5 +1,7 @@
 <html>
   <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
     <style>
       /*#widget {
         height: inherit;
@@ -16,13 +18,13 @@
         padding-bottom: 10px;
       }*/
 
-      #magcontrol {
-        top: 100px;
-        left: 100px;
+      #control {
+          /*top: 100px;
+          left: 100px;*/
         background-color: rgba(228, 228, 228, 0.94);
         border-radius: 10px;
-        width : 300px;
-        height: 400px;
+        /*width : 350px;
+        height: 450px;*/
       }
     </style>
 
@@ -30,7 +32,7 @@
 
       var magcontrol = function(parentId,x,y){
         var currentMw = 8.8;
-        var Mwmax = 9.2
+        var Mwmax = 9.1
         var MwMagGuides = [7,8,  9];
         var magnitudeToRadius = function(Mw){
           // Returns the "relative" radius of a sphere
@@ -52,14 +54,15 @@
 
         var parent = document.getElementById(parentId);
         var canvas = document.createElement('canvas');
+        var rectObject = parent.getBoundingClientRect();
         parent.appendChild(canvas);
         canvas.width = parent.offsetWidth;
         canvas.height = parent.offsetHeight;
         var x = canvas.width*0.5;
         var y = canvas.height;
         var context = canvas.getContext("2d");
-        var elemLeft = parent.offsetLeft; //canvas.offsetLeft;
-        var elemTop = parent.offsetTop; //canvas.offsetTop;
+        var elemLeft = rectObject.left;//parent.offsetLeft; //canvas.offsetLeft;
+        var elemTop = rectObject.top;//parent.offsetTop; //canvas.offsetTop;
         var rmax = Math.min(canvas.width,canvas.height)*0.5;
 
         // var guides = [0.1*rmax,0.2*rmax,0.4*rmax,0.8*rmax];
@@ -82,7 +85,7 @@
           for(var i = 0; i<guides.length; i++){
             context.beginPath();
             context.arc(x, y-guides[i]*rmax, guides[i]*rmax, 0, 2 * Math.PI, false);
-            context.lineWidth = 0.25;
+            context.lineWidth = 0.5;
             context.strokeStyle = 'black';
             context.setLineDash([4,2]);
             context.stroke();
@@ -95,7 +98,7 @@
           }
           context.beginPath();
           context.arc(x, y-rmax, rmax, 0, 2 * Math.PI, false);
-          context.lineWidth = 0.125;
+          context.lineWidth = 0.15;
           context.strokeStyle = 'black';
           context.setLineDash([4,0]);
           context.stroke();
@@ -121,6 +124,7 @@
       }
 
       var x1,y1,x2,y2 = 0;
+
       var init = function(){
         control = magcontrol('magcontrol');
         control.canvas.addEventListener('mousedown', function(event) {
@@ -151,12 +155,43 @@
           }
         }, false);
       }
+
     </script>
   </head>
 
   <body onload='init()'>
-    <div id="magcontrol">
-      <!-- <canvas id="ex1" width="150px" height="150px"></canvas> -->
+    <div class="container">
+      <div class="row">
+
+        <div id="control" class="col-xs-3">
+
+          <div class="row header">
+            <div  class="col-xs-12 text-right">
+              
+            </div>
+          </div>
+
+          <div class="row">
+            <div  class="col-xs-12 text-right">
+              <a href="#">
+                Similar in history:
+                <span class="badge">5</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div  class="col-xs-12">
+              <div id="magcontrol">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
     </div>
   </body>
 </html>

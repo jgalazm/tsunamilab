@@ -24,10 +24,15 @@ var init = function() {
   var top4 = centerTop - canvasHeight/2;
   var left4 = centerLeft - d - canvasHeight/2 - canvasWidth/2;
 
-  var popup = window.open('popup.html', 'secondary', `width=${window.outerWidth},height=${window.outerHeight}`);
+  popup = window.open('popup.html', 'secondary', `width=${window.outerWidth},height=${window.outerHeight}`);
   popup.document.write(
 `<head>
-  <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
     <style>
         @import url(../../node_modules/cesium/Build/Cesium/Widgets/widgets.css);
         html, body  {
@@ -60,6 +65,9 @@ var init = function() {
 
   </head>
   <body>
+  <div id="draggableHelper">
+    <img id="logo" src="img/favicon.png"></img>
+  </div>
     <div id="cesiumContainer1"></div>
     <div id="cesiumContainer2"></div>
     <div id="cesiumContainer3"></div>
@@ -67,10 +75,11 @@ var init = function() {
 
 
 
+
   </body>
 `);
 
-  // var top3 = centerTop +d+canvasHeight;
+    // var top3 = centerTop +d+canvasHeight;
   $("#cesiumContainer0").css({
     top: 0,
     left: 0,
@@ -136,7 +145,22 @@ var init = function() {
     left4: left4
   }
 
-  placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
+  // placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
+
+  $(popup.document.getElementById('logo')).css({
+    position: 'absolute',
+    width: 2*d,
+    height: 2*d
+  });
+
+  $(popup.document.getElementById('draggableHelper')).css({
+    position: 'absolute',
+    top: window.innerHeight*0.5,
+    left: window.innerWidth*0.5
+  });
+
+  $(popup.document.getElementById('logo')).resizable();
+  $(popup.document.getElementById('draggableHelper')).draggable();
 
   $( window ).unload(function() {
     popup.close();

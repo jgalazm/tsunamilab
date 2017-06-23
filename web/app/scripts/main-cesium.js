@@ -52,6 +52,10 @@ var init = function() {
         margin: 0; padding: 0; overflow: hidden;
         transform: rotate(270deg) scale(-1, 1);
     }
+    body{
+
+      background-color:black
+    }
     </style>
 
   </head>
@@ -60,54 +64,83 @@ var init = function() {
     <div id="cesiumContainer2"></div>
     <div id="cesiumContainer3"></div>
     <div id="cesiumContainer4"></div>
-    <img src="tsunami_labs-logo.png"> </img>
+
+
 
   </body>
 `);
 
-
   // var top3 = centerTop +d+canvasHeight;
-  // var
   $("#cesiumContainer0").css({
     top: 0,
     left: 0,
     position:'absolute',
     width: window.innerWidth,
     height: window.innerHeight});
-  $(popup.document.getElementById('cesiumContainer1')).css({
-    top: top1,
-    left: left1,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
 
-  $(popup.document.getElementById('cesiumContainer2')).css({
-    top: top2,
-    left: left2,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
-  $(popup.document.getElementById('cesiumContainer3')).css({
-    top: top3,
-    left: left3,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
+  // $(popup.document.getElementById('draggableHelper')).draggable();
+  // $(popup.document.getElementById('image')).resizeable();
 
-  $(popup.document.getElementById('cesiumContainer4')).css({
-    top: top4,
-    left: left4,
-    position:'absolute',
-    'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-    width: canvasWidth,
-    height: canvasHeight});
+  var placeSlaveCanvas = function(d,canvasWidth,canvasHeight,coords){
 
-    $( window ).unload(function() {
-      popup.close();
-    });
+    var top1 = coords.top1,
+    left1 = coords.left1,
+    top2 = coords.top2,
+    left2 = coords.left2,
+    top3 = coords.top3,
+    left3 = coords.left3,
+    top4 = coords.top4,
+    left4 = coords.left4;
+
+    $(popup.document.getElementById('cesiumContainer1')).css({
+      top: top1,
+      left: left1,
+      position:'absolute',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      width: canvasWidth,
+      height: canvasHeight});
+
+    $(popup.document.getElementById('cesiumContainer2')).css({
+      top: top2,
+      left: left2,
+      position:'absolute',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      width: canvasWidth,
+      height: canvasHeight});
+    $(popup.document.getElementById('cesiumContainer3')).css({
+      top: top3,
+      left: left3,
+      position:'absolute',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      width: canvasWidth,
+      height: canvasHeight});
+
+      $(popup.document.getElementById('cesiumContainer4')).css({
+        top: top4,
+        left: left4,
+        position:'absolute',
+        'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+        width: canvasWidth,
+        height: canvasHeight});
+
+  }
+
+  var coords = {
+    top1: top1,
+    left1: left1,
+    top2: top2,
+    left2: left2,
+    top3: top3,
+    left3: left3,
+    top4: top4,
+    left4: left4
+  }
+
+  placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
+
+  $( window ).unload(function() {
+    popup.close();
+  });
 
   var tsunamiShaders = shadersCode('tsunami');
 

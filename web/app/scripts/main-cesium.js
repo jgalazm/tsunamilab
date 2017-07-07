@@ -180,16 +180,13 @@ var init = function() {
       
     resizeCanvas(windowwidth, windowheight, popup.d);
   });
-    // var top3 = centerTop +d+canvasHeight;
+
   $("#cesiumContainer0").css({
     top: 0,
     left: 0,
     position:'absolute',
     width: window.innerWidth,
     height: window.innerHeight});
-
-  // $(popup.document.getElementById('draggableHelper')).draggable();
-  // $(popup.document.getElementById('image')).resizeable();
 
  
 

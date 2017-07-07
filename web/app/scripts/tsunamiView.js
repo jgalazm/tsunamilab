@@ -65,17 +65,17 @@ var TsunamiView = function(params){
     viewer.scene.globe.depthTestAgainstTerrain = true
 
     viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*6;
-
-    var videoLayer = viewer.entities.add({
-      rectangle : {
-        coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
-        bbox[1][0],Math.min(bbox[1][1],89.99999)),
-        height: 0,
-        material : videoElement,
-        asynchronous: true
-      }
-    });
-    videoLayer.rectangle.material.transparent = true;
+    // 
+    // var videoLayer = viewer.entities.add({
+    //   rectangle : {
+    //     coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),
+    //     bbox[1][0],Math.min(bbox[1][1],89.99999)),
+    //     height: 0,
+    //     material : videoElement,
+    //     asynchronous: true
+    //   }
+    // });
+    // videoLayer.rectangle.material.transparent = true;
 
     return viewer;
   }

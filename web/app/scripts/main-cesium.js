@@ -60,7 +60,9 @@ var init = function() {
     <div id="cesiumContainer2"></div>
     <div id="cesiumContainer3"></div>
     <div id="cesiumContainer4"></div>
-    <img src="tsunami_labs-logo.png"> </img>
+    <div id="draggable">
+      <img id"image" width ="100px" src="img/tsunami_labs-logo.png"> </img>
+    </div>
 
   </body>
 `);
@@ -68,6 +70,7 @@ var init = function() {
 
   // var top3 = centerTop +d+canvasHeight;
   // var
+  $(popup.document.getElementById('image')).resizable();
   $("#cesiumContainer0").css({
     top: 0,
     left: 0,

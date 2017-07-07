@@ -67,6 +67,8 @@ var TsunamiView = function(params){
     viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*6;
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 1000000*100;
 
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*6;
+
     var videoLayer = viewer.entities.add({
       rectangle : {
         coordinates : Cesium.Rectangle.fromDegrees(bbox[0][0],Math.max(bbox[0][1],-89.99999),

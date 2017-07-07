@@ -58,11 +58,11 @@ var TsunamiView = function(params){
     //   length : 100000000000000.0,
     //   width : 10.0
     // }));
-    // viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-    //             url : 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
-    //             requestWaterMask : true
-    //         });
-    // viewer.scene.globe.depthTestAgainstTerrain = true
+    viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
+                url : 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
+                requestWaterMask : true
+            });
+    viewer.scene.globe.depthTestAgainstTerrain = true
 
     viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*6;
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 1000000*100;
@@ -84,10 +84,10 @@ var TsunamiView = function(params){
   }
 
   viewer = createViewer(containerID0);
-  viewer1 = createViewer(containerID1);
-  viewer2 = createViewer(containerID2);
-  viewer3 = createViewer(containerID3);
-  viewer4 = createViewer(containerID4);
+  // viewer1 = createViewer(containerID1);
+  // viewer2 = createViewer(containerID2);
+  // viewer3 = createViewer(containerID3);
+  // viewer4 = createViewer(containerID4);
 
   var setSlaves = function(masterCamera, slaveCamera, slaveViewer, offset){
     console.log(masterCamera);
@@ -116,10 +116,10 @@ var TsunamiView = function(params){
     });
   }
 
-  setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
-  setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
-  setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
-  setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
+  // setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
+  // setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
+  // setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
+  // setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
 
 
   var previousTime = Date.now();
@@ -456,7 +456,7 @@ var TsunamiView = function(params){
 
 
     return {
-      viewers : [viewer,viewer1,viewer2,viewer3,viewer4],
+      viewers : [viewer],//,viewer1,viewer2,viewer3,viewer4],
       viewer: viewer,
       setColormap: setColormap,
       getCurrentPin: getCurrentPin

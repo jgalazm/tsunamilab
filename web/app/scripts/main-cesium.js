@@ -1,12 +1,12 @@
 // function that initializes the cesium display
 $('#init_modal').modal();
 
-var resizeCanvas = function(popup){
-  if(!popup)
-    popup = window;
-  var windowheight = popup.innerHeight;;
-  var windowwidth = popup.innerWidth;
-  var d = 0.10*windowheight;
+var resizeCanvas = function(windowwidth, windowheight, d){
+  // if(!popup)
+  //   popup = window;
+  // var windowheight = popup.innerHeight;;
+  // var windowwidth = popup.innerWidth;
+  // var d = 0.10*windowheight;
   var centerTop = 0.5*windowheight;
   var centerLeft = 0.5*windowwidth;
 
@@ -38,6 +38,7 @@ var resizeCanvas = function(popup){
   }
 
   placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
+  // $(popup.document.getElementById('draggableHelper'))[0].top = top3;
 }
 
  var placeSlaveCanvas = function(d,canvasWidth,canvasHeight,coords){
@@ -148,9 +149,6 @@ var init = function() {
 
   </head>
   <body>
-  <div id="draggableHelper">
-    <img id="logo" src="img/favicon.png"></img>
-  </div>
     <div id="cesiumContainer1"></div>
     <div id="cesiumContainer2"></div>
     <div id="cesiumContainer3"></div>
@@ -162,7 +160,14 @@ var init = function() {
   </body>
 `);
 
-  $(popup).resize(function(){resizeCanvas(popup)});
+  $(popup).resize(function(){
+    var windowheight = popup.innerHeight;
+    var windowwidth = popup.innerWidth;
+    if(!popup.d)
+      popup.d = 0.10*windowheight;
+      
+    resizeCanvas(windowwidth, windowheight, popup.d);
+  });
     // var top3 = centerTop +d+canvasHeight;
   $("#cesiumContainer0").css({
     top: 0,
@@ -189,23 +194,21 @@ var init = function() {
 
   placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
 
-  $(popup.document.getElementById('logo')).css({
-    position: 'absolute',
-    width: 2*d,
-    height: 2*d
-  });
-
-  $(popup.document.getElementById('draggableHelper')).css({
-    position: 'absolute',
-    top: window.innerHeight*0.5,
-    left: window.innerWidth*0.5
-  });
-
-  $(popup.document.getElementById('logo')).resizable();
-  $(popup.document.getElementById('draggableHelper')).draggable();
-
   $( window ).unload(function() {
     popup.close();
+  });
+
+  $(popup.document.body).bind('mousewheel', function(e) {
+    console.log(e.originalEvent.wheelDelta);
+    var windowheight = popup.innerHeight;
+    var windowwidth = popup.innerWidth;
+    
+    if(e.originalEvent.wheelDelta > 0)
+      popup.d += 5;
+    else
+      popup.d -= 5;
+      
+    resizeCanvas(windowwidth, windowheight, popup.d);
   });
 
   var tsunamiShaders = shadersCode('tsunami');

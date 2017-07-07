@@ -137,21 +137,21 @@ var init = function() {
 
     #cesiumContainer1 {
             margin: 0; padding: 0; overflow: hidden;
-            transform: scale(-1, -1);
+            transform: scale(1, -1);
     }
     #cesiumContainer2 {
         margin: 0; padding: 0; overflow: hidden;
-        transform: rotate(90deg) scale(-1, -1);
+        transform: rotate(90deg) scale(1, -1);
 
     }
     #cesiumContainer3 {
         margin: 0; padding: 0; overflow: hidden;
-        transform: rotate(180deg) scale(-1, -1);
+        transform: rotate(180deg) scale(1, -1);
 
     }
     #cesiumContainer4 {
         margin: 0; padding: 0; overflow: hidden;
-        transform: rotate(270deg) scale(-1, -1);
+        transform: rotate(270deg) scale(1, -1);
     }
     body{
 

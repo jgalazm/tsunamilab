@@ -56,7 +56,10 @@ var resizeCanvas = function(windowwidth, windowheight, d){
       top: top1,
       left: left1,
       position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
+                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
+                              + (canvasWidth+2*d)/2 + 'px 0%, ' 
+                              + (canvasWidth-2*d)/2 + 'px 0%)',
       width: canvasWidth,
       height: canvasHeight});
 
@@ -64,14 +67,20 @@ var resizeCanvas = function(windowwidth, windowheight, d){
       top: top2,
       left: left2,
       position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
+                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
+                              + (canvasWidth+2*d)/2 + 'px 0%, ' 
+                              + (canvasWidth-2*d)/2 + 'px 0%)',
       width: canvasWidth,
       height: canvasHeight});
     $(popup.document.getElementById('cesiumContainer3')).css({
       top: top3,
       left: left3,
       position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
+                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
+                              + (canvasWidth+2*d)/2 + 'px 0%, ' 
+                              + (canvasWidth-2*d)/2 + 'px 0%)',
       width: canvasWidth,
       height: canvasHeight});
 
@@ -79,7 +88,10 @@ var resizeCanvas = function(windowwidth, windowheight, d){
         top: top4,
         left: left4,
         position:'absolute',
-        'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+        'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
+                        + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
+                        + (canvasWidth+2*d)/2 + 'px 0%, ' 
+                        + (canvasWidth-2*d)/2 + 'px 0%)',
         width: canvasWidth,
         height: canvasHeight});
 
@@ -125,21 +137,21 @@ var init = function() {
 
     #cesiumContainer1 {
             margin: 0; padding: 0; overflow: hidden;
-            transform: scale(-1, 1);
+            transform: scale(-1, -1);
     }
     #cesiumContainer2 {
         margin: 0; padding: 0; overflow: hidden;
-        transform: rotate(90deg) scale(-1, 1);
+        transform: rotate(90deg) scale(-1, -1);
 
     }
     #cesiumContainer3 {
         margin: 0; padding: 0; overflow: hidden;
-        transform: rotate(180deg) scale(-1, 1);
+        transform: rotate(180deg) scale(-1, -1);
 
     }
     #cesiumContainer4 {
         margin: 0; padding: 0; overflow: hidden;
-        transform: rotate(270deg) scale(-1, 1);
+        transform: rotate(270deg) scale(-1, -1);
     }
     body{
 

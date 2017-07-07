@@ -145,7 +145,7 @@ var init = function() {
     left4: left4
   }
 
-  // placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
+  placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
 
   $(popup.document.getElementById('logo')).css({
     position: 'absolute',

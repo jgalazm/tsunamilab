@@ -1,6 +1,89 @@
 // function that initializes the cesium display
 $('#init_modal').modal();
 
+var resizeCanvas = function(popup){
+  if(!popup)
+    popup = window;
+  var windowheight = popup.innerHeight;;
+  var windowwidth = popup.innerWidth;
+  var d = 0.10*windowheight;
+  var centerTop = 0.5*windowheight;
+  var centerLeft = 0.5*windowwidth;
+
+  var canvasWidth = windowwidth*0.6; //45°
+  var canvasHeight  = windowheight/2.0 - d;
+
+  var top1 = centerTop - d-canvasHeight;
+  var left1 = centerLeft - canvasWidth/2;
+
+  var top2 = centerTop - canvasHeight/2;
+  var left2 = centerLeft + d + canvasHeight/2 - canvasWidth/2;
+
+  var top3 = centerTop + d;
+  var left3 = centerLeft - canvasWidth/2;
+
+  var top4 = centerTop - canvasHeight/2;
+  var left4 = centerLeft - d - canvasHeight/2 - canvasWidth/2;
+
+
+  var coords = {
+    top1: top1,
+    left1: left1,
+    top2: top2,
+    left2: left2,
+    top3: top3,
+    left3: left3,
+    top4: top4,
+    left4: left4
+  }
+
+  placeSlaveCanvas(d,canvasWidth,canvasHeight,coords);
+}
+
+ var placeSlaveCanvas = function(d,canvasWidth,canvasHeight,coords){
+
+    var top1 = coords.top1,
+    left1 = coords.left1,
+    top2 = coords.top2,
+    left2 = coords.left2,
+    top3 = coords.top3,
+    left3 = coords.left3,
+    top4 = coords.top4,
+    left4 = coords.left4;
+
+    $(popup.document.getElementById('cesiumContainer1')).css({
+      top: top1,
+      left: left1,
+      position:'absolute',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      width: canvasWidth,
+      height: canvasHeight});
+
+    $(popup.document.getElementById('cesiumContainer2')).css({
+      top: top2,
+      left: left2,
+      position:'absolute',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      width: canvasWidth,
+      height: canvasHeight});
+    $(popup.document.getElementById('cesiumContainer3')).css({
+      top: top3,
+      left: left3,
+      position:'absolute',
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+      width: canvasWidth,
+      height: canvasHeight});
+
+      $(popup.document.getElementById('cesiumContainer4')).css({
+        top: top4,
+        left: left4,
+        position:'absolute',
+        'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
+        width: canvasWidth,
+        height: canvasHeight});
+
+  }
+
 var init = function() {
 
   var windowheight = window.innerHeight;;
@@ -79,6 +162,7 @@ var init = function() {
   </body>
 `);
 
+  $(popup).resize(function(){resizeCanvas(popup)});
     // var top3 = centerTop +d+canvasHeight;
   $("#cesiumContainer0").css({
     top: 0,
@@ -90,49 +174,7 @@ var init = function() {
   // $(popup.document.getElementById('draggableHelper')).draggable();
   // $(popup.document.getElementById('image')).resizeable();
 
-  var placeSlaveCanvas = function(d,canvasWidth,canvasHeight,coords){
-
-    var top1 = coords.top1,
-    left1 = coords.left1,
-    top2 = coords.top2,
-    left2 = coords.left2,
-    top3 = coords.top3,
-    left3 = coords.left3,
-    top4 = coords.top4,
-    left4 = coords.left4;
-
-    $(popup.document.getElementById('cesiumContainer1')).css({
-      top: top1,
-      left: left1,
-      position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px 0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-      width: canvasWidth,
-      height: canvasHeight});
-
-    $(popup.document.getElementById('cesiumContainer2')).css({
-      top: top2,
-      left: left2,
-      position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-      width: canvasWidth,
-      height: canvasHeight});
-    $(popup.document.getElementById('cesiumContainer3')).css({
-      top: top3,
-      left: left3,
-      position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-      width: canvasWidth,
-      height: canvasHeight});
-
-      $(popup.document.getElementById('cesiumContainer4')).css({
-        top: top4,
-        left: left4,
-        position:'absolute',
-        'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  0%, ' + (canvasWidth/2+(canvasHeight+d)) + 'px 0%, ' + (canvasWidth+2*d)/2 + 'px 100%, ' + (canvasWidth-2*d)/2 + 'px 100%)',
-        width: canvasWidth,
-        height: canvasHeight});
-
-  }
+ 
 
   var coords = {
     top1: top1,

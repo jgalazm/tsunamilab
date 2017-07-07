@@ -448,7 +448,7 @@ var TsunamiView = function(params){
 
     createPopover();
 
-    // addAllPins();
+    addAllPins();
 
     addPinsHandlers();
 

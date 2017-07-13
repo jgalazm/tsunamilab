@@ -1,9 +1,9 @@
 var TsunamiView = function(params){
   var containerID0 = params.containerID0;
-  var containerID1 = params.containerID1;
-  var containerID2 = params.containerID2;
-  var containerID3 = params.containerID3;
-  var containerID4 = params.containerID4;
+  // var containerID1 = params.containerID1;
+  // var containerID2 = params.containerID2;
+  // var containerID3 = params.containerID3;
+  // var containerID4 = params.containerID4;
   var initialImage = params.initialImage; //output de model.renderScreen()
   var bbox = params.bbox;
   var zmin = params.zmin;
@@ -99,17 +99,18 @@ var TsunamiView = function(params){
   }
 
 
-  var makeSlaves = function(){
-    var viewer1 = createViewer(containerID1);
-    var viewer2 = createViewer(containerID2);
-    var viewer3 = createViewer(containerID3);
-    var viewer4 = createViewer(containerID4);
-    viewers = viewers.concat([viewer1,viewer2,viewer3,viewer4]);
+  var makeSlaves = function(container1, container2, container3, container4){
+    var viewer1 = createViewer(container1);
+    var viewer2 = createViewer(container2);
+    var viewer3 = createViewer(container3);
+    var viewer4 = createViewer(container4);
 
     setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
     setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
     setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
     setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
+
+    return [viewer1,viewer2,viewer3,viewer4];
   }
 
 
@@ -444,6 +445,7 @@ var TsunamiView = function(params){
     addAllPins();
 
     addPinsHandlers();
+
 
 
     return {

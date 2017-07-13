@@ -404,18 +404,21 @@ var init = function() {
     var videoElement = document.getElementById('videoElement');
     var viewParams = {
       containerID0: 'cesiumContainer0',
-      containerID1: popup.document.getElementById('cesiumContainer1'),
-      containerID2: popup.document.getElementById('cesiumContainer2'),
-      containerID3: popup.document.getElementById('cesiumContainer3'),
-      containerID4: popup.document.getElementById('cesiumContainer4'),
       initialImage: initialImage,
       bbox: bbox,
       historicalData: usgsapi.historicalData,
       videoElement: videoElement
     };
 
+
     view = TsunamiView(viewParams);
 
+    view.viewers = view.viewers.concat(view.makeSlaves(
+        popup.document.getElementById('cesiumContainer1'),
+        popup.document.getElementById('cesiumContainer2'),
+        popup.document.getElementById('cesiumContainer3'),
+        popup.document.getElementById('cesiumContainer4'))
+      );
 
     // initialize Controller
 

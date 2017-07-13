@@ -81,11 +81,8 @@ var TsunamiView = function(params){
     return viewer;
   }
 
-  viewer = createViewer(containerID0);
-  viewer1 = createViewer(containerID1);
-  viewer2 = createViewer(containerID2);
-  viewer3 = createViewer(containerID3);
-  viewer4 = createViewer(containerID4);
+  var viewer = createViewer(containerID0);
+  var viewers = [viewer];
 
   var setSlaves = function(masterCamera, slaveCamera, slaveViewer, offset){
     console.log(masterCamera);
@@ -98,26 +95,22 @@ var TsunamiView = function(params){
       var height = masterCamera.positionCartographic.height;
       var offsetFactor1 = Math.min(1, Math.pow(height/50000000, 1.5));
       var offsetFactor2 = Math.min(1, Math.pow(height/10000000, 0.5));
-      // console.log(offsetFactor1, offsetFactor2);
-      // console.log('offsetFactor1', slaveCamera.up);
-    //   if(offset == 180)
-    //     offsetFactor1 = 1;
-    //   slaveCamera.rotate(slaveCamera.up, offsetFactor1*offset/180*Math.PI);
-    //   if(offset != 180)
-    //     slaveCamera.setView({
-    //         orientation: {
-    //             heading : Cesium.Math.toRadians(90.0), // east, default value is 0.0 (north)
-    //             pitch : Cesium.Math.toRadians(-90+(1-offsetFactor2)*offset/1.3),    // default value (looking down)
-    //             roll : Cesium.Math.toRadians(-90)                           // default value
-    //         }
-    //     });
     });
   }
 
-  setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
-  setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
-  setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
-  setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
+
+  var makeSlaves = function(){
+    var viewer1 = createViewer(containerID1);
+    var viewer2 = createViewer(containerID2);
+    var viewer3 = createViewer(containerID3);
+    var viewer4 = createViewer(containerID4);
+    viewers = viewers.concat([viewer1,viewer2,viewer3,viewer4]);
+
+    setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
+    setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
+    setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
+    setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
+  }
 
 
   var previousTime = Date.now();
@@ -454,9 +447,10 @@ var TsunamiView = function(params){
 
 
     return {
-      viewers : [viewer,viewer1,viewer2,viewer3,viewer4],
+      viewers : viewers,
       viewer: viewer,
       setColormap: setColormap,
-      getCurrentPin: getCurrentPin
+      getCurrentPin: getCurrentPin,
+      makeSlaves: makeSlaves
     };
   }

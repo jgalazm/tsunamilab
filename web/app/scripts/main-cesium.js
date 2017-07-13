@@ -56,9 +56,9 @@ var resizeCanvas = function(windowwidth, windowheight, d){
       top: top1,
       left: left1,
       position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
-                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
-                              + (canvasWidth+2*d)/2 + 'px 0%, ' 
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, '
+                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, '
+                              + (canvasWidth+2*d)/2 + 'px 0%, '
                               + (canvasWidth-2*d)/2 + 'px 0%)',
       width: canvasWidth,
       height: canvasHeight});
@@ -67,9 +67,9 @@ var resizeCanvas = function(windowwidth, windowheight, d){
       top: top2,
       left: left2,
       position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
-                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
-                              + (canvasWidth+2*d)/2 + 'px 0%, ' 
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, '
+                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, '
+                              + (canvasWidth+2*d)/2 + 'px 0%, '
                               + (canvasWidth-2*d)/2 + 'px 0%)',
       width: canvasWidth,
       height: canvasHeight});
@@ -77,9 +77,9 @@ var resizeCanvas = function(windowwidth, windowheight, d){
       top: top3,
       left: left3,
       position:'absolute',
-      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
-                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
-                              + (canvasWidth+2*d)/2 + 'px 0%, ' 
+      'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, '
+                              + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, '
+                              + (canvasWidth+2*d)/2 + 'px 0%, '
                               + (canvasWidth-2*d)/2 + 'px 0%)',
       width: canvasWidth,
       height: canvasHeight});
@@ -88,9 +88,9 @@ var resizeCanvas = function(windowwidth, windowheight, d){
         top: top4,
         left: left4,
         position:'absolute',
-        'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, ' 
-                        + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, ' 
-                        + (canvasWidth+2*d)/2 + 'px 0%, ' 
+        'clip-path': 'polygon(' + (canvasWidth/2-(canvasHeight+d)) + 'px  100%, '
+                        + (canvasWidth/2+(canvasHeight+d)) + 'px 100%, '
+                        + (canvasWidth+2*d)/2 + 'px 0%, '
                         + (canvasWidth-2*d)/2 + 'px 0%)',
         width: canvasWidth,
         height: canvasHeight});
@@ -107,7 +107,7 @@ var init = function() {
 
   var canvasWidth = windowwidth*0.6; //45°
   var canvasHeight  = 1.5*windowheight/2.0 - d;
-  
+
   var top1 = centerTop - d-canvasHeight;
   var left1 = centerLeft - canvasWidth/2;
 
@@ -177,7 +177,7 @@ var init = function() {
     var windowwidth = popup.innerWidth;
     if(!popup.d)
       popup.d = 0.10*windowheight;
-      
+
     resizeCanvas(windowwidth, windowheight, popup.d);
   });
 
@@ -188,7 +188,7 @@ var init = function() {
     width: window.innerWidth,
     height: window.innerHeight});
 
- 
+
 
   var coords = {
     top1: top1,
@@ -211,12 +211,12 @@ var init = function() {
     console.log(e.originalEvent.wheelDelta);
     var windowheight = popup.innerHeight;
     var windowwidth = popup.innerWidth;
-    
+
     if(e.originalEvent.wheelDelta > 0)
       popup.d += 5;
     else
       popup.d -= 5;
-      
+
     resizeCanvas(windowwidth, windowheight, popup.d);
   });
 

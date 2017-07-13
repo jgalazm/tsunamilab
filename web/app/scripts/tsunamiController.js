@@ -9,24 +9,16 @@ function TsunamiController(model, view){
   //   });
   // }
 
-  var flyToMultiple = function (viewers,lat, lng, scale) {
-    var scale = scale ? scale : 8;
-    // for(var index =0; index<viewers.length; index++){
-    //
-
-      // var offset = index*90;
-      // var lng_corrected = (lng + offset)%180;
-
+  var flyToMultiple = function (viewers,lat, lng) {
+      // default "%" operator is wrong for negative numbers
+      // http://stackoverflow.com/questions/4467539/javascript-modulo-not-behaving
       for(var i=0; i<viewers.length; i++){
         var lng2 = lng + i*90;
-        lng2 = lng2>180 ? lng2-360: lng2;
+        // lng2 = lng2>180 ? lng2-360: lng2;
         viewers[i].camera.flyTo({
-          destination: Cesium.Rectangle.fromDegrees(
-            ((lng2-5) - 3 * scale)%180,
-            ((lat-5) - 3 * scale)%90,
-            ((lng2+5) + 3 * scale)%180,
-            ((lat+5) + 3 * scale)%90
-          )});
+          destination: Cesium.Cartesian3.fromDegrees(lng2,lat, 1000000*6*2),
+          duration: 1
+        });
       }
   }
 
@@ -39,8 +31,7 @@ function TsunamiController(model, view){
     );
     // normalize using valdivia as reference
     // but not farther than valdivia's scale
-    var scale = Math.min(12,12*maxL/850000);
-
+    var scale = 15*Math.min(1,maxL/850000);
     // flyTo(lat, lng, scale);
     flyToMultiple(view.viewers,lat, lng, scale);
   }

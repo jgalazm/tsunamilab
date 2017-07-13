@@ -11,7 +11,8 @@ var resizeCanvas = function(windowwidth, windowheight, d){
   var centerLeft = 0.5*windowwidth;
 
   var canvasWidth = windowwidth*0.6; //45°
-  var canvasHeight  = 1.5*windowheight/2.0 - d;
+  var canvasHeight  = windowheight/2.0 - d;
+  // var canvasHeight  = 1.5*windowheight/2.0 - d;
 
   var top1 = centerTop - d-canvasHeight;
   var left1 = centerLeft - canvasWidth/2;

@@ -17,7 +17,7 @@ function TsunamiController(model, view){
         // lng2 = lng2>180 ? lng2-360: lng2;
         viewers[i].camera.flyTo({
           destination: Cesium.Cartesian3.fromDegrees(lng2,lat,
-            viewers[i].scene.screenSpaceCameraController.minimumZoomDistance*2),
+            viewers[i].scene.screenSpaceCameraController.minimumZoomDistance*3),
           duration: 1
         });
       }

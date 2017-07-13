@@ -392,7 +392,7 @@ var TsunamiView = function(params){
 
     var trackPin = function(movement){ //move and hide pin when necessary
       var visible = $('#pin-info').data()['bs.popover'].tip().hasClass('in');
-      if(currentPin && currentPin.selected && currentPin.dragged && visible){
+      if(currentPin && currentPin.selected && visible){
 
         //move div
         var coord = Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, currentPin.position._value) ;
@@ -420,8 +420,13 @@ var TsunamiView = function(params){
 
     handler.setInputAction(trackPin, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
 
-    viewer.camera.moveEnd.addEventListener(function(){
+    viewer.camera.moveStart.addEventListener(function(){
       trackPin();
+    });
+
+    viewer.camera.changed.addEventListener(function(){
+        trackPin();
+        // console.log('changed')
     });
 
     handler.setInputAction(function(movement){

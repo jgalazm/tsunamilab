@@ -64,8 +64,8 @@ var TsunamiView = function(params){
     //         });
     // viewer.scene.globe.depthTestAgainstTerrain = true
 
-    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*6;
-    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 1000000*100;
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*8;
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 1000000*40;
 
 
     var videoLayer = viewer.entities.add({
@@ -154,10 +154,15 @@ var TsunamiView = function(params){
     var pin = viewer.entities.add({
       position : Cesium.Cartesian3.fromDegrees(lon, lat,1000),
       billboard : {
-        width: 48,
-        height: 51,
+        width: 48*0.8,
+        height: 51*0.8,
         image : 'img/pin2.svg',//,
-        scaleByDistance :  new Cesium.NearFarScalar(1.5e1, 1.5, 4.0e7, 0.0)
+        scaleByDistance :  new Cesium.NearFarScalar(
+          viewer.scene.screenSpaceCameraController.minimumZoomDistance*1.1,
+          1.0,
+          viewer.scene.screenSpaceCameraController.maximumZoomDistance*0.8,
+          0.0),
+        // color: new Cesium.Color(1.0,1.0,1.0,0.8)
       }
     });
     pin.isPin = true;

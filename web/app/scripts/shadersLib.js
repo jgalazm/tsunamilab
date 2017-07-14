@@ -531,7 +531,7 @@ void main()
     float bati = texval.a;
     float bati_real = zmin + (zmax-zmin)*bati;
 
-    float corrected_color =  pow(abs(value),0.8);
+    float corrected_color =  pow(abs(value),0.5);
     if (bati_real>-0.0){
         corrected_color = 0.0;
     }

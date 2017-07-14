@@ -295,9 +295,9 @@ var init = function() {
 
   var startMVC = function () {
     var d = 0.5;
-    var k = 3;
+    var k = 4;
 
-    var colormapArray = getColormapArray('bwr',k,d);
+    var colormapArray = getColormapArray('inferno',k,d);
     var modelParams = {
       shaders: tsunamiShaders,
       rendererSize: {

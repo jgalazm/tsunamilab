@@ -53,10 +53,16 @@
 
         background-color:black
       }
+      #logo {
+        z-index: 100000;
+        position:absolute;
+        margin: 15px;
+        width:33%
+      }
   </style>
 </head>
 <body onload="init()">
-<nav class="navbar navbar-inverse navbar-fixed-top" >
+<!-- <nav class="navbar navbar-inverse navbar-fixed-top" >
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -76,13 +82,16 @@
     </div>
     <!--/.nav-collapse -->
   </div>
-</nav>
+</nav> -->
+
 <video id='videoElement' style='display:none'></video>
 <video id='videoPlayback' style='display:none'></video>
 <div id="cbwaterDiv" class="row-fluid">
   <h5> Altura de la ola (en metros) </h5>
   <canvas id="cbwater"></canvas>
 </div>
+
+<img id="logo" src='img/tsunami_labs-logo.png'/>
 
 <div id="cesiumContainer0"></div>
 <div id="cesiumContainer1"></div>
@@ -96,6 +105,8 @@
 </div>
 
 <div id="controls" class="container">
+
+
 
   <div class="row">
     <input type="text" data-provide="slider" data-slider-id="timeline-slider" data-slider-tooltip="hide" data-slider-min="0"

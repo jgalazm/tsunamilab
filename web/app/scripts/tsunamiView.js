@@ -21,7 +21,6 @@ var TsunamiView = function(params){
       }),
       baseLayerPicker : false,
       animation: false,
-      baseLayerPicker: true,
       fullscreenButton: false,
       scene3DOnly: true,
       geocoder: false,
@@ -36,7 +35,7 @@ var TsunamiView = function(params){
       navigationInstructionsInitiallyVisible: false
     });
     viewer.scene.globe.enableLighting = true;
-    viewer.scene.debugShowFramesPerSecond = true;
+    // viewer.scene.debugShowFramesPerSecond = true;
     viewer.scene.screenSpaceCameraController.inertiaSpin = 0;
     viewer.scene.screenSpaceCameraController.inertiaTranslate = 0;
     viewer.scene.screenSpaceCameraController.inertiaZoom = 0;

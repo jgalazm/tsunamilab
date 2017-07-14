@@ -217,14 +217,12 @@ var makePopup = function(view){
   });
 
   setTimeout(function(){
-    console.log(popup.document);
     view.viewers = view.viewers.concat(view.makeSlaves(
       popup.document.getElementById('cesiumContainer1'),
       popup.document.getElementById('cesiumContainer2'),
       popup.document.getElementById('cesiumContainer3'),
       popup.document.getElementById('cesiumContainer4'))
     );
-
   }, 3000);
 
 
@@ -475,7 +473,7 @@ var init = function() {
           id: 'timeline-slider',
           value : time,
           min: 0,
-          max: 20*3600,
+          max: 28*3600,
           tooltip: 'hide'
       });
     }
@@ -543,6 +541,10 @@ var init = function() {
         setTime(time);
         if(mediaRecorder.state != 'recording')
           mediaRecorder.start(100);
+      }
+
+      if(time>=28*60*60){
+        controller.reset();
       }
       requestAnimationFrame(processFrame);
     }

@@ -8,7 +8,7 @@ var USGSAPI = function(historicalData){
     var baseQueryString = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
     var startTime = "&starttime=1990-01-01"
     var endTime = "&endtime=2016-12-31"
-    var minMagnitudeString = "&minmagnitude=8.0"
+    var minMagnitudeString = "&minmagnitude=7.5"
     var productType = "&producttype=moment-tensor"
     qString = baseQueryString + startTime + endTime + minMagnitudeString
     var finished = $.ajax({

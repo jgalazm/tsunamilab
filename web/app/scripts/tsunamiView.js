@@ -62,10 +62,10 @@ var TsunamiView = function(params){
     //             url : 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
     //             requestWaterMask : true
     //         });
-    // viewer.scene.globe.depthTestAgainstTerrain = true
+    // viewer.scene.globe.depthTestAgainstTerrain = false
 
-    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1000000*8;
-    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 1000000*40;
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1e6*8;
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 1e6*40;
 
 
     var videoLayer = viewer.entities.add({
@@ -78,6 +78,7 @@ var TsunamiView = function(params){
       }
     });
     videoLayer.rectangle.material.transparent = true;
+
     return viewer;
   }
 
@@ -117,7 +118,7 @@ var TsunamiView = function(params){
   var previousTime = Date.now();
 
   viewer.scene.postRender.addEventListener(function (scene, time){
-      var spinRate = 0.1;
+      var spinRate = 0.05;
       var currentTime = Date.now();
       var delta = -( currentTime - previousTime ) / 1000 *0.5;
       previousTime = currentTime;
@@ -154,11 +155,11 @@ var TsunamiView = function(params){
     var pin = viewer.entities.add({
       position : Cesium.Cartesian3.fromDegrees(lon, lat,1000),
       billboard : {
-        width: 48*0.8,
-        height: 51*0.8,
+        width: 48,
+        height: 51,
         image : 'img/pin2.svg',//,
         scaleByDistance :  new Cesium.NearFarScalar(
-          viewer.scene.screenSpaceCameraController.minimumZoomDistance*1.1,
+          viewer.scene.screenSpaceCameraController.minimumZoomDistance*0.8,
           1.0,
           viewer.scene.screenSpaceCameraController.maximumZoomDistance*0.8,
           0.0),

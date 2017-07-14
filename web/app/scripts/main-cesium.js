@@ -96,6 +96,11 @@ var resizeCanvas = function(windowwidth, windowheight, d){
         width: canvasWidth,
         height: canvasHeight});
 
+
+    $(popup).unload(function(){
+      view.viewers = [view.viewer];
+    });
+
   }
 
 var init = function() {

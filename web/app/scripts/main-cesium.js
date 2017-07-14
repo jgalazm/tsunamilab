@@ -103,8 +103,7 @@ var resizeCanvas = function(windowwidth, windowheight, d){
 
   }
 
-var init = function() {
-
+var makePopup = function(view){
   var windowheight = window.innerHeight;;
   var windowwidth = window.innerWidth;
   var d = 0.10*windowheight;
@@ -187,15 +186,6 @@ var init = function() {
     resizeCanvas(windowwidth, windowheight, popup.d);
   });
 
-  $("#cesiumContainer0").css({
-    top: 0,
-    left: 0,
-    position:'absolute',
-    width: window.innerWidth,
-    height: window.innerHeight});
-
-
-
   var coords = {
     top1: top1,
     left1: left1,
@@ -225,6 +215,32 @@ var init = function() {
 
     resizeCanvas(windowwidth, windowheight, popup.d);
   });
+
+  setTimeout(function(){
+    console.log(popup.document);
+    view.viewers = view.viewers.concat(view.makeSlaves(
+      popup.document.getElementById('cesiumContainer1'),
+      popup.document.getElementById('cesiumContainer2'),
+      popup.document.getElementById('cesiumContainer3'),
+      popup.document.getElementById('cesiumContainer4'))
+    );
+
+  }, 3000);
+
+
+
+}
+
+var init = function() {
+
+
+  $("#cesiumContainer0").css({
+    top: 0,
+    left: 0,
+    position:'absolute',
+    width: window.innerWidth,
+    height: window.innerHeight});
+
 
   var tsunamiShaders = shadersCode('tsunami');
 
@@ -420,13 +436,9 @@ var init = function() {
     view = TsunamiView(viewParams);
 
 
+
     $( "#start-holo" ).click(function() {
-      view.viewers = view.viewers.concat(view.makeSlaves(
-        popup.document.getElementById('cesiumContainer1'),
-        popup.document.getElementById('cesiumContainer2'),
-        popup.document.getElementById('cesiumContainer3'),
-        popup.document.getElementById('cesiumContainer4'))
-      );
+      makePopup(view);
     });
     // initialize Controller
 

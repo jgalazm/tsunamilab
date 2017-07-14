@@ -418,6 +418,7 @@ var init = function() {
     view = TsunamiView(viewParams);
 
     $( "#start-holo" ).click(function() {
+      controller.flyHome();
       makePopup(view);
     });
     // initialize Controller
@@ -482,6 +483,7 @@ var init = function() {
       $("#pause-button").toggleClass('hidden');
       controller.play();
     });
+
     $( "#pause-button" ).click(function() {
       $("#play-button").toggleClass('hidden');
       $(this).toggleClass('hidden');

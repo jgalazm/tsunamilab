@@ -419,13 +419,15 @@ var init = function() {
 
     view = TsunamiView(viewParams);
 
-    view.viewers = view.viewers.concat(view.makeSlaves(
+
+    $( "#start-holo" ).click(function() {
+      view.viewers = view.viewers.concat(view.makeSlaves(
         popup.document.getElementById('cesiumContainer1'),
         popup.document.getElementById('cesiumContainer2'),
         popup.document.getElementById('cesiumContainer3'),
         popup.document.getElementById('cesiumContainer4'))
       );
-
+    });
     // initialize Controller
 
     controller = TsunamiController(model, view);
@@ -473,7 +475,6 @@ var init = function() {
     $( "#reset-view-button" ).click(function() {
       controller.flyHome();
     });
-
 
     $( "#step-backward-button" ).click(function() {
       controller.reset();

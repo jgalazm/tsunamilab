@@ -11,8 +11,8 @@ var resizeCanvas = function(windowwidth, windowheight, d){
   var centerLeft = 0.5*windowwidth;
 
   var canvasWidth = windowwidth*0.6; //45°
-  var canvasHeight  = windowheight/2.0 - d;
-  // var canvasHeight  = 1.5*windowheight/2.0 - d;
+  // var canvasHeight  = windowheight/2.0 - d;
+  var canvasHeight  = 1.5*windowheight/2.0 - d;
 
   var top1 = centerTop - d-canvasHeight;
   var left1 = centerLeft - canvasWidth/2;
@@ -418,9 +418,12 @@ var init = function() {
     view = TsunamiView(viewParams);
 
     $( "#start-holo" ).click(function() {
-      controller.flyHome();
-      makePopup(view);
+        controller.flyHome();
+        makePopup(view);
     });
+
+
+
     // initialize Controller
 
     controller = TsunamiController(model, view);
@@ -456,7 +459,7 @@ var init = function() {
           id: 'timeline-slider',
           value : time,
           min: 0,
-          max: 28*3600,
+          max: 50*3600,
           tooltip: 'hide'
       });
     }

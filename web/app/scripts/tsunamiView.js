@@ -11,6 +11,7 @@ var TsunamiView = function(params){
   var historicalData = params.historicalData;
   var videoElement = params.videoElement;
   var currentPin = undefined;
+  var rotate = true;
 
   var createViewer = function(canvasID){
     Cesium.BingMapsApi.defaultKey = 'AhuWKTWDw_kUhGKOyx9PgQlV3fdXfFt8byGqQrLVNCMKc0Bot9LS7UvBW7VW4-Ym';
@@ -57,13 +58,13 @@ var TsunamiView = function(params){
     //   length : 100000000000000.0,
     //   width : 10.0
     // }));
-    // viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-    //             url : 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
-    //             requestWaterMask : true
-    //         });
-    // viewer.scene.globe.depthTestAgainstTerrain = false
+    viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
+                url : 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
+                requestWaterMask : true
+            });
+    viewer.scene.globe.depthTestAgainstTerrain = false;
 
-    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1e6*8;
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1e6*5;
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 1e6*40;
 
 
@@ -85,7 +86,8 @@ var TsunamiView = function(params){
   var viewers = [viewer];
 
   var setSlaves = function(masterCamera, slaveCamera, slaveViewer, offset){
-    console.log(masterCamera);
+
+    masterCamera.offset = 0;
     slaveViewer.scene.preRender.addEventListener(function(){
       Cesium.Cartesian3.clone(masterCamera.position, slaveCamera.position);
       Cesium.Cartesian3.clone(masterCamera.direction, slaveCamera.direction);
@@ -95,7 +97,22 @@ var TsunamiView = function(params){
       var height = masterCamera.positionCartographic.height;
       var offsetFactor1 = Math.min(1, Math.pow(height/50000000, 1.5));
       var offsetFactor2 = Math.min(1, Math.pow(height/10000000, 0.5));
+      // console.log(offsetFactor1, offsetFactor2);
+      // console.log('offsetFactor1', slaveCamera.up);
+      //   if(offset == 180)
+      //     offsetFactor1 = 1;
+        slaveCamera.rotate(slaveCamera.up, offset/180*Math.PI);
+        slaveCamera.offset = offset;
+      //   if(offset != 180)
+      //     slaveCamera.setView({
+      //         orientation: {
+      //             heading : Cesium.Math.toRadians(90.0), // east, default value is 0.0 (north)
+      //             pitch : Cesium.Math.toRadians(-90+(1-offsetFactor2)*offset/1.3),    // default value (looking down)
+      //             roll : Cesium.Math.toRadians(-90)                           // default value
+      //         }
     });
+
+
   }
 
 
@@ -105,10 +122,10 @@ var TsunamiView = function(params){
     var viewer3 = createViewer(container3);
     var viewer4 = createViewer(container4);
 
-    setSlaves(viewer.camera, viewer1.camera, viewer1, 0);
-    setSlaves(viewer.camera, viewer2.camera, viewer2, 0);//;-90);
-    setSlaves(viewer.camera, viewer3.camera, viewer3, 0);//;180);
-    setSlaves(viewer.camera, viewer4.camera, viewer4, 0);//;90);
+    setSlaves(viewer.camera, viewer1.camera, viewer1, 0-90);
+    setSlaves(viewer.camera, viewer2.camera, viewer2, -90-90);
+    setSlaves(viewer.camera, viewer3.camera, viewer3, 180-90);
+    setSlaves(viewer.camera, viewer4.camera, viewer4, 90-90);
 
     return [viewer1,viewer2,viewer3,viewer4];
   }
@@ -116,12 +133,25 @@ var TsunamiView = function(params){
 
   var previousTime = Date.now();
 
+
+  var timeout;
+  $(document).mousemove(function(){
+    rotate = false;
+    clearTimeout(timeout);
+    timeout = setTimeout(function(){
+      rotate = true;
+    },100);
+  });
+
+
   viewer.scene.postRender.addEventListener(function (scene, time){
-      var spinRate = 0.05;
+      var spinRate = 0.2;
       var currentTime = Date.now();
       var delta = -( currentTime - previousTime ) / 1000 *0.5;
       previousTime = currentTime;
-      viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -spinRate * delta);
+      if(rotate){
+        viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -spinRate * delta);
+      }
   });
 
   var flyTo = function (viewer,lat, lng, scale) {
@@ -463,6 +493,7 @@ var TsunamiView = function(params){
       viewer: viewer,
       setColormap: setColormap,
       getCurrentPin: getCurrentPin,
-      makeSlaves: makeSlaves
+      makeSlaves: makeSlaves,
+      rotate: rotate
     };
   }
